@@ -56,11 +56,21 @@ namespace API.Controllers
 		}
 
 		[HttpPost("forgot-password")]
-		public async Task<IActionResult> ForgotPasswordAsync()
+		public async Task<IActionResult> ForgotPasswordAsync(EmailRequest email)
 		{
+			return Ok(ApiResult<ForgotPassWordModel>
+				.Success(await _userService.ForgotPasswordAsync(email)));
+		}
 
-
-			return Ok();
+		[HttpPost("reset-password")]
+		public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			return Ok(ApiResult<ResetPasswordModel>
+				.Success(await _userService.ResetPasswordAsync(resetPasswordModel)));
 		}
 
 

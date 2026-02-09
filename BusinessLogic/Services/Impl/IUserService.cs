@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using BusinessLogic.Models;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,11 @@ namespace BusinessLogic.Services.Impl
 		Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 		Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel);
 		Task LogoutAsync(int userId);
+
+		Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email);
+
+		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel);
+
+
 	}
 }

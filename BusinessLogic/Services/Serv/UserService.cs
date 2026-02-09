@@ -1,5 +1,6 @@
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static BusinessLogic.Models.User;
@@ -18,13 +20,17 @@ namespace BusinessLogic.Services.Serv
 		private readonly IUserRepository _userRepository;
 		private readonly IRoleRepository _roleRepository;
 		private readonly IRefreshTokenRepository _refreshTokenRepository;
+		private readonly IResetPasswordTokenRepository _resetPasswordTokenRepository;
+		private readonly IEmailService _emailService;
 		private readonly IConfiguration _configuration;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IConfiguration configuration)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
 			_refreshTokenRepository = refreshTokenRepository;
+			_resetPasswordTokenRepository = resetPasswordTokenRepository;
+			_emailService = emailService;
 			_configuration = configuration;
 		}
 
@@ -42,7 +48,7 @@ namespace BusinessLogic.Services.Serv
 			var role = await _roleRepository.GetRoleNameAsync("Student");
 
 			// tạo user mới
-			var user = new User
+			var user = new Domain.Models.User
 			{
 				RoleId = role.Id,
 				Username = createUserModel.UserName,
@@ -109,7 +115,67 @@ namespace BusinessLogic.Services.Serv
 			await _refreshTokenRepository.RevokeUserTokensAsync(userId);
 		}
 
+		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)
+		{
+			var user = await _userRepository.GetUserByEmail(email.Email);
+			if (user == null)
+				throw new BadRequestException("Email không tồn tại.");
+			
+			var resetToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+			var resetTokenExpiry = DateTime.Now.AddMinutes(2);
 
+			await _resetPasswordTokenRepository.RevokeResetTokensAsync(user.Id);
+
+			await _resetPasswordTokenRepository.AddAsync(new ResetPasswordToken
+			{
+				UserId = user.Id,
+				ResetToken = resetToken,
+				ExpiredAt = resetTokenExpiry,
+				IsUsed = false,
+				CreateAt = DateTime.Now,
+			});
+
+			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={resetToken}&email={email.Email}";
+
+			// Gửi email reset password
+			await _emailService.SendEmailResetPasswordAsync(new ForgotPasswordModel
+			{
+				Email = email.Email,
+				ResetLink = resetLink
+			});
+			return new ForgotPassWordModel
+			{
+				Email = email.Email,
+				Token = resetToken,
+			};
+		}
+
+		public async Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+		{
+			var userResetPassToken = await _resetPasswordTokenRepository.GetByTokenAsync(resetPasswordModel.Token);
+
+			if (userResetPassToken == null)
+				throw new BadRequestException("Token không hợp lệ hoặc đã được sử dụng.");
+
+			if (DateTime.Now > userResetPassToken.ExpiredAt)
+				throw new BadRequestException("Hết thời gian thay đổi mật khẩu.");
+
+			// Get user from token and update password
+			var user = userResetPassToken.User;
+			user.Password = BCrypt.Net.BCrypt.HashPassword(resetPasswordModel.Password);
+			await _userRepository.UpdateAsync(user);
+
+			// Mark token as used
+			userResetPassToken.IsUsed = true;
+			await _resetPasswordTokenRepository.UpdateAsync(userResetPassToken);
+
+			return new ResetPasswordModel
+			{
+				Email = user.Email,
+				Token = resetPasswordModel.Token
+			};
+
+		}
 	}
 }
 

@@ -37,6 +37,9 @@ namespace DataAccess
 			// refreshToken
 			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
+			// resetPasswordToken
+			services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
+
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

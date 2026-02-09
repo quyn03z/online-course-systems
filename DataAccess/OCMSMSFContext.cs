@@ -37,6 +37,8 @@ public partial class OCMSMSFContext : DbContext
 
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public virtual DbSet<ResetPasswordToken> ResetPasswordTokens { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<SubLesson> SubLessons { get; set; }
@@ -276,6 +278,29 @@ public partial class OCMSMSFContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RefreshTokens_User");
+        });
+
+        modelBuilder.Entity<ResetPasswordToken>(entity =>
+        {
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreateAt)
+                .HasColumnType("datetime")
+                .HasColumnName("createAt");
+            entity.Property(e => e.ExpiredAt)
+                .HasColumnType("datetime")
+                .HasColumnName("expiredAt");
+            entity.Property(e => e.IsUsed).HasColumnName("isUsed");
+            entity.Property(e => e.ResetToken)
+                .IsRequired()
+                .HasMaxLength(256)
+                .IsFixedLength()
+                .HasColumnName("reset_token");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ResetPasswordTokens)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ResetPasswordTokens_User");
         });
 
         modelBuilder.Entity<Role>(entity =>
