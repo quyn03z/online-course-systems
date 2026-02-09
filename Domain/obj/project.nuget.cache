@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NP6S1bvh5lKyzSMSM4vAC1v8Qc6zh2Vd5gRHeKV2LwDHi/QX/fIfGodUVNiTGRFXtMNMaWU9qzCGnjZIi1DDMw==",
+  "dgSpecHash": "tu2MbWfnnLcOOTTMJWQCjAHjXkdfPnKcS9Ja07JUNYce4aDwRuz5EqGWZ/Q/ejNPMYErIfhRAR+Xz/MqpXdSlA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\Domain\\Domain.csproj",
+  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\Domain\\Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

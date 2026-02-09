@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xefqLyqWaMx/4oNONujtplxGZV5z7Are3VpC97Ec33ZbBEJb7LMShPEeDmDwtDLITBnuiWxvJAVOmGBcTbQxYw==",
+  "dgSpecHash": "BFa+QG0rEjlVyzgf4N+22TGy1kYCNVWwbFoA8dZ+YqNx6kUPKsJO75sj1Unhj+xQ41lFOPKGUKech4WzeyNP4A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\API\\API.csproj",
+  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

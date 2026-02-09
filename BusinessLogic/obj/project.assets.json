@@ -3038,11 +3038,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\BusinessLogic.csproj",
+      "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\BusinessLogic.csproj",
       "projectName": "BusinessLogic",
-      "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\BusinessLogic.csproj",
+      "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\BusinessLogic.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\obj\\",
+      "outputPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3059,8 +3059,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\DataAccess\\DataAccess.csproj"
+            "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\DataAccess\\DataAccess.csproj"
             }
           }
         }

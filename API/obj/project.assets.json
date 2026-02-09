@@ -3225,11 +3225,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\API\\API.csproj",
+      "projectUniqueName": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\API.csproj",
       "projectName": "API",
-      "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\API\\API.csproj",
+      "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\API.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\API\\obj\\",
+      "outputPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3246,8 +3246,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\BusinessLogic.csproj": {
-              "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\BusinessLogic.csproj"
+            "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\BusinessLogic.csproj": {
+              "projectPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\BusinessLogic.csproj"
             }
           }
         }

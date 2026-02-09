@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dfSfFnqCXoxanwXUqBimRjiOcAOW91Gt2QH4bPphZs+mF1UlvkjJfR1Tb74dW3cdUa+uA1pcTXr5KpHgX3nhzA==",
+  "dgSpecHash": "pwsXeSCuFfwhoCa2ujwikQ/pd1RTMxgGrIJMwcVNbhDxMxD3JuQ53A2+eNKMW60Fy9l7qg+8hVEvgmSbPQXGfw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\OCMS\\OCMS\\BusinessLogic\\BusinessLogic.csproj",
+  "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\BusinessLogic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
