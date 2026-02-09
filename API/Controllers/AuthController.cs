@@ -43,7 +43,25 @@ namespace API.Controllers
 
 		}
 
+		[HttpPost("logout")]
+		public async Task<IActionResult> LogoutAsync()
+		{
+			var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+			{
+				return Unauthorized(ApiResult<object>.Failure(new[] { "User not authenticated" }));
+			}
+			await _userService.LogoutAsync(userId);
+			return Ok(ApiResult<object>.Success(new { message = "Đã đăng xuất thành công" }));
+		}
 
+		[HttpPost("forgot-password")]
+		public async Task<IActionResult> ForgotPasswordAsync()
+		{
+
+
+			return Ok();
+		}
 
 
 	}

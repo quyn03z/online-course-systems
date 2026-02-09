@@ -12,5 +12,6 @@ namespace BusinessLogic.Services.Impl
 	{
 		Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 		Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel);
+		Task LogoutAsync(int userId);
 	}
 }

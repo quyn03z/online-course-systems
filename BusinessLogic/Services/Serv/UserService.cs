@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Services.Impl;
 using DataAccess.Repositories.Impl;
@@ -17,12 +17,14 @@ namespace BusinessLogic.Services.Serv
 	{
 		private readonly IUserRepository _userRepository;
 		private readonly IRoleRepository _roleRepository;
+		private readonly IRefreshTokenRepository _refreshTokenRepository;
 		private readonly IConfiguration _configuration;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IConfiguration configuration)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
+			_refreshTokenRepository = refreshTokenRepository;
 			_configuration = configuration;
 		}
 
@@ -77,14 +79,36 @@ namespace BusinessLogic.Services.Serv
 
 			var accessToken = JwtHelper.GenerateToken(user, _configuration);
 
+			await _refreshTokenRepository.RevokeUserTokensAsync(user.Id);
+
+			var refeshToken = JwtHelper.GenerateRefreshToken();
+
+			var tokenRefresh = new RefreshToken
+			{
+				UserId = user.Id,
+				Token = refeshToken,
+				IsRevoked = false,
+				ExpiredAt = DateTime.Now.AddDays(7),
+				CreatedAt = DateTime.Now,
+			};
+
+			await _refreshTokenRepository.AddAsync(tokenRefresh);
+
 			return new LoginResponseModel
 			{
 				Username = user.Username,
 				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = accessToken,
+				RefreshToken = refeshToken,
 			};
 		}
+
+		public async Task LogoutAsync(int userId)
+		{
+			await _refreshTokenRepository.RevokeUserTokensAsync(userId);
+		}
+
 
 	}
 }

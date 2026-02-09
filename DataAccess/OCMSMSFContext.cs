@@ -264,9 +264,7 @@ public partial class OCMSMSFContext : DbContext
 
         modelBuilder.Entity<RefreshToken>(entity =>
         {
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
             entity.Property(e => e.Token)

@@ -1,0 +1,14 @@
+﻿using Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Repositories.Impl
+{
+	public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
+	{
+		Task RevokeUserTokensAsync(int userId);
+	}
+}
