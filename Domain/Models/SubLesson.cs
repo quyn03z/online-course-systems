@@ -24,4 +24,6 @@ public partial class SubLesson
     public long? VideoDuration { get; set; }
 
     public string VideoLink { get; set; }
+
+    public virtual Lesson Lession { get; set; }
 }

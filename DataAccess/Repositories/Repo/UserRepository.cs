@@ -32,7 +32,9 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<User?> GetUserByUserNameAsync(string userName)
 		{
-			return await _dbSet.FirstOrDefaultAsync(x => x.Usename == userName);
+			return await _dbSet
+				.Include(r => r.Role)
+				.FirstOrDefaultAsync(x => x.Username == userName);
 		}
 
 

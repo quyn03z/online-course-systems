@@ -11,7 +11,7 @@ namespace DataAccess.Repositories.Repo
 {
 	public class BaseRepository<T> : IBaseRepository<T> where T : class
 	{
-		private readonly OCMSMSFContext _context;
+		protected readonly OCMSMSFContext _context;
 		protected readonly DbSet<T> _dbSet;
 
 		public BaseRepository(OCMSMSFContext context)

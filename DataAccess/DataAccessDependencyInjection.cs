@@ -34,7 +34,11 @@ namespace DataAccess
 			// role
 			services.AddScoped<IRoleRepository, RoleRepository>();
 
+			// refreshToken
+			services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
+			// resetPasswordToken
+			services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
 		}
 

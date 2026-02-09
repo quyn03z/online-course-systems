@@ -11,8 +11,9 @@ namespace BusinessLogic.Models
 	{
 		public class LoginUserModel
 		{
+			[Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
 			public string Username { get; set; }
-
+			[Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
 			public string Password { get; set; }
 		}
 
@@ -25,9 +26,7 @@ namespace BusinessLogic.Models
 
 			public string Token { get; set; }
 			public string RefreshToken { get; set; }
-
 			public string Role { get; set; }
-			public bool EmailConfirm { get; set; }
 		}
 
 		public class CreateUserResponseModel 

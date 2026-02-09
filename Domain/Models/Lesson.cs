@@ -16,4 +16,6 @@ public partial class Lesson
     public virtual Course Course { get; set; }
 
     public virtual Quizz Quizz { get; set; }
+
+    public virtual ICollection<SubLesson> SubLessons { get; set; } = new List<SubLesson>();
 }

@@ -30,6 +30,9 @@ builder.Services.AddDataAccess(builder.Configuration)
 
 var app = builder.Build();
 
+// Add exception handling middleware
+app.UseMiddleware<API.Middleware.ExceptionHandlingMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
