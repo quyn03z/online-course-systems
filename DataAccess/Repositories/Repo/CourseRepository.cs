@@ -1,0 +1,17 @@
+﻿using DataAccess.Repositories.Impl;
+using Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Repositories.Repo
+{
+	public class CourseRepository : BaseRepository<Course>, ICourseRepository
+	{
+		public CourseRepository(OCMSMSFContext context) : base(context)
+		{
+		}
+	}
+}
