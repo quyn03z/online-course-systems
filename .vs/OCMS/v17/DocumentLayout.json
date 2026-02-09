@@ -3,6 +3,34 @@
   "WorkspaceRootPath": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C1566100-8DF0-499A-B54F-B0ED8532AC39}|Domain\\Domain.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\domain\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C1566100-8DF0-499A-B54F-B0ED8532AC39}|Domain\\Domain.csproj|solutionrelative:domain\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\businesslogic\\services\\serv\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|solutionrelative:businesslogic\\services\\serv\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\businesslogic\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|solutionrelative:businesslogic\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\businesslogic\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|solutionrelative:businesslogic\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{28D024D6-C218-44C4-83F3-1B6340EC7EBA}|DataAccess\\DataAccess.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\dataaccess\\repositories\\repo\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{28D024D6-C218-44C4-83F3-1B6340EC7EBA}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\repositories\\repo\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC0EE65-ED68-499F-8A88-D4E869E3A187}|API\\API.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0DC0EE65-ED68-499F-8A88-D4E869E3A187}|API\\API.csproj|solutionrelative:api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\businesslogic\\exceptions\\badrequestexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{737DBD16-1CDC-4535-882F-C02E7C1F09D0}|BusinessLogic\\BusinessLogic.csproj|solutionrelative:businesslogic\\exceptions\\badrequestexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0DC0EE65-ED68-499F-8A88-D4E869E3A187}|API\\API.csproj|c:\\users\\admin\\desktop\\msf\\git ocms\\online-course-systems\\api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0DC0EE65-ED68-499F-8A88-D4E869E3A187}|API\\API.csproj|solutionrelative:api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,8 +42,86 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 206,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\Domain\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Domain\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\Domain\\Models\\User.cs*",
+              "RelativeToolTip": "Domain\\Models\\User.cs*",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABUAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T03:16:30.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\DataAccess\\Repositories\\Repo\\UserRepository.cs",
+              "RelativeDocumentMoniker": "DataAccess\\Repositories\\Repo\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\DataAccess\\Repositories\\Repo\\UserRepository.cs",
+              "RelativeToolTip": "DataAccess\\Repositories\\Repo\\UserRepository.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAgwCMAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T02:30:16.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "JwtHelper.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Helpers\\JwtHelper.cs",
+              "RelativeDocumentMoniker": "BusinessLogic\\Helpers\\JwtHelper.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Helpers\\JwtHelper.cs*",
+              "RelativeToolTip": "BusinessLogic\\Helpers\\JwtHelper.cs*",
+              "ViewState": "AQIAAAsAAAAAAAAAAAASwA8AAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T02:23:08.596Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BadRequestException.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Exceptions\\BadRequestException.cs",
+              "RelativeDocumentMoniker": "BusinessLogic\\Exceptions\\BadRequestException.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Exceptions\\BadRequestException.cs",
+              "RelativeToolTip": "BusinessLogic\\Exceptions\\BadRequestException.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T02:22:37.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\appsettings.json",
+              "RelativeDocumentMoniker": "API\\appsettings.json",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\appsettings.json",
+              "RelativeToolTip": "API\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-09T02:22:10.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Models\\User.cs",
+              "RelativeDocumentMoniker": "BusinessLogic\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Models\\User.cs",
+              "RelativeToolTip": "BusinessLogic\\Models\\User.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAASwBcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T02:19:48.717Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
@@ -842,13 +948,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Services\\Serv\\UserService.cs",
+              "RelativeDocumentMoniker": "BusinessLogic\\Services\\Serv\\UserService.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\BusinessLogic\\Services\\Serv\\UserService.cs*",
+              "RelativeToolTip": "BusinessLogic\\Services\\Serv\\UserService.cs*",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAgwFEAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T02:19:23.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "API\\Controllers\\AuthController.cs",
               "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MSF\\Git OCMS\\online-course-systems\\API\\Controllers\\AuthController.cs",
               "RelativeToolTip": "API\\Controllers\\AuthController.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABcAAAAbAAAA",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAxwBwAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-09T02:10:30.252Z",
               "EditorCaption": ""

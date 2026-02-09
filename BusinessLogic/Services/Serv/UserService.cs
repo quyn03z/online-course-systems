@@ -1,7 +1,9 @@
 ﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Helpers;
 using BusinessLogic.Services.Impl;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,13 @@ namespace BusinessLogic.Services.Serv
 	{
 		private readonly IUserRepository _userRepository;
 		private readonly IRoleRepository _roleRepository;
+		private readonly IConfiguration _configuration;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
+			_configuration = configuration;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -55,24 +59,31 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-		//public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
-		//{
-		//	var user = await _userRepository.GetUserByUserNameAsync(loginUserModel.Username);
-		//	if (user == null)
-		//		throw new NotFoundException("Tên đăng nhập không chính xác");
+		public async Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel)
+		{
+			var user = await _userRepository.GetUserByUserNameAsync(loginUserModel.Username);
+			if (user == null)
+				throw new NotFoundException("Tên đăng nhập không chính xác.");
 
-		//	if (!BCrypt.Net.BCrypt.Verify(loginUserModel.Password, user.Password))
-		//	{
-		//		throw new NotFoundException("Mật khẩu nhập không chính xác");
-		//	}
+			if (!BCrypt.Net.BCrypt.Verify(loginUserModel.Password, user.Password))
+			{
+				throw new NotFoundException("Mật khẩu nhập không chính xác.");
+			}
 
-		//	if (!user.IsLocked)
-		//	{
+			if (!user.IsLocked)
+			{
+				throw new NotFoundException("Tài khoản đã bị khóa.");
+			}
 
-		//	}
+			var accessToken = JwtHelper.GenerateToken(user, _configuration);
 
-
-		//}
+			return new LoginResponseModel
+			{
+				Username = user.Usename,
+				Email = user.Email,
+				Token = accessToken,
+			};
+		}
 
 	}
 }

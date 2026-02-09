@@ -35,6 +35,8 @@ public partial class OCMSMSFContext : DbContext
 
     public virtual DbSet<Quizz> Quizzs { get; set; }
 
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<SubLesson> SubLessons { get; set; }
@@ -260,6 +262,24 @@ public partial class OCMSMSFContext : DbContext
                 .HasConstraintName("FK_Quizz_Lesson");
         });
 
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.ExpiredAt).HasColumnType("datetime");
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.RefreshTokens)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RefreshTokens_User");
+        });
+
         modelBuilder.Entity<Role>(entity =>
         {
             entity.ToTable("Role");
@@ -292,6 +312,11 @@ public partial class OCMSMSFContext : DbContext
             entity.Property(e => e.VideoLink)
                 .IsUnicode(false)
                 .HasColumnName("video_link");
+
+            entity.HasOne(d => d.Lession).WithMany(p => p.SubLessons)
+                .HasForeignKey(d => d.LessionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubLesson_Lesson");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -319,11 +344,16 @@ public partial class OCMSMSFContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("password");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
-            entity.Property(e => e.Usename)
+            entity.Property(e => e.Username)
                 .IsRequired()
                 .HasMaxLength(100)
                 .IsFixedLength()
-                .HasColumnName("usename");
+                .HasColumnName("username");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Role");
         });
 
         OnModelCreatingPartial(modelBuilder);

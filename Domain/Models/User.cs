@@ -9,7 +9,7 @@ public partial class User
 {
     public int Id { get; set; }
 
-    public string Usename { get; set; }
+    public string Username { get; set; }
 
     public string Lastname { get; set; }
 
@@ -30,4 +30,8 @@ public partial class User
     public virtual ICollection<MenteeScore> MenteeScores { get; set; } = new List<MenteeScore>();
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+
+    public virtual Role Role { get; set; }
 }
