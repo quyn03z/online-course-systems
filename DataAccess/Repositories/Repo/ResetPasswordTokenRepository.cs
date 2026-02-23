@@ -19,15 +19,15 @@ namespace DataAccess.Repositories.Repo
 		{
 			return await _context.ResetPasswordTokens
 				.Include(u => u.User)
-				.Where(x => x.ResetToken == token && !x.IsUsed)
+				.Where(x => x.ResetToken == token && !x.isUsed)
 				.FirstOrDefaultAsync();
 		}
 
 		public async Task RevokeResetTokensAsync(int userId)
 		{
 			await _context.ResetPasswordTokens
-				.Where(x => x.UserId == userId && !x.IsUsed)
-				.ExecuteUpdateAsync(x => x.SetProperty(x => x.IsUsed, true));
+				.Where(x => x.UserId == userId && !x.isUsed)
+				.ExecuteUpdateAsync(x => x.SetProperty(x => x.isUsed, true));
 		}
 	}
 }

@@ -5,8 +5,7 @@ namespace Domain.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Enrollment")]
-    public partial class Enrollment
+    public partial class MenteeScores
     {
         [Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -14,12 +13,11 @@ namespace Domain.Models
 
         [Column(Order = 1)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int CourseId { get; set; }
+        public int QuizId { get; set; }
 
-        [Column(TypeName = "date")]
-        public DateTime? Date { get; set; }
+        public double? Score { get; set; }
 
-        public virtual Course Course { get; set; }
+        public virtual Quizz Quizz { get; set; }
 
         public virtual User User { get; set; }
     }

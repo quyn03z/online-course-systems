@@ -32,5 +32,24 @@ namespace API.Controllers
 			}
 			return Ok(ApiResult<UserResponseModel>.Success(await _userService.AddUserByAdmin(addUserAdminModel)));
 		}
+
+		[HttpPut("block-user-admin")]
+		public async Task<IActionResult> BlockUserAdmin(int targetId)
+		{
+			return Ok(ApiResult<string>.Success(await _userService.BlockUserAdmin(targetId)));
+
+		}
+
+		//[HttpPut("edit-user-admin")]
+		//public async Task<IActionResult> EditUserAdmin(UserRequest userRequest)
+		//{
+		//	if (ModelState.IsValid)
+		//	{
+		//		return BadRequest(ModelState);
+		//	}
+		//	return Ok(ApiResult<UserResponseModel>.Success(await _userService.EditUserAdmin(addUserAdminModel)));
+		//}
+
+
 	}
 }

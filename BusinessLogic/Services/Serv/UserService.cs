@@ -67,7 +67,7 @@ namespace BusinessLogic.Services.Serv
 
 			return new CreateUserResponseModel
 			{
-				Id = createdUser.Id,
+				Id = createdUser.UserId,
 			};
 		}
 
@@ -89,13 +89,13 @@ namespace BusinessLogic.Services.Serv
 
 			var accessToken = JwtHelper.GenerateToken(user, _configuration);
 
-			await _refreshTokenRepository.RevokeUserTokensAsync(user.Id);
+			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
 
 			var refeshToken = JwtHelper.GenerateRefreshToken();
 
 			var tokenRefresh = new RefreshToken
 			{
-				UserId = user.Id,
+				UserId = user.UserId,
 				Token = refeshToken,
 				IsRevoked = false,
 				ExpiredAt = DateTime.Now.AddDays(7),
@@ -128,14 +128,14 @@ namespace BusinessLogic.Services.Serv
 			var resetToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
 			var resetTokenExpiry = DateTime.Now.AddMinutes(2);
 
-			await _resetPasswordTokenRepository.RevokeResetTokensAsync(user.Id);
+			await _resetPasswordTokenRepository.RevokeResetTokensAsync(user.UserId);
 
 			await _resetPasswordTokenRepository.AddAsync(new ResetPasswordToken
 			{
-				UserId = user.Id,
+				UserId = user.UserId,
 				ResetToken = resetToken,
 				ExpiredAt = resetTokenExpiry,
-				IsUsed = false,
+				isUsed = false,
 				CreateAt = DateTime.Now,
 			});
 
@@ -170,7 +170,7 @@ namespace BusinessLogic.Services.Serv
 			await _userRepository.UpdateAsync(user);
 
 			// Mark token as used
-			userResetPassToken.IsUsed = true;
+			userResetPassToken.isUsed = true;
 			await _resetPasswordTokenRepository.UpdateAsync(userResetPassToken);
 
 			return new ResetPasswordModel
@@ -186,13 +186,13 @@ namespace BusinessLogic.Services.Serv
 			var users = await _userRepository.GetAllUserAdmin();
 			return users.Select(u => new UserResponseModel
 			{
-				Id = u.Id,
-				Username = u.Username,
-				Firstname = u.Firstname,
-				Lastname = u.Lastname,
-				Email = u.Email,
+				Id = u.UserId,
+				Username = u.Username.Trim(),
+				Firstname = u.Firstname.Trim(),
+				Lastname = u.Lastname.Trim(),
+				Email = u.Email.Trim(),
 				IsLocked = u.IsLocked,
-				RoleName = u.Role?.RoleName
+				RoleName = u.Role?.RoleName.Trim()
 			});
 		}
 
@@ -218,7 +218,7 @@ namespace BusinessLogic.Services.Serv
 
 			await _userRepository.AddAsync(user);
 			return new UserResponseModel {
-				Id = user.Id,
+				Id = user.UserId,
 				Username = user.Username,
 				Firstname = user.Firstname,
 				Lastname = user.Lastname,
@@ -228,6 +228,20 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
+		public async Task<string> BlockUserAdmin(int targetId)
+		{
+			var currentId = _claimService.GetUserId();
+			if (currentId == targetId)
+				throw new BadRequestException("Bạn không thể khóa tài khoản của mình.");
+
+			var user = await _userRepository.GetByIdAsync(targetId);
+			if (user == null)
+				throw new NotFoundException("Không tìm thấy người dùng.");
+
+			user.IsLocked = true;
+			await _userRepository.UpdateAsync(user);
+			return $"Khóa tài khoản '{user.Username.Trim()}' thành công.";
+		}
 
 	}
 }

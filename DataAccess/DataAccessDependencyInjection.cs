@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories.Impl;
+﻿using DataAccess.Repositories;
+using DataAccess.Repositories.Impl;
 using DataAccess.Repositories.Repo;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
