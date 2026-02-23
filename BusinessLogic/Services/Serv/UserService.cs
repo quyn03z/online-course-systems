@@ -1,3 +1,4 @@
+using BusinessLogic.Claims;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
@@ -7,6 +8,7 @@ using Domain.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,8 +25,9 @@ namespace BusinessLogic.Services.Serv
 		private readonly IResetPasswordTokenRepository _resetPasswordTokenRepository;
 		private readonly IEmailService _emailService;
 		private readonly IConfiguration _configuration;
+		private readonly IClaimService _claimService;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
@@ -32,6 +35,7 @@ namespace BusinessLogic.Services.Serv
 			_resetPasswordTokenRepository = resetPasswordTokenRepository;
 			_emailService = emailService;
 			_configuration = configuration;
+			_claimService = claimService;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -191,6 +195,40 @@ namespace BusinessLogic.Services.Serv
 				RoleName = u.Role?.RoleName
 			});
 		}
+
+		public async Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
+		{
+			if (await _userRepository.ExistsByEmailAsync(addUserAdminModel.Email))
+				throw new BadRequestException("Email đã tồn tại trong hệ thống!");
+
+			if(await _userRepository.ExistsByUserNameAsync(addUserAdminModel.UserName))
+				throw new BadRequestException("Username đã tồn tại trong hệ thống!");
+
+			var randomPassword = PasswordGenerator.GeneratePassword(8);
+
+			var user = new Domain.Models.User
+			{
+				RoleId = addUserAdminModel.RoleId,
+				Username = addUserAdminModel.UserName,
+				Email = addUserAdminModel.Email,
+				Firstname = addUserAdminModel.FirstName,
+				Lastname = addUserAdminModel.LastName,
+				Password = BCrypt.Net.BCrypt.HashPassword(randomPassword)
+			};
+
+			await _userRepository.AddAsync(user);
+			return new UserResponseModel {
+				Id = user.Id,
+				Username = user.Username,
+				Firstname = user.Firstname,
+				Lastname = user.Lastname,
+				Email = user.Email,
+				IsLocked = user.IsLocked,
+				RoleName = user.Role?.RoleName
+			};
+		}
+
+
 	}
 }
 

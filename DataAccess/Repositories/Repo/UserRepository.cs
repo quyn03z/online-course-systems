@@ -17,12 +17,12 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<bool> ExistsByEmailAsync(string email)
 		{
-			return await _dbSet.AllAsync(x => x.Email == email);
+			return await _dbSet.AnyAsync(x => x.Email == email);
 		}
 
 		public async Task<bool> ExistsByUserNameAsync(string userName)
 		{
-			return await _dbSet.AllAsync(x => x.Equals(userName));
+			return await _dbSet.AnyAsync(x => x.Username == userName);
 		}
 
 		public async Task<IEnumerable<User>> GetAllUserAdmin()

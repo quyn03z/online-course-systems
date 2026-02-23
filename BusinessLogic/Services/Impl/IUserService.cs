@@ -21,6 +21,6 @@ namespace BusinessLogic.Services.Impl
 
 		Task<IEnumerable<UserResponseModel>> GetAllUserAdmin();
 
-
+		Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel);
 	}
 }

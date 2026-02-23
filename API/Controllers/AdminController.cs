@@ -22,5 +22,15 @@ namespace API.Controllers
 		{
 			return Ok(ApiResult<IEnumerable<UserResponseModel>>.Success(await _userService.GetAllUserAdmin()));
 		}
+
+		[HttpPost("add-user")]
+		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			return Ok(ApiResult<UserResponseModel>.Success(await _userService.AddUserByAdmin(addUserAdminModel)));
+		}
 	}
 }
