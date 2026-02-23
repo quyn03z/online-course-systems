@@ -90,9 +90,10 @@ namespace BusinessLogic.Models
 
 		}
 
-		public class UserRequest
+		public class UserRequest	
 		{
-			public int userId;
+			public int UserId { get; set; }
+
 			[Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
 			[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên đăng nhập phải từ 3 đến 50 ký tự.")]
 			public string UserName { get; set; }
@@ -105,6 +106,9 @@ namespace BusinessLogic.Models
 			public string? LastName { get; set; }
 			[Range(1, 3, ErrorMessage = "RoleId chỉ được phép là 1, 2 hoặc 3.")]
 			public int RoleId { get; set; }
+
+			public bool IsLocked { get; set; }
+
 		}
 
 

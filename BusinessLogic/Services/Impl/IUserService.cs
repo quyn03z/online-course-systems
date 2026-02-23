@@ -25,5 +25,7 @@ namespace BusinessLogic.Services.Impl
 
 		Task<string> BlockUserAdmin(int targetId);
 
+		Task<UserResponseModel> EditUserAdmin(UserRequest userRequest);
+
 	}
 }

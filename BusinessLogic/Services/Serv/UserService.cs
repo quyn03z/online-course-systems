@@ -243,6 +243,45 @@ namespace BusinessLogic.Services.Serv
 			return $"Khóa tài khoản '{user.Username.Trim()}' thành công.";
 		}
 
+		public async Task<UserResponseModel> EditUserAdmin(UserRequest userRequest)
+		{
+			// Lấy user hiện tại từ DB
+			var user = await _userRepository.GetByIdAsync(userRequest.UserId);
+			if (user == null)
+				throw new NotFoundException("Không tìm thấy người dùng.");
+
+			// Kiểm tra email trùng — loại trừ chính user đang sửa
+			if (user.Email != userRequest.Email && await _userRepository.ExistsByEmailAsync(userRequest.Email))
+				throw new BadRequestException("Email đã tồn tại trong hệ thống!");
+
+			// Kiểm tra username trùng — loại trừ chính user đang sửa
+			if (user.Username != userRequest.UserName && await _userRepository.ExistsByUserNameAsync(userRequest.UserName))
+				throw new BadRequestException("Username đã tồn tại trong hệ thống!");
+
+			// Cập nhật các field
+			user.RoleId = userRequest.RoleId;
+			user.Username = userRequest.UserName;
+			user.Email = userRequest.Email;
+			user.Firstname = userRequest.FirstName;
+			user.Lastname = userRequest.LastName;
+			user.IsLocked = userRequest.IsLocked;
+
+			await _userRepository.UpdateAsync(user);
+
+			return new UserResponseModel
+			{
+				Id = user.UserId,
+				Username = user.Username,
+				Firstname = user.Firstname,
+				Lastname = user.Lastname,
+				Email = user.Email,
+				IsLocked = user.IsLocked,
+				RoleName = user.Role?.RoleName
+			};
+		}
+
+
+
 	}
 }
 
