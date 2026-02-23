@@ -176,6 +176,21 @@ namespace BusinessLogic.Services.Serv
 			};
 
 		}
+
+		public async Task<IEnumerable<UserResponseModel>> GetAllUserAdmin()
+		{
+			var users = await _userRepository.GetAllUserAdmin();
+			return users.Select(u => new UserResponseModel
+			{
+				Id = u.Id,
+				Username = u.Username,
+				Firstname = u.Firstname,
+				Lastname = u.Lastname,
+				Email = u.Email,
+				IsLocked = u.IsLocked,
+				RoleName = u.Role?.RoleName
+			});
+		}
 	}
 }
 

@@ -25,6 +25,11 @@ namespace DataAccess.Repositories.Repo
 			return await _dbSet.AllAsync(x => x.Equals(userName));
 		}
 
+		public async Task<IEnumerable<User>> GetAllUserAdmin()
+		{
+			return await _dbSet.Include(r => r.Role).ToListAsync();
+		}
+
 		public async Task<User?> GetUserByEmail(string email)
 		{
 			return await _dbSet.FirstOrDefaultAsync(x => x.Email == email);
@@ -36,6 +41,9 @@ namespace DataAccess.Repositories.Repo
 				.Include(r => r.Role)
 				.FirstOrDefaultAsync(x => x.Username == userName);
 		}
+
+
+
 
 
 	}
