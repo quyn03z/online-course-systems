@@ -60,5 +60,53 @@ namespace BusinessLogic.Models
 			public string? LastName { get; set; }
 
 		}
+
+		public class UserResponseModel
+		{
+			public int Id { get; set; }
+			public string Username { get; set; }
+			public string Lastname { get; set; }
+			public string Firstname { get; set; }
+			public string Email { get; set; }
+			public bool IsLocked { get; set; }
+			public string RoleName { get; set; }
+		}
+
+
+		public class AddUserAdminModel
+		{
+			[Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
+			[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên đăng nhập phải từ 3 đến 50 ký tự.")]
+			public string UserName { get; set; }
+
+			[Required(ErrorMessage = "Email là bắt buộc.")]
+			[EmailAddress(ErrorMessage = "Định dạng email không hợp lệ.")]
+			[StringLength(100, ErrorMessage = "Email không được vượt quá 100 ký tự.")]
+			public string Email { get; set; }
+			public string? FirstName { get; set; }
+			public string? LastName { get; set; }
+			[Range(1, 3, ErrorMessage = "RoleId chỉ được phép là 1, 2 hoặc 3.")]
+			public int RoleId { get; set; }
+
+		}
+
+		public class UserRequest
+		{
+			public int userId;
+			[Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
+			[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên đăng nhập phải từ 3 đến 50 ký tự.")]
+			public string UserName { get; set; }
+
+			[Required(ErrorMessage = "Email là bắt buộc.")]
+			[EmailAddress(ErrorMessage = "Định dạng email không hợp lệ.")]
+			[StringLength(100, ErrorMessage = "Email không được vượt quá 100 ký tự.")]
+			public string Email { get; set; }
+			public string? FirstName { get; set; }
+			public string? LastName { get; set; }
+			[Range(1, 3, ErrorMessage = "RoleId chỉ được phép là 1, 2 hoặc 3.")]
+			public int RoleId { get; set; }
+		}
+
+
 	}
 }
