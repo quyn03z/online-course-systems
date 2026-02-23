@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.Infrastructure;
+using DataAccess.Repositories;
 using DataAccess.Repositories.Impl;
 using DataAccess.Repositories.Repo;
 using Domain.Models;
@@ -26,6 +27,9 @@ namespace DataAccess
 
 		private static void AddRepositories(this IServiceCollection services)
 		{
+			// connection factory
+			services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+
 			// user
 			services.AddScoped<IUserRepository, UserRepository>();
 
@@ -59,7 +63,6 @@ namespace DataAccess
 						opt => opt.MigrationsAssembly(typeof(OCMSMSFContext).Assembly.FullName)));
 			}
 		}
-
 
 
 		private class DatabaseConfiguration

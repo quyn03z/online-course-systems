@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repositories.Impl
+namespace BusinessLogic.Services.Impl
 {
-	public interface ICourseRepository 
+	public interface ICourseService
 	{
-		Task<List<CourseResponseModel>> GetAllCourseAsync();	
-		Task<CourseResponseModel>
+		Task<List<CourseResponseModel>> GetAllCourseAsync();
 	}
 }

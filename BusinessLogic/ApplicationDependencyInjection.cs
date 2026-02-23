@@ -29,6 +29,12 @@ namespace BusinessLogic
 
 			//claim service
 			services.AddScoped<IClaimService, ClaimService>();
+
+			// course
+			services.AddScoped<ICourseService, CourseService>();
+
+
+
 		}
 
 	}
