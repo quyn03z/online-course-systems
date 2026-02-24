@@ -51,6 +51,8 @@ namespace DataAccess
 			// resetPasswordToken
 			services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
+			// sublesson
+			services.AddScoped<ISubLessonRepository, SubLessonRepository>();
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
