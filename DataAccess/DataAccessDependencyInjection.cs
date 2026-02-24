@@ -27,6 +27,9 @@ namespace DataAccess
 
 		private static void AddRepositories(this IServiceCollection services)
 		{
+			// sql data access
+			services.AddScoped<ISqlDataAccess, SqlDataAccess>();
+
 			// connection factory
 			services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
 

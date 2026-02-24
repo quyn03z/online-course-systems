@@ -3,6 +3,7 @@ using DataAccess.Models.CourseModel;
 using BusinessLogic.Services.Impl;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Models;
 
 namespace API.Controllers
 {
@@ -19,7 +20,20 @@ namespace API.Controllers
 		[HttpGet("get-alls-course")]
 		public async Task<IActionResult> GetAllsCourse()
 		{
-			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllCourseAsync()));
+			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllCourseHomeAsync()));
 		}
+
+		[HttpGet("{courseId}")]
+		public async Task<IActionResult> GetCourseById(int courseId)
+		{
+			return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.GetCourseById(courseId)));
+		}
+
+		[HttpPost("add-course")]
+		public async Task<IActionResult> AddCourseAsync(CourseRequestModel courseRequestModel)
+		{
+			return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.AddCourseAsync(courseRequestModel)));
+		}
+
 	}
 }

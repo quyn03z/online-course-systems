@@ -19,24 +19,24 @@ namespace BusinessLogic.Services.Serv
 			_courseRepository = courseRepository;
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllCourseAsync()
+		public async Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel)
 		{
-			var allsCourse = await _courseRepository.GetAllCourseAsync();
-			return allsCourse.Select(x => new CourseResponseModel
-			{
-				CourseId = x.CourseId,
-				CourseName = x.CourseName,
-				Title = x.Title,
-				Description = x.Description,
-				Image = x.Image,
-				IsDelete = x.IsDelete,
-				IsLocked = x.IsLocked,
-				Price = x.Price,
-				CourseTypeName = x.CourseTypeName,
-
-			}).ToList();
+			return await _courseRepository.AddCourseAsync(courseRequestModel);
 		}
 
+		public async Task<List<CourseResponseModel>> GetAllCourseHomeAsync()
+		{
+			return await _courseRepository.GetAllCourseHomeAsync();
+		}
 
+		public Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		{
+			throw new NotImplementedException();
+		}
+
+		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		{
+			return await _courseRepository.GetCourseById(courseId);
+		}
 	}
 }

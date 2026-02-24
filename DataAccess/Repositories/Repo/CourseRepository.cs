@@ -15,53 +15,59 @@ namespace DataAccess.Repositories.Repo
 {
 	public class CourseRepository : ICourseRepository
 	{
-		private readonly IDbConnectionFactory _connectionFactory;
+		private readonly ISqlDataAccess _sqlDataAccess;
 
-		public CourseRepository(IDbConnectionFactory connectionFactory)
+		public CourseRepository(ISqlDataAccess sqlDataAccess)
 		{
-			_connectionFactory = connectionFactory;
+			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllCourseAsync()
+		public async Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel)
 		{
-			var allsCourse = new List<CourseResponseModel>();
 			try
 			{
-				// b1 mở connect đến Db
-				using var conn = _connectionFactory.CreateConnection();
-				// b2 dùng sql command để thao tác với database
-				using var cmd = new SqlCommand("sp_GetAllCourse", conn);
-				cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-				// Mở kết nối trước khi đọc
-				await conn.OpenAsync();
-
-				// b3 dùng sql reader để đọc dữ liệu từ command
-				using var reader = await cmd.ExecuteReaderAsync();
-
-				while (await reader.ReadAsync())
+				int newCourseId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddCourse", courseRequestModel);
+				return new CourseResponseModel 
 				{
-					allsCourse.Add(new CourseResponseModel
-					{
-						CourseId       = reader.GetInt32("CourseId"),
-						CourseName     = reader.GetString("CourseName").Trim(),
-						Title          = reader.GetString("Title").Trim(),
-						Description    = reader.GetString("Description").Trim(),
-						Image          = reader.GetString("Image").Trim(),
-						IsLocked       = reader.GetBoolean("IsLocked"),
-						IsDelete       = reader.GetBoolean("IsDelete"),
-						Price          = Convert.ToDouble(reader["Price"]),
-						CourseTypeName = reader.GetString("CourseTypeName").Trim(),
-					});
-				}
-			} catch (Exception ex)
-			{
-				throw new Exception("Lỗi lấy tất cả khóa học.", ex);
+					CourseId = newCourseId,
+					CourseName = courseRequestModel.CourseName,
+					Title = courseRequestModel.Title,
+					Description = courseRequestModel.Description,
+					Image = courseRequestModel.Image,
+					IsLocked = courseRequestModel.IsLocked,
+					IsDelete = courseRequestModel.IsDelete,
+					Price = courseRequestModel.Price,
+					CourseTypeId = courseRequestModel.CourseTypeId,
+				};
 			}
-
-			return allsCourse;
+			catch (Exception ex)
+			{
+				throw new Exception("Thêm Khóa học thất bại.", ex);
+			}
 		}
 
+		public async Task<List<CourseResponseModel>> GetAllCourseHomeAsync()
+		{
+			try
+			{
+				var allsCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllCourseIsLocked", null);
+				return allsCourse.ToList();
+			} catch (Exception ex)
+			{
+				throw new Exception("Lỗi lấy tất cả khóa học.",ex);
+			}
+		}
 
+		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		{
+			try
+			{
+				return await _sqlDataAccess.QueryFirstOrDefaultAsync<CourseResponseModel>("sp_GetCourseById", new { CourseId = courseId });
+
+			}catch (Exception ex)
+			{
+				throw new Exception("Không có khóa học tương ứng.",ex);
+			}
+		}
 	}
 }
