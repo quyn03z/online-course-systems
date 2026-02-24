@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories.Impl;
+﻿using DataAccess.Models.LessonModel;
+using DataAccess.Repositories.Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface ILessonService
 	{
-
-
+		Task<IEnumerable<LessonResponseModel>> GetAllManaLessonAsync(int courseId);
+		Task<LessonResponseModel> AddManaLessonAsync(LessonRequestModel lessonRequesModel,int courseId);
+		Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel);
 	}
 }

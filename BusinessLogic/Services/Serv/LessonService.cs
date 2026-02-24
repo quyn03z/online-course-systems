@@ -1,5 +1,8 @@
-﻿using BusinessLogic.Services.Impl;
+﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Services.Impl;
+using DataAccess.Models.LessonModel;
 using DataAccess.Repositories.Impl;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,74 @@ namespace BusinessLogic.Services.Serv
 		public LessonService(ILessonRepository lessonRepository)
 		{
 			_lessonRepository = lessonRepository;
+		}
+
+		public async Task<LessonResponseModel> AddManaLessonAsync(LessonRequestModel lessonRequesModel, int courseId)
+		{
+			try
+			{
+				var lesson = new Lesson
+				{
+					CourseId = courseId,
+					Title = lessonRequesModel.Title,
+					IsLocked = lessonRequesModel.IsLocked,
+				};
+				await _lessonRepository.AddAsync(lesson);
+
+				return new LessonResponseModel { 
+					Title = lesson.Title,
+					IsLocked = lesson.IsLocked,
+					CourseId = lesson.CourseId,
+				};
+			}catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi thêm bài học mới.", ex);
+			}
+		}
+		
+		public async Task<IEnumerable<LessonResponseModel>> GetAllManaLessonAsync(int courseId)
+		{
+			try
+			{
+				var allsLesson = await _lessonRepository.GetAllManaLessonAsync(courseId);
+				return allsLesson.Select(x => new LessonResponseModel
+				{
+					LessonId = x.LessonId,
+					Title = x.Title,
+					CourseName = x.Course.CourseName,
+					IsLocked = x.IsLocked,
+					CourseId = x.CourseId,
+				});
+			}catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi lấy tất cả bài học.",ex);
+			}
+		}
+
+		public async Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel)
+		{
+			try
+			{
+				var lesson = await _lessonRepository.GetByIdAsync(lessonId);
+				if (lesson == null) throw new BadRequestException("Lesson không tồn tại trong hệ thống!");
+
+				lesson.Title    = lessonRequesModel.Title;
+				lesson.IsLocked = lessonRequesModel.IsLocked;
+
+				await _lessonRepository.UpdateAsync(lesson);
+
+				return new LessonResponseModel
+				{
+					LessonId = lesson.LessonId,
+					Title    = lesson.Title,
+					IsLocked = lesson.IsLocked,
+					CourseId = lesson.CourseId,
+				};
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi cập nhật bài học.", ex);
+			}
 		}
 
 
