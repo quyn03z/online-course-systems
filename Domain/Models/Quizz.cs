@@ -20,10 +20,10 @@ namespace Domain.Models
         [StringLength(100)]
         public string Title { get; set; }
 
-        public int LessionId { get; set; }
+        public int LessonId { get; set; }
 
         [StringLength(100)]
-        public string LessionName { get; set; }
+        public string LessonName { get; set; }
 
         public virtual Lesson Lesson { get; set; }
 

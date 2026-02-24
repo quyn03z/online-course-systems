@@ -19,13 +19,11 @@ namespace Domain.Models
 
         public string Description { get; set; }
 
-        public int LessionId { get; set; }
+        public int LessonId { get; set; }
 
         public DateTime? CreateDate { get; set; }
 
         public bool? IsLocked { get; set; }
-
-        public long? VideoDuration { get; set; }
 
         public string VideoLink { get; set; }
 
