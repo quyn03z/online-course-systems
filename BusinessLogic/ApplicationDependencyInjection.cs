@@ -33,7 +33,8 @@ namespace BusinessLogic
 			// course
 			services.AddScoped<ICourseService, CourseService>();
 
-
+			// lesson
+			services.AddScoped<ILessonService, LessonService>();
 
 		}
 

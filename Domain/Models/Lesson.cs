@@ -21,6 +21,8 @@ namespace Domain.Models
 
         public int CourseId { get; set; }
 
+        public bool IsLocked { get; set; } = false;
+
         public virtual Course Course { get; set; }
 
         public virtual Quizz Quizz { get; set; }

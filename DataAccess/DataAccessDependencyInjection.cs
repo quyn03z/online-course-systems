@@ -39,6 +39,9 @@ namespace DataAccess
 			// course
 			services.AddScoped<ICourseRepository, CourseRepository>();
 
+			// lesson
+			services.AddScoped <ILessonRepository,LessonRepository>();
+
 			// role
 			services.AddScoped<IRoleRepository, RoleRepository>();
 
@@ -56,7 +59,7 @@ namespace DataAccess
 			if (databaseConfig != null && databaseConfig.UseInMemoryDatabase)
 			{
 				services.AddDbContext<OCMSMSFContext>(options =>
-					options.UseInMemoryDatabase("OCMSMSF"));
+					options.UseInMemoryDatabase("OnlineCourseMSF"));
 			}
 			else
 			{
