@@ -17,10 +17,10 @@ namespace API.Controllers
 			_courseService = courseService;
 		}
 
-		[HttpGet("get-alls-course")]
-		public async Task<IActionResult> GetAllsCourse()
+		[HttpGet("get-alls-home-course")]
+		public async Task<IActionResult> GetAllsHomeCourse()
 		{
-			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllCourseHomeAsync()));
+			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllHomeCourseAsync()));
 		}
 
 		[HttpGet("{courseId}")]
@@ -29,11 +29,9 @@ namespace API.Controllers
 			return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.GetCourseById(courseId)));
 		}
 
-		[HttpPost("add-course")]
-		public async Task<IActionResult> AddCourseAsync(CourseRequestModel courseRequestModel)
-		{
-			return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.AddCourseAsync(courseRequestModel)));
-		}
+
+
+		
 
 	}
 }

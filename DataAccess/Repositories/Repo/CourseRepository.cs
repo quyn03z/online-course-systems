@@ -46,15 +46,28 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllCourseHomeAsync()
+		public async Task<List<CourseResponseModel>> GetAllHomeCourseAsync()
 		{
 			try
 			{
-				var allsCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllCourseIsLocked", null);
-				return allsCourse.ToList();
+				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllHomeCourseAsync", null);
+				return allsHomeCourse.ToList();
 			} catch (Exception ex)
 			{
 				throw new Exception("Lỗi lấy tất cả khóa học.",ex);
+			}
+		}
+
+		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		{
+			try
+			{
+				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", null);
+				return allsManaCourse.ToList();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Không có khóa học tương ứng.", ex);
 			}
 		}
 
@@ -69,5 +82,45 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("Không có khóa học tương ứng.",ex);
 			}
 		}
+
+		public async Task<string> RemoveCourseById(int courseId)
+		{
+			try
+			{
+				await _sqlDataAccess.ExecuteAsync("sp_RemoveCourseById", new { CourseId = courseId });
+				return "Xóa khóa học thành công.";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Xóa khóa học thất bại.", ex);
+			}
+		}
+
+		public async Task<string> UpdateCourseAsync( CourseRequestModel courseRequestModel, int courseId)
+		{
+			try
+			{
+				await _sqlDataAccess.ExecuteAsync("sp_UpdateCourse", new
+				{
+					CourseId     = courseId,
+					CourseName   = courseRequestModel.CourseName,
+					Title        = courseRequestModel.Title,
+					Description  = courseRequestModel.Description,
+					Image        = courseRequestModel.Image,
+					IsLocked       = courseRequestModel.IsLocked,
+					IsDelete     = courseRequestModel.IsDelete,
+					Price        = courseRequestModel.Price,
+					CourseTypeId = courseRequestModel.CourseTypeId,
+				});
+				return "Cập nhật khóa học thành công.";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Cập nhật khóa học thất bại.", ex);
+			}
+		}
+
+		
+
 	}
 }
