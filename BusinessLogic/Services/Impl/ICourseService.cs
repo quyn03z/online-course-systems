@@ -6,17 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repositories.Impl
+namespace BusinessLogic.Services.Impl
 {
-	public interface ICourseRepository 
+	public interface ICourseService
 	{
 		Task<List<CourseResponseModel>> GetAllHomeCourseAsync();
 		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
 		Task<CourseResponseModel> GetCourseById(int courseId);
+
 		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
 
 		Task<string> RemoveCourseById(int courseId);
 
-		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel,int courseId);
+		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel, int courseId);
 	}
 }

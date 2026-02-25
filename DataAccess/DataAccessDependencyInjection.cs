@@ -1,4 +1,5 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.Infrastructure;
+using DataAccess.Repositories;
 using DataAccess.Repositories.Impl;
 using DataAccess.Repositories.Repo;
 using Domain.Models;
@@ -26,11 +27,20 @@ namespace DataAccess
 
 		private static void AddRepositories(this IServiceCollection services)
 		{
+			// sql data access
+			services.AddScoped<ISqlDataAccess, SqlDataAccess>();
+
+			// connection factory
+			services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
+
 			// user
 			services.AddScoped<IUserRepository, UserRepository>();
 
 			// course
 			services.AddScoped<ICourseRepository, CourseRepository>();
+
+			// lesson
+			services.AddScoped <ILessonRepository,LessonRepository>();
 
 			// role
 			services.AddScoped<IRoleRepository, RoleRepository>();
@@ -41,6 +51,8 @@ namespace DataAccess
 			// resetPasswordToken
 			services.AddScoped<IResetPasswordTokenRepository, ResetPasswordTokenRepository>();
 
+			// sublesson
+			services.AddScoped<ISubLessonRepository, SubLessonRepository>();
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -49,7 +61,7 @@ namespace DataAccess
 			if (databaseConfig != null && databaseConfig.UseInMemoryDatabase)
 			{
 				services.AddDbContext<OCMSMSFContext>(options =>
-					options.UseInMemoryDatabase("OCMSMSF"));
+					options.UseInMemoryDatabase("OnlineCourseMSF"));
 			}
 			else
 			{
@@ -59,7 +71,6 @@ namespace DataAccess
 						opt => opt.MigrationsAssembly(typeof(OCMSMSFContext).Assembly.FullName)));
 			}
 		}
-
 
 
 		private class DatabaseConfiguration

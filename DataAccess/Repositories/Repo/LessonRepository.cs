@@ -1,0 +1,25 @@
+﻿using DataAccess.Models.LessonModel;
+using DataAccess.Repositories.Impl;
+using Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Repositories.Repo
+{
+	public class LessonRepository : BaseRepository<Lesson>, ILessonRepository
+	{
+		public LessonRepository(OCMSMSFContext context) : base(context)
+		{
+		}
+
+		public async Task<IEnumerable<Lesson>> GetAllManaLessonAsync(int courseId)
+		{
+			return await _dbSet.Include(c => c.Course).Where(l => l.CourseId == courseId).ToListAsync();
+		}
+	}
+
+}

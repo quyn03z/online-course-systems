@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(OCMSMSFContext))]
-    partial class OCMSMSFContextModelSnapshot : ModelSnapshot
+    [Migration("20260224074932_AddIsLockedToLesson")]
+    partial class AddIsLockedToLesson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,10 +320,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuizzId"));
 
-                    b.Property<int>("LessonId")
+                    b.Property<int>("LessionId")
                         .HasColumnType("int");
 
-                    b.Property<string>("LessonName")
+                    b.Property<string>("LessionName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -332,7 +335,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("QuizzId");
 
-                    b.HasIndex("LessonId")
+                    b.HasIndex("LessionId")
                         .IsUnique();
 
                     b.ToTable("Quizz");
@@ -442,7 +445,7 @@ namespace DataAccess.Migrations
                     b.Property<bool?>("IsLocked")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LessonId")
+                    b.Property<int>("LessionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -450,13 +453,16 @@ namespace DataAccess.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<long?>("VideoDuration")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("VideoLink")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubLessonId");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("LessionId");
 
                     b.ToTable("SubLesson");
                 });
@@ -620,7 +626,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Domain.Models.Lesson", "Lesson")
                         .WithOne("Quizz")
-                        .HasForeignKey("Domain.Models.Quizz", "LessonId")
+                        .HasForeignKey("Domain.Models.Quizz", "LessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -653,7 +659,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Domain.Models.Lesson", "Lesson")
                         .WithMany("SubLessons")
-                        .HasForeignKey("LessonId")
+                        .HasForeignKey("LessionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

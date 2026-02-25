@@ -79,12 +79,12 @@ namespace DataAccess.Repositories
 			modelBuilder.Entity<Lesson>()
 				.HasOne(e => e.Quizz)
 				.WithOne(e => e.Lesson)
-				.HasForeignKey<Quizz>(e => e.LessionId);
+				.HasForeignKey<Quizz>(e => e.LessonId);
 
 			modelBuilder.Entity<Lesson>()
 				.HasMany(e => e.SubLessons)
 				.WithOne(e => e.Lesson)
-				.HasForeignKey(e => e.LessionId)
+				.HasForeignKey(e => e.LessonId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			// Payment
