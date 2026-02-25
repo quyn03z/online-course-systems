@@ -24,6 +24,32 @@ namespace API.Controllers
 				.Success(await _quizzService.GetAllQuizzAsync()));
 		}
 
+		[HttpPost("add-quizz")]
+		public async Task<IActionResult> AddQuizzAsync(QuizzRequestModel quizzRequestModel, int lessonId)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			return Ok(ApiResult<QuizzResponseModel>.Success(await _quizzService.AddQuizzAsync(quizzRequestModel, lessonId)));
+		}
+
+		[HttpPut("update-quizz")]
+		public async Task<IActionResult> UpdateQuizzAsync(QuizzRequestModel quizzRequestModel, int quizzId)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			return Ok(ApiResult<string>.Success(await _quizzService.UpdateQuizzAsync(quizzRequestModel, quizzId)));
+		}
+
+		[HttpDelete("remove-quizz")]
+		public async Task<IActionResult> RemoveQuizzAsync(int quizzId)
+		{
+			return Ok(ApiResult<string>.Success(await _quizzService.RemoveQuizzAsync(quizzId)));
+		}
+
 
 	}
 }
