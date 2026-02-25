@@ -16,6 +16,11 @@ namespace DataAccess.Repositories.Repo
 		{
 		}
 
+		public async Task<IEnumerable<Lesson>> GetAllLessonAsync(int courseId)
+		{
+			return await _dbSet.Include(c => c.Course).Where(c => c.CourseId == courseId && c.IsLocked == false).ToListAsync();
+		}
+
 		public async Task<IEnumerable<Lesson>> GetAllManaLessonAsync(int courseId)
 		{
 			return await _dbSet.Include(c => c.Course).Where(l => l.CourseId == courseId).ToListAsync();
