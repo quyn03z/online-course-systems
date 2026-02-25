@@ -17,9 +17,29 @@ namespace BusinessLogic.Services.Serv
 			_subLessonRepository = subLessonRepository;
 		}
 
+		public async Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId)
+		{
+			return await _subLessonRepository.AddSubLessonAsync(subLessonRequestModel, lessonId);
+		}
+
+		public async Task<List<SubLessonResponseModel>> GetAllsSubLesson(int lessonId)
+		{
+			return await _subLessonRepository.GetAllsSubLesson(lessonId);
+		}
+
 		public async Task<List<SubLessonResponseModel>> GetAllsSubLessonAsync(int lessonId)
 		{
 			return await _subLessonRepository.GetAllsSubLessonAsync(lessonId);
+		}
+
+		public async Task<string> RemoveSubLessonAsync(int sublessonId)
+		{
+			return await _subLessonRepository.RemoveSubLessonAsync(sublessonId);
+		}
+
+		public async Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId)
+		{
+			return await _subLessonRepository.UpdateSubLessonAsync(subLessonRequestModel, sublessonId);
 		}
 	}
 }

@@ -9,9 +9,18 @@ namespace DataAccess.Repositories.Impl
 {
 	public interface ISubLessonRepository
 	{
-		// lấy hết cả lock
+		// lấy hết cả locked
 		Task<List<SubLessonResponseModel>> GetAllsSubLessonAsync(int lessonId);
 
-		// lấy hết không có lock
+		// lấy hết không có locked
+
+		Task<List<SubLessonResponseModel>> GetAllsSubLesson(int lessonId);
+
+		Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId);
+
+		Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId);
+
+		Task<string> RemoveSubLessonAsync(int subLessonId);
+
 	}
 }
