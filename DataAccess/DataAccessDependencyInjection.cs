@@ -56,6 +56,9 @@ namespace DataAccess
 
 			// quizz
 			services.AddScoped<IQuizzRepository, QuizzRepository>();
+
+			// questions
+			services.AddScoped<IQuestionsRepository, QuestionsRepository>();
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
