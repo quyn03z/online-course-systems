@@ -41,6 +41,9 @@ namespace BusinessLogic
 
 			// quizz
 			services.AddScoped<IQuizzService, QuizzService>();
+			
+			// questions
+			services.AddScoped<IQuestionsService, QuestionsService>();
 		}
 
 	}
