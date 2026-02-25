@@ -22,8 +22,7 @@ namespace Domain.Models
 
         public int LessonId { get; set; }
 
-        [StringLength(100)]
-        public string LessonName { get; set; }
+        public int QuizzTime { get; set; }
 
         public virtual Lesson Lesson { get; set; }
 
