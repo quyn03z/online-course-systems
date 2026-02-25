@@ -42,7 +42,27 @@ namespace BusinessLogic.Services.Serv
 				throw new Exception("Có lỗi khi thêm bài học mới.", ex);
 			}
 		}
-		
+
+		public async Task<IEnumerable<LessonResponseModel>> GetAllLessonAsync(int courseId)
+		{
+			try
+			{
+				var allsLesson = await _lessonRepository.GetAllLessonAsync(courseId);
+				return allsLesson.Select(x => new LessonResponseModel
+				{
+					LessonId = x.LessonId,
+					Title = x.Title,
+					CourseName = x.Course.CourseName,
+					IsLocked = x.IsLocked,
+					CourseId = x.CourseId,
+				});
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi lấy tất cả bài học.", ex);
+			}
+		}
+
 		public async Task<IEnumerable<LessonResponseModel>> GetAllManaLessonAsync(int courseId)
 		{
 			try
