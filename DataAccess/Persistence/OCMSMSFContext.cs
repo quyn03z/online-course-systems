@@ -92,6 +92,12 @@ namespace DataAccess.Repositories
 				.Property(e => e.Amount)
 				.HasColumnType("decimal(10,2)");
 
+			// Question — khai báo rõ FK để EF không sinh QuestionTypeTypeId
+			modelBuilder.Entity<Question>()
+				.HasOne(q => q.QuestionType)
+				.WithMany()
+				.HasForeignKey(q => q.TypeId);
+
 			// Quizz
 			modelBuilder.Entity<Quizz>()
 				.HasMany(e => e.MenteeScores)
@@ -102,7 +108,7 @@ namespace DataAccess.Repositories
 			modelBuilder.Entity<Quizz>()
 				.HasMany(e => e.Questions)
 				.WithOne(e => e.Quizz)
-				.HasForeignKey(e => e.QuizId);
+				.HasForeignKey(e => e.QuizzId);
 
 			// Role
 			modelBuilder.Entity<Role>()
