@@ -34,6 +34,8 @@ namespace Domain.Models
         [StringLength(100)]
         public string Email { get; set; }
 
+        public string Avatar { get; set; }
+
         public bool IsLocked { get; set; }
 
         public int RoleId { get; set; }

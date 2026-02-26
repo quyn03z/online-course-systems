@@ -190,6 +190,7 @@ namespace BusinessLogic.Services.Serv
 				Username = u.Username.Trim(),
 				Firstname = u.Firstname.Trim(),
 				Lastname = u.Lastname.Trim(),
+				Avatar = u.Avatar.Trim(),
 				Email = u.Email.Trim(),
 				IsLocked = u.IsLocked,
 				RoleName = u.Role?.RoleName.Trim()
@@ -213,6 +214,7 @@ namespace BusinessLogic.Services.Serv
 				Email = addUserAdminModel.Email,
 				Firstname = addUserAdminModel.FirstName,
 				Lastname = addUserAdminModel.LastName,
+				Avatar = addUserAdminModel.Avatar,
 				Password = BCrypt.Net.BCrypt.HashPassword(randomPassword)
 			};
 
@@ -222,6 +224,7 @@ namespace BusinessLogic.Services.Serv
 				Username = user.Username,
 				Firstname = user.Firstname,
 				Lastname = user.Lastname,
+				Avatar = user.Avatar,	
 				Email = user.Email,
 				IsLocked = user.IsLocked,
 				RoleName = user.Role?.RoleName
@@ -264,6 +267,7 @@ namespace BusinessLogic.Services.Serv
 			user.Email = userRequest.Email;
 			user.Firstname = userRequest.FirstName;
 			user.Lastname = userRequest.LastName;
+			user.Avatar = userRequest.Avatar;
 			user.IsLocked = userRequest.IsLocked;
 
 			await _userRepository.UpdateAsync(user);
@@ -274,6 +278,7 @@ namespace BusinessLogic.Services.Serv
 				Username = user.Username,
 				Firstname = user.Firstname,
 				Lastname = user.Lastname,
+				Avatar = user.Avatar,
 				Email = user.Email,
 				IsLocked = user.IsLocked,
 				RoleName = user.Role?.RoleName
@@ -281,6 +286,46 @@ namespace BusinessLogic.Services.Serv
 		}
 
 
+
+
+
+		public async Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
+		{
+			// 1. Tìm refresh token trong DB (chưa revoke + chưa hết hạn)
+			var storedToken = await _refreshTokenRepository.GetByTokenAsync(tokenRequestModel.RefreshToken);
+			if (storedToken == null)
+				throw new BadRequestException("Refresh token không hợp lệ hoặc đã hết hạn.");
+
+			var user = storedToken.User;
+
+			if (user.IsLocked)
+				throw new BadRequestException("Tài khoản đã bị khóa.");
+
+			// 2. Thu hồi toàn bộ token cũ của user
+			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
+
+			// 3. Tạo access token + refresh token mới
+			var newAccessToken = JwtHelper.GenerateToken(user, _configuration);
+			var newRefreshToken = JwtHelper.GenerateRefreshToken();
+
+			await _refreshTokenRepository.AddAsync(new RefreshToken
+			{
+				UserId = user.UserId,
+				Token = newRefreshToken,
+				IsRevoked = false,
+				ExpiredAt = DateTime.Now.AddDays(7),
+				CreatedAt = DateTime.Now,
+			});
+
+			return new LoginResponseModel
+			{
+				Username = user.Username,
+				Email = user.Email,
+				Role = user.Role.RoleName,
+				Token = newAccessToken,
+				RefreshToken = newRefreshToken,
+			};
+		}
 
 	}
 }
