@@ -27,5 +27,7 @@ namespace BusinessLogic.Services.Impl
 
 		Task<UserResponseModel> EditUserAdmin(UserRequest userRequest);
 
+		Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel);
+
 	}
 }
