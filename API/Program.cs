@@ -1,5 +1,6 @@
 using BusinessLogic;
 using DataAccess;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,18 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddDataAccess(builder.Configuration)
 	.AddApplication(builder.Environment);
 
+
+// add cors 
+builder.Services.AddCors(option =>
+{
+	option.AddPolicy("AllowAngular", policy =>
+	{
+		policy.WithOrigins("http://localhost:4200")
+			  .AllowAnyHeader()
+			  .AllowAnyMethod();
+	});
+});
+
 var app = builder.Build();
 
 // Add exception handling middleware
@@ -43,6 +56,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 
