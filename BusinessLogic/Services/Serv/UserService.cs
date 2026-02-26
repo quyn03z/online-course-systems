@@ -57,8 +57,6 @@ namespace BusinessLogic.Services.Serv
 				RoleId = role.Id,
 				Username = createUserModel.UserName,
 				Email = createUserModel.Email,
-				Firstname = createUserModel.FirstName,
-				Lastname = createUserModel.LastName,
 				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password)
 			};
 

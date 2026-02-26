@@ -53,12 +53,6 @@ namespace BusinessLogic.Models
 
 			[Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")] 
 			public string ConfirmPassword { get; set; } = string.Empty;
-
-
-			public string? FirstName { get; set; }
-
-			public string? LastName { get; set; }
-
 		}
 
 		public class UserResponseModel
