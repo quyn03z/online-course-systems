@@ -12,7 +12,6 @@ namespace Domain.Models
 
         public int? QuestionId { get; set; }
 
-        [Column(TypeName = "text")]
         public string AnswerText { get; set; }
 
         public bool? IsCorrect { get; set; }

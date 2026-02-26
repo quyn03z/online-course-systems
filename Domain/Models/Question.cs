@@ -15,10 +15,9 @@ namespace Domain.Models
         [Key]
         public int QuestionId { get; set; }
 
-        public int? QuizId { get; set; }
+        public int? QuizzId { get; set; }
 
-        [Column(TypeName = "text")]
-        public string QuestionText { get; set; }
+		public string QuestionText { get; set; }
 
         public int? TypeId { get; set; }
 

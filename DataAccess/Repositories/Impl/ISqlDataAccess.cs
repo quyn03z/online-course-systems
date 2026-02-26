@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,7 @@ namespace DataAccess.Repositories.Impl
 		// Dùng cho Update, Delete (trả về số dòng bị ảnh hưởng)
 		Task<int> ExecuteAsync(string storedProcedure, object parameters = null);
 
+		// đọc nhiều bảng
+		Task<T> QueryMultipleAsync<T>(string storedProcedure, Func<SqlMapper.GridReader, Task<T>> mapFunc, object parameters = null);
 	}
 }

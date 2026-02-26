@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(OCMSMSFContext))]
-    partial class OCMSMSFContextModelSnapshot : ModelSnapshot
+    [Migration("20260225075857_TypeQuestionText")]
+    partial class TypeQuestionText
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace DataAccess.Migrations
                     b.Property<string>("AnswerText")
                         .IsRequired()
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool?>("IsCorrect")
                         .HasColumnType("bit");
@@ -273,10 +276,10 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("QuestionTypeTypeId")
+                    b.Property<int>("QuestionTypeTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("QuizzId")
+                    b.Property<int?>("QuizId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TypeId")
@@ -286,9 +289,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("QuestionTypeTypeId");
 
-                    b.HasIndex("QuizzId");
-
-                    b.HasIndex("TypeId");
+                    b.HasIndex("QuizId");
 
                     b.ToTable("Questions");
                 });
@@ -601,17 +602,15 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Models.Question", b =>
                 {
-                    b.HasOne("Domain.Models.QuestionType", null)
+                    b.HasOne("Domain.Models.QuestionType", "QuestionType")
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionTypeTypeId");
+                        .HasForeignKey("QuestionTypeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Models.Quizz", "Quizz")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizzId");
-
-                    b.HasOne("Domain.Models.QuestionType", "QuestionType")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
+                        .HasForeignKey("QuizId");
 
                     b.Navigation("QuestionType");
 
