@@ -69,6 +69,7 @@ namespace BusinessLogic.Models
 			public string Firstname { get; set; }
 			public string Email { get; set; }
 			public bool IsLocked { get; set; }
+			public string Avatar {  get; set; }
 			public string RoleName { get; set; }
 		}
 
@@ -87,6 +88,8 @@ namespace BusinessLogic.Models
 			public string? LastName { get; set; }
 			[Range(1, 3, ErrorMessage = "RoleId chỉ được phép là 1, 2 hoặc 3.")]
 			public int RoleId { get; set; }
+			public string Avatar { get; set; }
+
 
 		}
 
@@ -108,6 +111,8 @@ namespace BusinessLogic.Models
 			public int RoleId { get; set; }
 
 			public bool IsLocked { get; set; }
+			public string Avatar { get; set; }
+
 
 		}
 
