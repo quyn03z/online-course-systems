@@ -139,7 +139,7 @@ namespace BusinessLogic.Services.Serv
 				CreateAt = DateTime.Now,
 			});
 
-			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={resetToken}&email={email.Email}";
+			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={resetToken}";
 
 			// Gửi email reset password
 			await _emailService.SendEmailResetPasswordAsync(new ForgotPasswordModel
