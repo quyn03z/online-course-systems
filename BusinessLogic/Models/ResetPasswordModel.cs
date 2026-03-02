@@ -15,6 +15,7 @@ namespace BusinessLogic.Models
 	public class ResetPasswordModel
 	{
 
+		public string Token { get; set; }
 		[Required(ErrorMessage = "Mật khẩu là bắt buộc.")]
 		[MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
 		[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$", ErrorMessage = "Mật khẩu phải có chữ hoa, chữ thường và số.")]

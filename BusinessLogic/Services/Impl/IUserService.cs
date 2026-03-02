@@ -17,7 +17,7 @@ namespace BusinessLogic.Services.Impl
 
 		Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email);
 
-		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel, string token);
+		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel);
 
 		Task<IEnumerable<UserResponseModel>> GetAllUserAdmin();
 
