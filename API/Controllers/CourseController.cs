@@ -17,10 +17,10 @@ namespace API.Controllers
 			_courseService = courseService;
 		}
 
-		[HttpGet("get-alls-home-course")]
+		[HttpGet("get-alls-course")]
 		public async Task<IActionResult> GetAllsHomeCourse()
 		{
-			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllHomeCourseAsync()));
+			return Ok(ApiResult<List<CourseResponseHomeModel>>.Success(await _courseService.GetAllHomeCourseAsync()));
 		}
 
 		[HttpGet("{courseId}")]

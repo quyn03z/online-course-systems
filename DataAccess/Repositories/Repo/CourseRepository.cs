@@ -46,11 +46,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCourseAsync()
 		{
 			try
 			{
-				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllHomeCourseAsync", null);
+				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", null);
 				return allsHomeCourse.ToList();
 			} catch (Exception ex)
 			{

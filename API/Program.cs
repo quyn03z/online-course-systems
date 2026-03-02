@@ -17,12 +17,10 @@ builder.Services.AddAuthentication("Bearer")
 	{
 		options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
 		{
-			ValidateIssuer = true,
-			ValidateAudience = true,
+			ValidateIssuer = false,
+			ValidateAudience = false,
 			ValidateLifetime = true,
 			ValidateIssuerSigningKey = true,
-			ValidIssuer = builder.Configuration["JwtConfiguration:ValidIssuer"],
-			ValidAudience = builder.Configuration["JwtConfiguration:ValidAudience"],
 			IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtConfiguration:SecretKey"]))
 		};
 	});

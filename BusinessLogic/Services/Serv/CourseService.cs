@@ -24,7 +24,7 @@ namespace BusinessLogic.Services.Serv
 			return await _courseRepository.AddCourseAsync(courseRequestModel);
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCourseAsync()
 		{
 			return await _courseRepository.GetAllHomeCourseAsync();
 		}

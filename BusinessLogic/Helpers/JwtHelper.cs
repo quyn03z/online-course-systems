@@ -16,6 +16,8 @@ namespace BusinessLogic.Helpers
 		public static string GenerateToken(User user, IConfiguration configuration)
 		{
 			var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
+			var issuer = configuration.GetValue<string>("JwtConfiguration:ValidIssuer");
+			var audience = configuration.GetValue<string>("JwtConfiguration:ValidAudience");
 
 			var key = Encoding.ASCII.GetBytes(secretKey ?? string.Empty);
 
@@ -34,6 +36,8 @@ namespace BusinessLogic.Helpers
 			{
 				Subject = new ClaimsIdentity(claims),
 				Expires = DateTime.Now.AddMinutes(30),
+				Issuer = issuer,
+				Audience = audience,
 				SigningCredentials =
 					new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};

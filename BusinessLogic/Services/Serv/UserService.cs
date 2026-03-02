@@ -111,9 +111,12 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-		public async Task LogoutAsync(int userId)
+		public async Task LogoutAsync()
 		{
-			await _refreshTokenRepository.RevokeUserTokensAsync(userId);
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new BusinessLogic.Exceptions.UnauthorizedException("Người dùng chưa xác thực.");
+			await _refreshTokenRepository.RevokeUserTokensAsync(userId.Value);
 		}
 
 		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)

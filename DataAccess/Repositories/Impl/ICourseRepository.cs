@@ -10,7 +10,7 @@ namespace DataAccess.Repositories.Impl
 {
 	public interface ICourseRepository 
 	{
-		Task<List<CourseResponseModel>> GetAllHomeCourseAsync();
+		Task<List<CourseResponseHomeModel>> GetAllHomeCourseAsync();
 		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
 		Task<CourseResponseModel> GetCourseById(int courseId);
 		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
