@@ -61,15 +61,15 @@ namespace API.Controllers
 				.Success(await _userService.ForgotPasswordAsync(email)));
 		}
 
-		[HttpPost("reset-password")]
-		public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+		[HttpPost("reset-password/{token}")]
+		public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordModel,string token)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
 			return Ok(ApiResult<ResetPasswordModel>
-				.Success(await _userService.ResetPasswordAsync(resetPasswordModel)));
+				.Success(await _userService.ResetPasswordAsync(resetPasswordModel,token)));
 		}
 
 		[HttpPost("refresh-token")]
