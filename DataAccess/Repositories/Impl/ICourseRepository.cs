@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using DataAccess.Models.CourseModel;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,15 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repositories.Impl
 {
-	public interface ICourseRepository : IBaseRepository<Course>
+	public interface ICourseRepository 
 	{
+		Task<List<CourseResponseModel>> GetAllHomeCourseAsync();
+		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
+		Task<CourseResponseModel> GetCourseById(int courseId);
+		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
+
+		Task<string> RemoveCourseById(int courseId);
+
+		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel,int courseId);
 	}
 }

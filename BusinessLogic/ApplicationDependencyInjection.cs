@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Services.Impl;
+﻿using BusinessLogic.Claims;
+using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -25,6 +26,24 @@ namespace BusinessLogic
 
 			//email
 			services.AddScoped<IEmailService, EmailService>();
+
+			//claim service
+			services.AddScoped<IClaimService, ClaimService>();
+
+			// course
+			services.AddScoped<ICourseService, CourseService>();
+
+			// lesson
+			services.AddScoped<ILessonService, LessonService>();
+
+			// sublesson
+			services.AddScoped<ISubLessonService, SubLessonService>();
+
+			// quizz
+			services.AddScoped<IQuizzService, QuizzService>();
+			
+			// questions
+			services.AddScoped<IQuestionsService, QuestionsService>();
 		}
 
 	}

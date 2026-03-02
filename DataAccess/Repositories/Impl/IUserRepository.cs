@@ -15,5 +15,7 @@ namespace DataAccess.Repositories.Impl
 		Task<bool> ExistsByEmailAsync(string email);
 
 		Task<bool> ExistsByUserNameAsync(string userName);
+
+		Task<IEnumerable<User>> GetAllUserAdmin();
 	}
 }

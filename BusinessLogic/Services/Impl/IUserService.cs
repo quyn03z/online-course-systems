@@ -19,6 +19,15 @@ namespace BusinessLogic.Services.Impl
 
 		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel, string token);
 
+		Task<IEnumerable<UserResponseModel>> GetAllUserAdmin();
+
+		Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel);
+
+		Task<string> BlockUserAdmin(int targetId);
+
+		Task<UserResponseModel> EditUserAdmin(UserRequest userRequest);
+
+		Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel);
 
 	}
 }

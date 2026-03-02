@@ -40,7 +40,6 @@ namespace API.Controllers
 			}
 			return Ok(ApiResult<LoginResponseModel>
 				.Success(await _userService.LoginAsync(loginUserModel)));
-
 		}
 
 		[HttpPost("logout")]
@@ -73,6 +72,16 @@ namespace API.Controllers
 				.Success(await _userService.ResetPasswordAsync(resetPasswordModel,token)));
 		}
 
+		[HttpPost("refresh-token")]
+		public async Task<IActionResult> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+			return Ok(ApiResult<LoginResponseModel>
+				.Success(await _userService.RefreshTokenAsync(tokenRequestModel)));
+		}
 
 	}
 }

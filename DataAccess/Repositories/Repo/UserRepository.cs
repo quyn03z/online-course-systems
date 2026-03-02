@@ -17,12 +17,17 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<bool> ExistsByEmailAsync(string email)
 		{
-			return await _dbSet.AllAsync(x => x.Email == email);
+			return await _dbSet.AnyAsync(x => x.Email == email);
 		}
 
 		public async Task<bool> ExistsByUserNameAsync(string userName)
 		{
-			return await _dbSet.AllAsync(x => x.Equals(userName));
+			return await _dbSet.AnyAsync(x => x.Username == userName);
+		}
+
+		public async Task<IEnumerable<User>> GetAllUserAdmin()
+		{
+			return await _dbSet.Include(r => r.Role).ToListAsync();
 		}
 
 		public async Task<User?> GetUserByEmail(string email)
@@ -36,6 +41,9 @@ namespace DataAccess.Repositories.Repo
 				.Include(r => r.Role)
 				.FirstOrDefaultAsync(x => x.Username == userName);
 		}
+
+
+
 
 
 	}

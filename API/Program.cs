@@ -1,11 +1,13 @@
 using BusinessLogic;
 using DataAccess;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -28,6 +30,18 @@ builder.Services.AddAuthentication("Bearer")
 builder.Services.AddDataAccess(builder.Configuration)
 	.AddApplication(builder.Environment);
 
+
+// add cors 
+builder.Services.AddCors(option =>
+{
+	option.AddPolicy("AllowAngular", policy =>
+	{
+		policy.WithOrigins("http://localhost:4200")
+			  .AllowAnyHeader()
+			  .AllowAnyMethod();
+	});
+});
+
 var app = builder.Build();
 
 // Add exception handling middleware
@@ -42,6 +56,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 
