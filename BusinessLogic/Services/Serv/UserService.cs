@@ -154,9 +154,9 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-		public async Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
+		public async Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel, string token)
 		{
-			var userResetPassToken = await _resetPasswordTokenRepository.GetByTokenAsync(resetPasswordModel.Token);
+			var userResetPassToken = await _resetPasswordTokenRepository.GetByTokenAsync(token);
 
 			if (userResetPassToken == null)
 				throw new BadRequestException("Token không hợp lệ hoặc đã được sử dụng.");
@@ -175,8 +175,8 @@ namespace BusinessLogic.Services.Serv
 
 			return new ResetPasswordModel
 			{
-				Email = user.Email,
-				Token = resetPasswordModel.Token
+				Password = resetPasswordModel.Password,
+				ConfirmPassword = resetPasswordModel.ConfirmPassword,
 			};
 
 		}
