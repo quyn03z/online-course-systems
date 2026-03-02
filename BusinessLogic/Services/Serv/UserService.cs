@@ -104,8 +104,6 @@ namespace BusinessLogic.Services.Serv
 
 			return new LoginResponseModel
 			{
-				Username = user.Username,
-				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = accessToken,
 				RefreshToken = refeshToken,
@@ -186,9 +184,9 @@ namespace BusinessLogic.Services.Serv
 			{
 				Id = u.UserId,
 				Username = u.Username.Trim(),
-				Firstname = u.Firstname.Trim(),
-				Lastname = u.Lastname.Trim(),
-				Avatar = u.Avatar.Trim(),
+				Firstname = u.Firstname?.Trim(),
+				Lastname = u.Lastname?.Trim(),
+				Avatar = u.Avatar?.Trim(),
 				Email = u.Email.Trim(),
 				IsLocked = u.IsLocked,
 				RoleName = u.Role?.RoleName.Trim()
@@ -317,8 +315,6 @@ namespace BusinessLogic.Services.Serv
 
 			return new LoginResponseModel
 			{
-				Username = user.Username,
-				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = newAccessToken,
 				RefreshToken = newRefreshToken,

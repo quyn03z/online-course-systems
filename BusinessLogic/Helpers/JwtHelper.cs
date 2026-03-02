@@ -27,6 +27,7 @@ namespace BusinessLogic.Helpers
 				new Claim(ClaimTypes.Name, user.Username),
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Role, user.Role.RoleName),
+				new Claim("Avatar", user.Avatar ?? "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png"),
 			};
 
 			var tokenDescriptor = new SecurityTokenDescriptor

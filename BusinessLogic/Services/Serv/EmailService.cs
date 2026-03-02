@@ -27,7 +27,7 @@ namespace BusinessLogic.Services.Serv
 			var smtpUsername = _configuration["Smtp:Username"];
 			var smtpPassword = _configuration["Smtp:Password"];
 			var fromEmail = _configuration["Smtp:FromEmail"] ?? smtpUsername; // Fallback to Username
-			var fromName = _configuration["Smtp:FromName"] ?? "OCMS System";
+			var fromName = _configuration["Smtp:FromName"] ?? "Online Course Learning System";
 
 			using var smtpClient = new SmtpClient(smtpHost, smtpPort)
 			{

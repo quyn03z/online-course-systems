@@ -20,9 +20,6 @@ namespace BusinessLogic.Models
 
 		public class LoginResponseModel
 		{
-			public string Username { get; set; }
-
-			public string Email { get; set; }
 
 			public string Token { get; set; }
 			public string RefreshToken { get; set; }
@@ -59,11 +56,11 @@ namespace BusinessLogic.Models
 		{
 			public int Id { get; set; }
 			public string Username { get; set; }
-			public string Lastname { get; set; }
-			public string Firstname { get; set; }
+			public string? Lastname { get; set; }
+			public string? Firstname { get; set; }
 			public string Email { get; set; }
 			public bool IsLocked { get; set; }
-			public string Avatar {  get; set; }
+			public string? Avatar {  get; set; }
 			public string RoleName { get; set; }
 		}
 

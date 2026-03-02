@@ -18,7 +18,7 @@ namespace API.Controllers
 			_userService = userService;
 		}
 
-		[HttpPost("create-user")]
+		[HttpPost("register")]
 		public async Task<IActionResult> CreateUserAsync(CreateUserModel createUserModel)
 		{
 			if (!ModelState.IsValid)
