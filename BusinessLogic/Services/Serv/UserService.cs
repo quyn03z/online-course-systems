@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static BusinessLogic.Models.User;
 
 namespace BusinessLogic.Services.Serv
@@ -134,8 +135,9 @@ namespace BusinessLogic.Services.Serv
 				isUsed = false,
 				CreateAt = DateTime.Now,
 			});
+			string safeToken = HttpUtility.UrlEncode(resetToken);
 
-			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={resetToken}&email={email.Email}";
+			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={safeToken}";
 
 			// Gửi email reset password
 			await _emailService.SendEmailResetPasswordAsync(new ForgotPasswordModel
@@ -150,9 +152,9 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-		public async Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel, string token)
+		public async Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
 		{
-			var userResetPassToken = await _resetPasswordTokenRepository.GetByTokenAsync(token);
+			var userResetPassToken = await _resetPasswordTokenRepository.GetByTokenAsync(resetPasswordModel.Token);
 
 			if (userResetPassToken == null)
 				throw new BadRequestException("Token không hợp lệ hoặc đã được sử dụng.");
@@ -171,6 +173,7 @@ namespace BusinessLogic.Services.Serv
 
 			return new ResetPasswordModel
 			{
+				Token = resetPasswordModel.Token,
 				Password = resetPasswordModel.Password,
 				ConfirmPassword = resetPasswordModel.ConfirmPassword,
 			};
