@@ -46,11 +46,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseHomeModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
 		{
 			try
 			{
-				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", null);
+				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", new {page,pageSize});
 				return allsHomeCourse.ToList();
 			} catch (Exception ex)
 			{
@@ -71,12 +71,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)
 		{
 			try
 			{
-				return await _sqlDataAccess.QueryFirstOrDefaultAsync<CourseResponseModel>("sp_GetCourseById", new { CourseId = courseId });
-
+				return await _sqlDataAccess.QueryFirstOrDefaultAsync<CourseResponseHomeModel>("sp_GetCourseById", new { CourseId = courseId });
 			}catch (Exception ex)
 			{
 				throw new Exception("Không có khóa học tương ứng.",ex);

@@ -1,8 +1,10 @@
+using Azure;
 using BusinessLogic.Claims;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;
@@ -183,10 +185,10 @@ namespace BusinessLogic.Services.Serv
 
 		}
 
-		public async Task<IEnumerable<UserResponseModel>> GetAllUserAdmin()
+		public async Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize)
 		{
-			var users = await _userRepository.GetAllUserAdmin();
-			return users.Select(u => new UserResponseModel
+			var pagedUsers = await _userRepository.GetAllUserAdminPagedAsync(page, pageSize);
+			return pagedUsers.Map(u => new UserResponseModel
 			{
 				Id = u.UserId,
 				Username = u.Username.Trim(),
@@ -286,10 +288,6 @@ namespace BusinessLogic.Services.Serv
 				RoleName = user.Role?.RoleName
 			};
 		}
-
-
-
-
 
 		public async Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
 		{

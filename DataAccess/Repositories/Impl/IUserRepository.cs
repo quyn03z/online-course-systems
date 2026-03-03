@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using DataAccess.Models.PageResultModel;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,6 @@ namespace DataAccess.Repositories.Impl
 
 		Task<bool> ExistsByUserNameAsync(string userName);
 
-		Task<IEnumerable<User>> GetAllUserAdmin();
+		Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize);
 	}
 }

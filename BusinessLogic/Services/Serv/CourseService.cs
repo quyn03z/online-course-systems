@@ -24,9 +24,9 @@ namespace BusinessLogic.Services.Serv
 			return await _courseRepository.AddCourseAsync(courseRequestModel);
 		}
 
-		public async Task<List<CourseResponseHomeModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
 		{
-			return await _courseRepository.GetAllHomeCourseAsync();
+			return await _courseRepository.GetAllHomeCoursePageAsync(page, pageSize);
 		}
 
 		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
@@ -34,9 +34,9 @@ namespace BusinessLogic.Services.Serv
 			return await _courseRepository.GetAllManaCourseAsync();
 		}
 
-		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)
 		{
-			return await _courseRepository.GetCourseById(courseId);
+			return await _courseRepository.GetCourseDetailsById(courseId);
 		}
 
 		public async Task<string> RemoveCourseById(int courseId)
