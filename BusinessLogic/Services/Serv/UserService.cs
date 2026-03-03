@@ -325,6 +325,42 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
+		public async Task<string> ChangePasswordAsync(ChangePassWordModel changePassWordModel)
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetByIdAsync(userId.Value);
+			
+			if (!BCrypt.Net.BCrypt.Verify(changePassWordModel.OldPassword,user.Password))
+				throw new BadRequestException("Mật khẩu cũ không chính xác");
+
+			user.Password = BCrypt.Net.BCrypt.HashPassword(changePassWordModel.NewPassword);
+
+			await _userRepository.UpdateAsync(user);
+
+			return "Change Password Thành Công.";
+		}
+
+		public async Task<UserResponseProfile> GetUserByIdAsync()
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetUserByIdAsync(userId.Value);
+			return new UserResponseProfile
+			{
+				Username = user.Username,
+				Lastname = user.Lastname,
+				Firstname = user.Firstname,
+				Email = user.Email,
+				Avatar = user.Avatar,
+				RoleName = user.Role.RoleName,
+			};
+		}
+
+
+
 	}
 }
 
