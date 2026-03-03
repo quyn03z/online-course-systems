@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static BusinessLogic.Models.User;
@@ -18,7 +19,7 @@ namespace API.Controllers
 			_userService = userService;
 		}
 
-		[HttpPost("create-user")]
+		[HttpPost("register")]
 		public async Task<IActionResult> CreateUserAsync(CreateUserModel createUserModel)
 		{
 			if (!ModelState.IsValid)
@@ -42,15 +43,11 @@ namespace API.Controllers
 				.Success(await _userService.LoginAsync(loginUserModel)));
 		}
 
+		[Authorize]
 		[HttpPost("logout")]
 		public async Task<IActionResult> LogoutAsync()
 		{
-			var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-			if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
-			{
-				return Unauthorized(ApiResult<object>.Failure(new[] { "User not authenticated" }));
-			}
-			await _userService.LogoutAsync(userId);
+			await _userService.LogoutAsync();
 			return Ok(ApiResult<object>.Success(new { message = "Đã đăng xuất thành công" }));
 		}
 

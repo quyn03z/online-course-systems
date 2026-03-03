@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Models;
+using DataAccess.Models.PageResultModel;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,13 @@ namespace BusinessLogic.Services.Impl
 	{
 		Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 		Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel);
-		Task LogoutAsync(int userId);
+		Task LogoutAsync();
 
 		Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email);
 
 		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel);
 
-		Task<IEnumerable<UserResponseModel>> GetAllUserAdmin();
+		Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize);
 
 		Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel);
 

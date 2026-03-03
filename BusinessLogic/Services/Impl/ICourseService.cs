@@ -10,9 +10,9 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface ICourseService
 	{
-		Task<List<CourseResponseModel>> GetAllHomeCourseAsync();
+		Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize);
 		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
-		Task<CourseResponseModel> GetCourseById(int courseId);
+		Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId);
 
 		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
 

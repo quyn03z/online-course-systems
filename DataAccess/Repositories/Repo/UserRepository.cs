@@ -1,4 +1,6 @@
-﻿using DataAccess.Repositories.Impl;
+﻿using Azure;
+using DataAccess.Models.PageResultModel;
+using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,9 +27,12 @@ namespace DataAccess.Repositories.Repo
 			return await _dbSet.AnyAsync(x => x.Username == userName);
 		}
 
-		public async Task<IEnumerable<User>> GetAllUserAdmin()
+		public async Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize)
 		{
-			return await _dbSet.Include(r => r.Role).ToListAsync();
+			return await _dbSet
+						.Include(r => r.Role)
+						.OrderByDescending(u => u.UserId)
+						.ToPagedListAsync(page, pageSize);
 		}
 
 		public async Task<User?> GetUserByEmail(string email)

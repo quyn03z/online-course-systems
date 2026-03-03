@@ -1,8 +1,10 @@
+using Azure;
 using BusinessLogic.Claims;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;
@@ -58,8 +60,6 @@ namespace BusinessLogic.Services.Serv
 				RoleId = role.Id,
 				Username = createUserModel.UserName,
 				Email = createUserModel.Email,
-				Firstname = createUserModel.FirstName,
-				Lastname = createUserModel.LastName,
 				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password)
 			};
 
@@ -107,17 +107,18 @@ namespace BusinessLogic.Services.Serv
 
 			return new LoginResponseModel
 			{
-				Username = user.Username,
-				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = accessToken,
 				RefreshToken = refeshToken,
 			};
 		}
 
-		public async Task LogoutAsync(int userId)
+		public async Task LogoutAsync()
 		{
-			await _refreshTokenRepository.RevokeUserTokensAsync(userId);
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new BusinessLogic.Exceptions.UnauthorizedException("Người dùng chưa xác thực.");
+			await _refreshTokenRepository.RevokeUserTokensAsync(userId.Value);
 		}
 
 		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)
@@ -184,16 +185,16 @@ namespace BusinessLogic.Services.Serv
 
 		}
 
-		public async Task<IEnumerable<UserResponseModel>> GetAllUserAdmin()
+		public async Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize)
 		{
-			var users = await _userRepository.GetAllUserAdmin();
-			return users.Select(u => new UserResponseModel
+			var pagedUsers = await _userRepository.GetAllUserAdminPagedAsync(page, pageSize);
+			return pagedUsers.Map(u => new UserResponseModel
 			{
 				Id = u.UserId,
 				Username = u.Username.Trim(),
-				Firstname = u.Firstname.Trim(),
-				Lastname = u.Lastname.Trim(),
-				Avatar = u.Avatar.Trim(),
+				Firstname = u.Firstname?.Trim(),
+				Lastname = u.Lastname?.Trim(),
+				Avatar = u.Avatar?.Trim(),
 				Email = u.Email.Trim(),
 				IsLocked = u.IsLocked,
 				RoleName = u.Role?.RoleName.Trim()
@@ -288,10 +289,6 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-
-
-
-
 		public async Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
 		{
 			// 1. Tìm refresh token trong DB (chưa revoke + chưa hết hạn)
@@ -322,8 +319,6 @@ namespace BusinessLogic.Services.Serv
 
 			return new LoginResponseModel
 			{
-				Username = user.Username,
-				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = newAccessToken,
 				RefreshToken = newRefreshToken,

@@ -25,16 +25,16 @@ namespace Domain.Models
         public string Username { get; set; }
 
         [StringLength(100)]
-        public string Lastname { get; set; }
+        public string? Lastname { get; set; }
 
         [StringLength(100)]
-        public string Firstname { get; set; }
+        public string? Firstname { get; set; }
 
         [Required]
         [StringLength(100)]
         public string Email { get; set; }
 
-        public string Avatar { get; set; }
+        public string? Avatar { get; set; }
 
         public bool IsLocked { get; set; }
 

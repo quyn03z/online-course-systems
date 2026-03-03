@@ -20,9 +20,6 @@ namespace BusinessLogic.Models
 
 		public class LoginResponseModel
 		{
-			public string Username { get; set; }
-
-			public string Email { get; set; }
 
 			public string Token { get; set; }
 			public string RefreshToken { get; set; }
@@ -53,23 +50,17 @@ namespace BusinessLogic.Models
 
 			[Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")] 
 			public string ConfirmPassword { get; set; } = string.Empty;
-
-
-			public string? FirstName { get; set; }
-
-			public string? LastName { get; set; }
-
 		}
 
 		public class UserResponseModel
 		{
 			public int Id { get; set; }
 			public string Username { get; set; }
-			public string Lastname { get; set; }
-			public string Firstname { get; set; }
+			public string? Lastname { get; set; }
+			public string? Firstname { get; set; }
 			public string Email { get; set; }
 			public bool IsLocked { get; set; }
-			public string Avatar {  get; set; }
+			public string? Avatar {  get; set; }
 			public string RoleName { get; set; }
 		}
 
