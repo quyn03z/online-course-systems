@@ -40,6 +40,11 @@ namespace DataAccess.Repositories.Repo
 			return await _dbSet.FirstOrDefaultAsync(x => x.Email == email);
 		}
 
+		public async Task<User> GetUserByIdAsync(int userId)
+		{
+			return await _dbSet.Include(r => r.Role).FirstOrDefaultAsync(x => x.UserId == userId);
+		}
+
 		public async Task<User?> GetUserByUserNameAsync(string userName)
 		{
 			return await _dbSet

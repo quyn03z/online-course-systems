@@ -64,6 +64,16 @@ namespace BusinessLogic.Models
 			public string RoleName { get; set; }
 		}
 
+		public class UserResponseProfile
+		{
+			public string Username { get; set; }
+			public string? Lastname { get; set; }
+			public string? Firstname { get; set; }
+			public string Email { get; set; }
+			public string? Avatar { get; set; }
+			public string RoleName { get; set; }
+		}
+
 
 		public class AddUserAdminModel
 		{
@@ -114,6 +124,17 @@ namespace BusinessLogic.Models
 
 		}
 
+		public class ChangePassWordModel
+		{
+			[MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+			[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$", ErrorMessage = "Mật khẩu phải có chữ hoa, chữ thường và số.")]
+			public string OldPassword { get; set;}
+			[MinLength(6, ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự.")]
+			[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$", ErrorMessage = "Mật khẩu phải có chữ hoa, chữ thường và số.")]
+			public string NewPassword { get; set; }
 
+			[Compare("NewPassword", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
+			public string ConfirmNewPassword { get; set; } = string.Empty;
+		}
 	}
 }

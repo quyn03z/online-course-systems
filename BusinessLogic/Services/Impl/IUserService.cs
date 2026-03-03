@@ -30,5 +30,9 @@ namespace BusinessLogic.Services.Impl
 
 		Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel);
 
+		Task<string> ChangePasswordAsync(ChangePassWordModel changePassWordModel);
+
+		Task<UserResponseProfile> GetUserByIdAsync();
+
 	}
 }
