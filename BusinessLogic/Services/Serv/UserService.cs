@@ -60,7 +60,8 @@ namespace BusinessLogic.Services.Serv
 				RoleId = role.Id,
 				Username = createUserModel.UserName,
 				Email = createUserModel.Email,
-				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password)
+				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password),
+				Avatar = "https://t4.ftcdn.net/jpg/07/03/86/11/360_F_703861114_7YxIPnoH8NfmbyEffOziaXy0EO1NpRHD.jpg"
 			};
 
 			// lưu user
@@ -351,14 +352,41 @@ namespace BusinessLogic.Services.Serv
 			return new UserResponseProfile
 			{
 				Username = user.Username,
-				Lastname = user.Lastname,
-				Firstname = user.Firstname,
+				LastName = user.Lastname,
+				FirstName = user.Firstname,
 				Email = user.Email,
 				Avatar = user.Avatar,
 				RoleName = user.Role.RoleName,
 			};
 		}
 
+		public async Task<UserResponseProfile> UpdateProfileAsync(UpdateProfileRequestModel updateProfileRequestModel)
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetUserByIdAsync(userId.Value);
+			user.Firstname = updateProfileRequestModel.FirstName;
+
+
+			user.Lastname = updateProfileRequestModel.LastName;
+				
+
+			user.Avatar = !string.IsNullOrWhiteSpace(updateProfileRequestModel.Avatar)
+				? updateProfileRequestModel.Avatar
+				: user.Avatar;
+
+			await _userRepository.UpdateAsync(user);
+			return new UserResponseProfile
+			{
+				Username = user.Username,
+				LastName = user.Lastname,
+				FirstName = user.Firstname,
+				Email = user.Email,
+				Avatar = user.Avatar,
+				RoleName = user.Role.RoleName,
+			};
+		}
 
 
 	}

@@ -9,9 +9,7 @@ using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AdminController : ControllerBase
+	public class AdminController : BaseController
 	{
 		private readonly IUserService _userService;
 
@@ -31,9 +29,7 @@ namespace API.Controllers
 		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<UserResponseModel>.Success(await _userService.AddUserByAdmin(addUserAdminModel)));
 		}
 
@@ -47,9 +43,7 @@ namespace API.Controllers
 		public async Task<IActionResult> EditUserAdmin(UserRequest userRequest)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<UserResponseModel>.Success(await _userService.EditUserAdmin(userRequest)));
 		}
 

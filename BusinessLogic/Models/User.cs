@@ -67,8 +67,8 @@ namespace BusinessLogic.Models
 		public class UserResponseProfile
 		{
 			public string Username { get; set; }
-			public string? Lastname { get; set; }
-			public string? Firstname { get; set; }
+			public string? LastName { get; set; }
+			public string? FirstName { get; set; }
 			public string Email { get; set; }
 			public string? Avatar { get; set; }
 			public string RoleName { get; set; }
@@ -136,5 +136,15 @@ namespace BusinessLogic.Models
 			[Compare("NewPassword", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
 			public string ConfirmNewPassword { get; set; } = string.Empty;
 		}
+
+
+		public class UpdateProfileRequestModel
+		{
+			public string? FirstName { get; set; }
+			public string? LastName { get; set; }
+			public string? Avatar { get; set; }
+
+		}
+
 	}
 }
