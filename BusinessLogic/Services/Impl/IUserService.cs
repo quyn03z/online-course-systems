@@ -34,5 +34,7 @@ namespace BusinessLogic.Services.Impl
 
 		Task<UserResponseProfile> GetUserByIdAsync();
 
+		Task<UserResponseProfile> UpdateProfileAsync(UpdateProfileRequestModel updateProfileRequestModel);
+
 	}
 }

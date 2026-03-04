@@ -9,9 +9,7 @@ using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class UserController : ControllerBase
+	public class UserController : BaseController
 	{
 		private readonly IUserService _userService;
 
@@ -19,14 +17,14 @@ namespace API.Controllers
 		{
 			_userService = userService;
 		}
+
+
 		[Authorize]
-		[HttpPost("change-password")]
+		[HttpPut("change-password")]
 		public async Task<IActionResult> ChangePasswordAsync(ChangePassWordModel changePassWordModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+			return ValidationError();
 			return Ok(ApiResult<string>.Success(await _userService.ChangePasswordAsync(changePassWordModel)));
 		}
 
@@ -36,5 +34,15 @@ namespace API.Controllers
 		{
 			return Ok(ApiResult<UserResponseProfile>.Success(await _userService.GetUserByIdAsync()));
 		}
+
+		[Authorize]
+		[HttpPut("update-profile")]
+		public async Task<IActionResult> UpdateProfileAsync(UpdateProfileRequestModel updateProfileRequestModel)
+		{
+			if (!ModelState.IsValid)
+				return ValidationError();
+			return Ok(ApiResult<UserResponseProfile>.Success(await _userService.UpdateProfileAsync(updateProfileRequestModel)));
+		}
+
 	}
 }

@@ -8,9 +8,7 @@ using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AuthController : ControllerBase
+	public class AuthController : BaseController
 	{
 		private readonly IUserService _userService;
 
@@ -23,10 +21,7 @@ namespace API.Controllers
 		public async Task<IActionResult> CreateUserAsync(CreateUserModel createUserModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
-
+				return ValidationError();
 			return Ok(ApiResult<CreateUserResponseModel>
 				.Success(await _userService.CreateUserAsync(createUserModel)));
 		}
@@ -36,9 +31,7 @@ namespace API.Controllers
 		public async Task<IActionResult> LoginAsync(LoginUserModel loginUserModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);	
-			}
+				return ValidationError();
 			return Ok(ApiResult<LoginResponseModel>
 				.Success(await _userService.LoginAsync(loginUserModel)));
 		}
@@ -62,9 +55,7 @@ namespace API.Controllers
 		public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel resetPasswordModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<ResetPasswordModel>
 				.Success(await _userService.ResetPasswordAsync(resetPasswordModel)));
 		}
@@ -73,9 +64,7 @@ namespace API.Controllers
 		public async Task<IActionResult> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<LoginResponseModel>
 				.Success(await _userService.RefreshTokenAsync(tokenRequestModel)));
 		}
