@@ -18,14 +18,14 @@ namespace API.Controllers
 			_userService = userService;
 		}
 
-		[HttpGet("get-alls-user")]
-		public async Task<IActionResult> GetAllUserAdminPagedAsync([FromQuery]  int page = 1, [FromQuery] int pageSize = 9)
+		[HttpGet("get-all-users")]
+		public async Task<IActionResult> GetAllUserAdminPagedAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
 		{
-			var result = await _userService.GetAllUserAdminPagedAsync(page, pageSize);
+			var result = await _userService.GetAllUserAdminPagedAsync(page, pageSize, search);
 			return Ok(ApiResult<PagedResults<UserResponseModel>>.Success(result));
 		}
 
-		[HttpPost("add-user")]
+		[HttpPost("create-user-admin")]
 		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
 		{
 			if (!ModelState.IsValid)

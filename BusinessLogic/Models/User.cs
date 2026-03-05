@@ -60,7 +60,6 @@ namespace BusinessLogic.Models
 			public string? Firstname { get; set; }
 			public string Email { get; set; }
 			public bool IsLocked { get; set; }
-			public string? Avatar {  get; set; }
 			public string RoleName { get; set; }
 		}
 
@@ -89,18 +88,13 @@ namespace BusinessLogic.Models
 			public string? LastName { get; set; }
 			[Range(1, 3, ErrorMessage = "RoleId chỉ được phép là 1, 2 hoặc 3.")]
 			public int RoleId { get; set; }
-			public string Avatar { get; set; }
-
+			public bool IsLocked { get; set; }
 
 		}
 
 		public class UserRequest	
 		{
 			public int UserId { get; set; }
-
-			[Required(ErrorMessage = "Tên đăng nhập là bắt buộc.")]
-			[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên đăng nhập phải từ 3 đến 50 ký tự.")]
-			public string UserName { get; set; }
 
 			[Required(ErrorMessage = "Email là bắt buộc.")]
 			[EmailAddress(ErrorMessage = "Định dạng email không hợp lệ.")]
@@ -112,7 +106,6 @@ namespace BusinessLogic.Models
 			public int RoleId { get; set; }
 
 			public bool IsLocked { get; set; }
-			public string Avatar { get; set; }
 
 
 		}

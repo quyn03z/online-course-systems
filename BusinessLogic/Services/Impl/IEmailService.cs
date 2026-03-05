@@ -10,5 +10,6 @@ namespace BusinessLogic.Services.Impl
 	public interface IEmailService
 	{
 		Task SendEmailResetPasswordAsync(ForgotPasswordModel forgotPasswordModel);
+		Task SendWelcomeEmailAsync(string toEmail, string username, string password);
 	}
 }

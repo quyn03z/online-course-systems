@@ -27,10 +27,15 @@ namespace DataAccess.Repositories.Repo
 			return await _dbSet.AnyAsync(x => x.Username == userName);
 		}
 
-		public async Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize)
+		public async Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null)
 		{
-			return await _dbSet
-						.Include(r => r.Role)
+			var query = _dbSet.Include(r => r.Role).AsQueryable();
+			if (!string.IsNullOrWhiteSpace(search))
+			{
+				var term = search.Trim().ToLower();
+				query = query.Where(u => u.Username.ToLower().Contains(term) || u.Email.ToLower().Contains(term));
+			}
+			return await query
 						.OrderByDescending(u => u.UserId)
 						.ToPagedListAsync(page, pageSize);
 		}
