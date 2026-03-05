@@ -15,12 +15,11 @@ namespace BusinessLogic.Services.Impl
 		Task<LoginResponseModel> LoginAsync(LoginUserModel loginUserModel);
 		Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel);
 		Task LogoutAsync();
-
 		Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email);
 
 		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel);
 
-		Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize);
+		Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null);
 
 		Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel);
 
