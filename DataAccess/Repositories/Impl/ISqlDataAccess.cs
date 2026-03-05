@@ -12,6 +12,8 @@ namespace DataAccess.Repositories.Impl
 		// Dùng cho Insert lấy ID, hoặc đếm số lượng (COUNT)
 		Task<T> ExecuteSalarAsync<T>(string storedProcedure, object parameters = null);
 
+		Task<T> ExecuteQuerySingleAsync<T>(string storedProcedure, object parameters = null);
+
 		// Dùng cho Select danh sách
 		Task<IEnumerable<T>> QueryAsync<T>(string storedProcedure, object parameters = null);
 

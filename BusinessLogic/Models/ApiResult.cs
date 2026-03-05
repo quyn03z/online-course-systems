@@ -33,5 +33,10 @@ namespace BusinessLogic.Models
 			return new ApiResult<T>(false, default, errors);
 		}
 
+		public static ApiResult<T> Failure(string message)
+		{
+			return new ApiResult<T>(false, default, new List<string> { message });
+		}
+
 	}
 }
