@@ -1,9 +1,11 @@
-﻿using BusinessLogic.Models;
+﻿using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using DataAccess.Models.CourseModel;
 using DataAccess.Models.LessonModel;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

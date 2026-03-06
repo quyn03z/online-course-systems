@@ -1,7 +1,9 @@
 ﻿using Azure;
+using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.PageResultModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +11,7 @@ using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
+	[Authorize(Roles = AppConstants.Roles.Admin)]
 	public class AdminController : BaseController
 	{
 		private readonly IUserService _userService;

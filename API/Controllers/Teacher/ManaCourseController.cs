@@ -1,12 +1,15 @@
-﻿using BusinessLogic.Models;
+﻿using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.CourseModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Teacher
 {
 	[Route("api/[controller]")]
+	[Authorize(Roles = AppConstants.Roles.Teacher)]
 	[ApiController]
 	public class ManaCourseController : ControllerBase
 	{
