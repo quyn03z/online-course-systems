@@ -18,19 +18,12 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<PaymentResponseModel> AddPaymentAsync(PaymentRequestModel paymentRequestModel)
+		public async Task<bool> AddPaymentAsync(PaymentRequestModel paymentRequestModel)
 		{
 			try
 			{
 				int paymentId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddPayment", paymentRequestModel);
-				return new PaymentResponseModel
-				{
-					PaymentId = paymentId,
-					CourseId = paymentRequestModel.CourseId,
-					UserId = paymentRequestModel.UserId,
-					Amount = paymentRequestModel.Amount,
-					TransactionCode = paymentRequestModel.TransactionCode,
-				};
+				return true;
 			}
 			catch (Exception ex)
 			{

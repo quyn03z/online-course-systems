@@ -10,7 +10,7 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface IPaymentService
 	{
-		Task<PaymentResponseModel> AddaymentAsync(PaymentRequestModel paymentRequestModel);
+		Task<bool> AddaymentAsync(PaymentRequestModel paymentRequestModel);
 
 	}
 }

@@ -19,16 +19,16 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<EnrollmentModel> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
+		public async Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
 		{
 			try
 			{
-				var insertedKeys = await _sqlDataAccess.ExecuteQuerySingleAsync<dynamic>("sp_InsertCourseRegistration",new { UserId = 1, CourseId = 5 });
-				return new EnrollmentModel
+				var insertedKeys = await _sqlDataAccess.ExecuteQuerySingleAsync<dynamic>("sp_AddEnrollment", enrollmentRequestModel);
+				if (insertedKeys != null)
 				{
-					CourseId = insertedKeys.CourseId,
-					UserId = insertedKeys.UserId,
-				};
+					return true;
+				}
+				return false;
 			}
 			catch (Exception ex)
 			{
@@ -37,4 +37,6 @@ namespace DataAccess.Repositories.Repo
 		}
 
 	}
+
+
 }

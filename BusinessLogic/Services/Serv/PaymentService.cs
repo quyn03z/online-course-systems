@@ -18,9 +18,9 @@ namespace BusinessLogic.Services.Serv
 			_paymentRepository = paymentRepository;
 		}
 
-		public async Task<PaymentResponseModel> AddaymentAsync(PaymentRequestModel paymentRequestModel)
+		public async Task<bool> AddaymentAsync(PaymentRequestModel paymentRequestModel)
 		{
-			return await _paymentRepository.AddPaymentAsync(paymentRequestModel);
+			 return await _paymentRepository.AddPaymentAsync(paymentRequestModel);
 		}
 	}
 }

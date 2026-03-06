@@ -12,7 +12,7 @@ namespace BusinessLogic.Services.Impl
 	public interface IMomoService
 	{
 		Task<MomoCreatePaymentResponeModel> CreatePaymentAsync(OrderInfoModel model);
-		Task<MomoExecuteResponseModel> PaymentExecuteAsync(IQueryCollection collection, int courseId);
+		Task<MomoExecuteResponseModel> PaymentExecuteAsync(IQueryCollection collection);
 
 	}
 }

@@ -9,6 +9,6 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface IEnrollmentService
 	{
-		Task<EnrollmentModel> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
+		Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 	}
 }

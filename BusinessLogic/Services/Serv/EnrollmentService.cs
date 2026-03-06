@@ -18,7 +18,7 @@ namespace BusinessLogic.Services.Serv
 			_enrollmentRepository = enrollmentRepository;
 		}
 
-		public async Task<EnrollmentModel> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
+		public async Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
 		{
 			return await _enrollmentRepository.AddEnrollmentAsync(enrollmentRequestModel);
 		}

@@ -10,11 +10,12 @@ namespace BusinessLogic.Models
 	{
 		private ApiResult() { }
 
-		private ApiResult(bool succeeded, T result, IEnumerable<string> errors)
+		private ApiResult(bool succeeded, T result, IEnumerable<string> errors, string message = null)
 		{
 			Succeeded = succeeded;
 			Result = result;
 			Errors = errors;
+			Message = message;
 		}
 
 		public bool Succeeded { get; set; }
@@ -23,19 +24,21 @@ namespace BusinessLogic.Models
 
 		public IEnumerable<string> Errors { get; set; }
 
-		public static ApiResult<T> Success(T result)
+		public string Message { get; set; }
+
+		public static ApiResult<T> Success(T result, string message = null)
 		{
-			return new ApiResult<T>(true, result, new List<string>());
+			return new ApiResult<T>(true, result, new List<string>(), message);
 		}
 
-		public static ApiResult<T> Failure(IEnumerable<string> errors)
+		public static ApiResult<T> Failure(IEnumerable<string> errors, string message = null)
 		{
-			return new ApiResult<T>(false, default, errors);
+			return new ApiResult<T>(false, default, errors, message);
 		}
 
 		public static ApiResult<T> Failure(string message)
 		{
-			return new ApiResult<T>(false, default, new List<string> { message });
+			return new ApiResult<T>(false, default, new List<string> { message }, message);
 		}
 
 	}

@@ -11,6 +11,6 @@ namespace DataAccess.Repositories.Impl
 {
 	public interface IEnrollmentRepository
 	{
-		Task<EnrollmentModel> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
+		Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 	}
 }
