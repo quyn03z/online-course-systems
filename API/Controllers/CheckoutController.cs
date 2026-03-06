@@ -70,7 +70,7 @@ namespace API.Controllers
 		}
 
 		[Authorize]
-		[HttpGet("check-enrollment")]
+		[HttpGet("check-enrollment/{courseId}")]
 		public async Task<IActionResult> CheckEnrollmentAsync(int courseId)
 		{
 			var userId = _claimService.GetUserId();
