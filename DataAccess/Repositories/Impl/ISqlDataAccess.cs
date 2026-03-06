@@ -25,5 +25,6 @@ namespace DataAccess.Repositories.Impl
 
 		// đọc nhiều bảng
 		Task<T> QueryMultipleAsync<T>(string storedProcedure, Func<SqlMapper.GridReader, Task<T>> mapFunc, object parameters = null);
+
 	}
 }

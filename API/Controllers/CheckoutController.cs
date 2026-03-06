@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.Claims;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using BusinessLogic.Services.Serv;
+using DataAccess.Models.CourseModel;
 using DataAccess.Models.Enrollment;
 using DataAccess.Models.PaymentModel;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +34,6 @@ namespace API.Controllers
 		{
 			var requestQuery = HttpContext.Request.Query;
 
-			// Lấy kết quả giao dịch từ MoMo (decode extraData → UserId, CourseId)
 			var response = await _momoService.PaymentExecuteAsync(requestQuery);
 			// lấy userId
 			var userId = _claimService.GetUserId();
@@ -67,5 +68,23 @@ namespace API.Controllers
 
             return BadRequest(ApiResult<object>.Failure(string.IsNullOrEmpty(message) ? "Thanh toán thất bại." : message));
 		}
+
+		[Authorize]
+		[HttpGet("check-enrollment")]
+		public async Task<IActionResult> CheckEnrollmentAsync(int courseId)
+		{
+			var userId = _claimService.GetUserId();
+
+			var enrollmentModel = new EnrollmentModel
+			{
+				UserId = userId.Value,
+				CourseId = courseId
+			};
+
+			var isEnrolled = await _enrollmentService.CheckEnrollmentAsync(enrollmentModel);
+			return Ok(ApiResult<bool>.Success(isEnrolled));
+		}
+
+
 	}
 }

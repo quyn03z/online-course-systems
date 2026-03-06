@@ -32,10 +32,23 @@ namespace DataAccess.Repositories.Repo
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Enrollment thất bại.", ex);
+				throw new Exception("sp_AddEnrollment thất bại.", ex);
 			}
 		}
 
+		public async Task<bool> CheckEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
+		{
+			try
+			{
+				var count = await _sqlDataAccess.QueryFirstOrDefaultAsync<int>("sp_CheckEnrollment", enrollmentRequestModel);
+
+				return count > 0;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("sp_CheckEnrollment thất bại.", ex);
+			}
+		}
 	}
 
 

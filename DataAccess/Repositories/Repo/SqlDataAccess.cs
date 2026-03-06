@@ -58,6 +58,7 @@ namespace DataAccess.Repositories.Repo
 						commandType: CommandType.StoredProcedure);
 		}
 
+
 		public async Task<T> QueryFirstOrDefaultAsync<T>(string storedProcedure, object parameters = null)
 		{
 			using var conn = _dbConnectionFactory.CreateConnection();
