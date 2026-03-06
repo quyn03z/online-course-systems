@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using DataAccess.Infrastructure;
 using DataAccess.Repositories.Impl;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,6 +30,16 @@ namespace DataAccess.Repositories.Repo
 								commandType: CommandType.StoredProcedure);
 		}
 
+		public async Task<T> ExecuteQuerySingleAsync<T>(string storedProcedure, object parameters = null)
+		{
+			using var conn = _dbConnectionFactory.CreateConnection();
+			return await conn.QuerySingleOrDefaultAsync<T>(
+					storedProcedure,
+					parameters,
+					commandType: CommandType.StoredProcedure);
+			
+		}
+
 		public async Task<T> ExecuteSalarAsync<T>(string storedProcedure, object parameters = null)
 		{
 			using var conn = _dbConnectionFactory.CreateConnection();
@@ -46,6 +57,7 @@ namespace DataAccess.Repositories.Repo
 						parameters,
 						commandType: CommandType.StoredProcedure);
 		}
+
 
 		public async Task<T> QueryFirstOrDefaultAsync<T>(string storedProcedure, object parameters = null)
 		{

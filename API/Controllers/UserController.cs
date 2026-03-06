@@ -1,9 +1,6 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
-using BusinessLogic.Services.Serv;
-using DataAccess.Models.QuizzModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static BusinessLogic.Models.User;
 

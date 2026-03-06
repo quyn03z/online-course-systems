@@ -59,6 +59,15 @@ namespace DataAccess
 
 			// questions
 			services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+
+			// enrollment
+			services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+
+			// payment
+			services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+
+
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

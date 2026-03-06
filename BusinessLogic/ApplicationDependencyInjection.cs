@@ -1,6 +1,8 @@
 ﻿using BusinessLogic.Claims;
+using BusinessLogic.Models.Momo;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -44,6 +46,15 @@ namespace BusinessLogic
 			
 			// questions
 			services.AddScoped<IQuestionsService, QuestionsService>();
+
+			// momo
+			services.AddScoped<IMomoService, MomoService>();
+
+			// enrollment
+			services.AddScoped<IEnrollmentService, EnrollmentService>();
+
+			// payment
+			services.AddScoped<IPaymentService, PaymentService>();
 		}
 
 	}

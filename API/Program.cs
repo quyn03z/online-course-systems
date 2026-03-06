@@ -1,10 +1,12 @@
 ﻿using BusinessLogic;
+using BusinessLogic.Models.Momo;
 using DataAccess;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<MoMoConfig>(builder.Configuration.GetSection("MomoAPI"));
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -62,9 +64,9 @@ builder.Services.AddAuthentication("Bearer")
 		};
 	});
 
+
 builder.Services.AddDataAccess(builder.Configuration)
 	.AddApplication(builder.Environment);
-
 
 // add cors 
 builder.Services.AddCors(option =>
