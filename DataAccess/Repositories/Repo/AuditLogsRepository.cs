@@ -29,5 +29,7 @@ namespace DataAccess.Repositories.Repo
 
 			return (logs, totalCount);
 		}
+
+
 	}
 }

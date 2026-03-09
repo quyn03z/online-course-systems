@@ -29,8 +29,9 @@ namespace BusinessLogic.Services.Serv
 		private readonly IEmailService _emailService;
 		private readonly IConfiguration _configuration;
 		private readonly IClaimService _claimService;
+		private readonly IAuditLogsService _auditLogsService;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
@@ -39,6 +40,7 @@ namespace BusinessLogic.Services.Serv
 			_emailService = emailService;
 			_configuration = configuration;
 			_claimService = claimService;
+			_auditLogsService = auditLogsService;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -106,6 +108,8 @@ namespace BusinessLogic.Services.Serv
 
 			await _refreshTokenRepository.AddAsync(tokenRefresh);
 
+			await _auditLogsService.LogActionAsync(user.UserId, "Login", "User", keyValues: $"{{ \"UserId\": {user.UserId} }}");
+
 			return new LoginResponseModel
 			{
 				Role = user.Role.RoleName,
@@ -120,6 +124,7 @@ namespace BusinessLogic.Services.Serv
 			if (userId == null)
 				throw new BusinessLogic.Exceptions.UnauthorizedException("Người dùng chưa xác thực.");
 			await _refreshTokenRepository.RevokeUserTokensAsync(userId.Value);
+			await _auditLogsService.LogActionAsync(userId.Value, "Logout", "User", keyValues: $"{{ \"UserId\": {userId.Value} }}");
 		}
 
 		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)

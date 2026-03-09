@@ -20,7 +20,7 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId)
+		public async Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId, int userId)
 		{
 			try
 			{
@@ -33,6 +33,7 @@ namespace DataAccess.Repositories.Repo
 					CreateDate = subLessonRequestModel?.CreateDate,
 					IsLocked = subLessonRequestModel?.IsLocked,
 					VideoLink = subLessonRequestModel?.VideoLink,
+					UserId = userId
 				};
 				int newSubLessonId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddSubLesson", parameters);
 				return new SubLessonResponseModel
@@ -92,11 +93,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> RemoveSubLessonAsync(int subLessonId)
+		public async Task<string> RemoveSubLessonAsync(int subLessonId, int userId)
 		{
 			try
 			{
-				await _sqlDataAccess.ExecuteAsync("sp_RemoveSubLesson", new {SubLessonId = subLessonId});
+				await _sqlDataAccess.ExecuteAsync("sp_RemoveSubLesson", new {SubLessonId = subLessonId,UserId = userId});
 				return "Remove sublesson thành công.";
 			}
 			catch (Exception ex)
@@ -105,7 +106,7 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId)
+		public async Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId, int userId)
 		{
 			try
 			{
@@ -117,6 +118,7 @@ namespace DataAccess.Repositories.Repo
 					Description = subLessonRequestModel.Description,
 					IsLocked = subLessonRequestModel.IsLocked,
 					VideoLink = subLessonRequestModel.VideoLink,
+					UserId = userId
 				});
 				return "Cập nhật sublesson thành công.";
 			}
