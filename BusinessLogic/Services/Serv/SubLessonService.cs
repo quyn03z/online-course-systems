@@ -32,6 +32,11 @@ namespace BusinessLogic.Services.Serv
 			return await _subLessonRepository.GetAllsSubLessonAsync(lessonId);
 		}
 
+		public async Task<int> GetFirstSubLessonByLessonId(int lessonId)
+		{
+			return await _subLessonRepository.GetFirstSubLessonByLessonId(lessonId);
+		}
+
 		public async Task<string> RemoveSubLessonAsync(int sublessonId)
 		{
 			return await _subLessonRepository.RemoveSubLessonAsync(sublessonId);

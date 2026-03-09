@@ -31,18 +31,7 @@ namespace API.Controllers.Teacher
 			}
 		}
 
-		[HttpGet("alls-sublesson/{lessonId}")]
-		public async Task<IActionResult> GetAllsSubLesson(int lessonId)
-		{
-			try
-			{
-				return Ok(ApiResult<List<SubLessonResponseModel>>.Success(await _subLessonService.GetAllsSubLesson(lessonId)));
-			}
-			catch (Exception ex)
-			{
-				throw new Exception("Có lỗi khi lấy tất cả sublesson.");
-			}
-		}
+		
 
 		[HttpPost("add-sublesson")]
 		public async Task<IActionResult> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId)
