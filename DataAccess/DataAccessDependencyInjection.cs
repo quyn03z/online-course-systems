@@ -66,7 +66,8 @@ namespace DataAccess
 			// payment
 			services.AddScoped<IPaymentRepository, PaymentRepository>();
 
-
+			// auditlogs
+			services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
 
 		}
 

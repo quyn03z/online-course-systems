@@ -65,8 +65,7 @@ builder.Services.AddAuthentication("Bearer")
 	});
 
 
-builder.Services.AddDataAccess(builder.Configuration)
-	.AddApplication(builder.Environment);
+builder.Services.AddDataAccess(builder.Configuration).AddApplication(builder.Environment);
 
 // add cors 
 builder.Services.AddCors(option =>

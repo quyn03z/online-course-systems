@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Services.Impl;
+﻿using BusinessLogic.Claims;
+using BusinessLogic.Services.Impl;
 using DataAccess.Models.Enrollment;
 using DataAccess.Repositories.Impl;
 using System;
@@ -12,10 +13,12 @@ namespace BusinessLogic.Services.Serv
 	public class EnrollmentService : IEnrollmentService
 	{
 		private readonly IEnrollmentRepository _enrollmentRepository;
+		private readonly IClaimService _claimService;
 
-		public EnrollmentService(IEnrollmentRepository enrollmentRepository)
+		public EnrollmentService(IEnrollmentRepository enrollmentRepository, IClaimService claimService)
 		{
 			_enrollmentRepository = enrollmentRepository;
+			_claimService = claimService;
 		}
 
 		public async Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)

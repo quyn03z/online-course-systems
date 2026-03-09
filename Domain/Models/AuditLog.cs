@@ -18,13 +18,13 @@ namespace Domain.Models
         [StringLength(100)]
         public string Entity { get; set; }
 
-        public string OldValues { get; set; }
+        public string? OldValues { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
         public string KeyValues { get; set; }
 
-        public string NewValues { get; set; }
+        public string? NewValues { get; set; }
 
         public virtual User User { get; set; }
     }

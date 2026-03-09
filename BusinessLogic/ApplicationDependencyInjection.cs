@@ -55,6 +55,9 @@ namespace BusinessLogic
 
 			// payment
 			services.AddScoped<IPaymentService, PaymentService>();
+
+			// auditlogs
+			services.AddScoped<IAuditLogsService, AuditLogsService>();
 		}
 
 	}
