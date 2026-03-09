@@ -10,5 +10,6 @@ namespace BusinessLogic.Services.Impl
 	public interface IAuditLogsService
 	{
 		Task<(IEnumerable<AuditLogResponseModel> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize);
+		Task LogActionAsync(int? userId, string action, string entity, string keyValues = "{}", string oldValues = "{}", string newValues = "{}");
 	}
 }

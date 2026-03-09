@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BusinessLogic.Models
 {
@@ -13,11 +14,19 @@ namespace BusinessLogic.Models
         public string KeyValues { get; set; }
         public DateTime CreatedAt { get; set; }
         public AuditLogUserDto User { get; set; }
+        public List<AuditLogChangeDto> Changes { get; set; } = new List<AuditLogChangeDto>();
     }
 
     public class AuditLogUserDto
     {
         public string UserName { get; set; }
         public string Email { get; set; }
+    }
+
+    public class AuditLogChangeDto
+    {
+        public string PropertyName { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
     }
 }
