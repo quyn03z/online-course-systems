@@ -11,12 +11,12 @@ namespace DataAccess.Repositories.Impl
 	public interface ICourseRepository 
 	{
 		Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize);
-		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
+		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel,int userId);
 		Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId);
 		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
 
-		Task<string> RemoveCourseById(int courseId);
+		Task<string> RemoveCourseById(int courseId,int userId);
 
-		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel,int courseId);
+		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel,int courseId,int userId);
 	}
 }

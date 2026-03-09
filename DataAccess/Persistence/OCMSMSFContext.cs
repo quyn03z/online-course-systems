@@ -1,17 +1,23 @@
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using BusinessLogic.Claims;
 
 namespace DataAccess.Repositories
 {
 	public partial class OCMSMSFContext : DbContext
 	{
+		private readonly IClaimService? _claimService;
 
-		public OCMSMSFContext(DbContextOptions<OCMSMSFContext> options)
+		public OCMSMSFContext(DbContextOptions<OCMSMSFContext> options, IClaimService? claimService = null)
 	   : base(options)
 		{
+			_claimService = claimService;
 		}
 		
 
@@ -141,6 +147,130 @@ namespace DataAccess.Repositories
 				.WithOne(e => e.User)
 				.HasForeignKey(e => e.UserId)
 				.OnDelete(DeleteBehavior.Restrict);
+		}
+
+		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			var auditEntries = OnBeforeSaveChanges();
+			var result = await base.SaveChangesAsync(cancellationToken);
+			await OnAfterSaveChangesAsync(auditEntries);
+			return result;
+		}
+
+		public override int SaveChanges()
+		{
+			var auditEntries = OnBeforeSaveChanges();
+			var result = base.SaveChanges();
+			OnAfterSaveChanges(auditEntries);
+			return result;
+		}
+
+		private List<AuditEntry> OnBeforeSaveChanges()
+		{
+			ChangeTracker.DetectChanges();
+			var auditEntries = new List<AuditEntry>();
+			foreach (var entry in ChangeTracker.Entries())
+			{
+				if (entry.Entity is AuditLog || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
+					continue;
+
+				var auditEntry = new AuditEntry(entry);
+				auditEntry.TableName = entry.Entity.GetType().Name;
+				auditEntry.UserId = _claimService?.GetUserId();
+				auditEntries.Add(auditEntry);
+
+				foreach (var property in entry.Properties)
+				{
+					string propertyName = property.Metadata.Name;
+					if (property.IsTemporary)
+					{
+						auditEntry.TemporaryProperties.Add(property);
+						continue;
+					}
+
+					if (property.Metadata.IsPrimaryKey())
+					{
+						auditEntry.KeyValues[propertyName] = property.CurrentValue;
+						continue;
+					}
+
+					switch (entry.State)
+					{
+						case EntityState.Added:
+							auditEntry.NewValues[propertyName] = property.CurrentValue;
+							break;
+
+						case EntityState.Deleted:
+							auditEntry.OldValues[propertyName] = property.OriginalValue;
+							break;
+
+						case EntityState.Modified:
+							if (property.IsModified)
+							{
+								auditEntry.OldValues[propertyName] = property.OriginalValue;
+								auditEntry.NewValues[propertyName] = property.CurrentValue;
+							}
+							break;
+					}
+				}
+			}
+
+			foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
+			{
+				AuditLogs.Add(auditEntry.ToAuditLog());
+			}
+
+			return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
+		}
+
+		private Task OnAfterSaveChangesAsync(List<AuditEntry> auditEntries)
+		{
+			if (auditEntries == null || auditEntries.Count == 0)
+				return Task.CompletedTask;
+
+			foreach (var auditEntry in auditEntries)
+			{
+				foreach (var prop in auditEntry.TemporaryProperties)
+				{
+					if (prop.Metadata.IsPrimaryKey())
+					{
+						auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+					}
+					else
+					{
+						auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+					}
+				}
+
+				AuditLogs.Add(auditEntry.ToAuditLog());
+			}
+
+			return base.SaveChangesAsync();
+		}
+
+		private void OnAfterSaveChanges(List<AuditEntry> auditEntries)
+		{
+			if (auditEntries == null || auditEntries.Count == 0)
+				return;
+
+			foreach (var auditEntry in auditEntries)
+			{
+				foreach (var prop in auditEntry.TemporaryProperties)
+				{
+					if (prop.Metadata.IsPrimaryKey())
+					{
+						auditEntry.KeyValues[prop.Metadata.Name] = prop.CurrentValue;
+					}
+					else
+					{
+						auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+					}
+				}
+
+				AuditLogs.Add(auditEntry.ToAuditLog());
+			}
+
+			base.SaveChanges();
 		}
 	}
 }
