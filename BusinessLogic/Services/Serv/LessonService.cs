@@ -82,6 +82,17 @@ namespace BusinessLogic.Services.Serv
 			}
 		}
 
+		public async Task<int> GetFirstLessonIdByCourseId(int courseId)
+		{
+			try
+			{
+				return await _lessonRepository.GetFirstLessonIdByCourseId(courseId);
+			}catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi lấy GetFirstLessonIdByCourseId.");
+			}
+		}
+
 		public async Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel)
 		{
 			try

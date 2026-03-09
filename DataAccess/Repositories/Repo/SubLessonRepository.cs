@@ -79,6 +79,19 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
+		public async Task<int> GetFirstSubLessonByLessonId(int lessonId)
+		{
+			try
+			{
+				var subLessonId = await _sqlDataAccess.QueryFirstOrDefaultAsync<int>("GetFirstSubLessonByLessonId", new { lessonId = lessonId });
+				return subLessonId;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Lỗi lấy tất cả bài học.", ex);
+			}
+		}
+
 		public async Task<string> RemoveSubLessonAsync(int subLessonId)
 		{
 			try

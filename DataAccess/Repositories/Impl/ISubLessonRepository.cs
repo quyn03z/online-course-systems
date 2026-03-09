@@ -22,5 +22,8 @@ namespace DataAccess.Repositories.Impl
 
 		Task<string> RemoveSubLessonAsync(int subLessonId);
 
+
+		Task<int> GetFirstSubLessonByLessonId(int lessonId);
+
 	}
 }

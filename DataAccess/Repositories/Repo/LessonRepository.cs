@@ -25,6 +25,13 @@ namespace DataAccess.Repositories.Repo
 		{
 			return await _dbSet.Include(c => c.Course).Where(l => l.CourseId == courseId).ToListAsync();
 		}
+
+		public async Task<int> GetFirstLessonIdByCourseId(int courseId)
+		{
+			return await _dbSet
+						.Where(l => l.CourseId == courseId)
+						.Select(l => l.LessonId).FirstOrDefaultAsync();
+		}
 	}
 
 }
