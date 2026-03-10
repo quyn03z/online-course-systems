@@ -260,6 +260,10 @@ namespace BusinessLogic.Services.Serv
 
 		public async Task<UserResponseModel> EditUserAdmin(UserRequest userRequest)
 		{
+			var currentId = _claimService.GetUserId();
+			if (currentId == userRequest.UserId)
+				throw new BadRequestException("Bạn không thể khóa tài khoản của mình.");
+
 			// Lấy user hiện tại từ DB
 			var user = await _userRepository.GetByIdAsync(userRequest.UserId);
 			if (user == null)

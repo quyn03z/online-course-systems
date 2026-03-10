@@ -127,5 +127,6 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("Lỗi update bài học.", ex);
 			}
 		}
+
 	}
 }
