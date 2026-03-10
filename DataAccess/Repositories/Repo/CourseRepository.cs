@@ -70,11 +70,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
 		{
 			try
 			{
-				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", null);
+				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", new { page, pageSize,search });
 				return allsManaCourse.ToList();
 			}
 			catch (Exception ex)
