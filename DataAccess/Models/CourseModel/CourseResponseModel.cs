@@ -36,10 +36,10 @@ namespace DataAccess.Models.CourseModel
 	public class CourseRequestModel
 	{
 		[Required(ErrorMessage = "Tên khóa học là bắt buộc.")]
-		[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên khóa học phải từ 3 đến 50 ký tự.")]
+		[StringLength(250, MinimumLength = 3, ErrorMessage = "Tên khóa học phải từ 3 đến 50 ký tự.")]
 		public string CourseName { get; set; }
 		[Required(ErrorMessage = "Tên tiêu đề là bắt buộc.")]
-		[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên tiêu đề  phải từ 3 đến 50 ký tự.")]
+		[StringLength(250, MinimumLength = 3, ErrorMessage = "Tên tiêu đề  phải từ 3 đến 50 ký tự.")]
 		public string Title { get; set; }
 		public string Description { get; set; }
 		public string Image { get; set; }

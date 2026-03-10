@@ -69,6 +69,9 @@ namespace DataAccess
 			// auditlogs
 			services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
 
+			// courseType
+			services.AddScoped<ICourseTypeRepository, CourseTypeRepository>();
+
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

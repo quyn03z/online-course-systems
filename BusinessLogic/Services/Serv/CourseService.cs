@@ -33,9 +33,9 @@ namespace BusinessLogic.Services.Serv
 			return await _courseRepository.GetAllHomeCoursePageAsync(page, pageSize);
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
 		{
-			return await _courseRepository.GetAllManaCourseAsync();
+			return await _courseRepository.GetAllManaCourseAsync(page, pageSize,search);
 		}
 
 		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)

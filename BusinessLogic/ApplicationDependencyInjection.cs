@@ -58,6 +58,9 @@ namespace BusinessLogic
 
 			// auditlogs
 			services.AddScoped<IAuditLogsService, AuditLogsService>();
+
+			// courseType
+			services.AddScoped<ICourseTypeService, CourseTypeService>();
 		}
 
 	}

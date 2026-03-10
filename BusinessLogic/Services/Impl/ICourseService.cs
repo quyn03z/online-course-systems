@@ -14,7 +14,7 @@ namespace BusinessLogic.Services.Impl
 		Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel);
 		Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId);
 
-		Task<List<CourseResponseModel>> GetAllManaCourseAsync();
+		Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "");
 
 		Task<string> RemoveCourseById(int courseId);
 
