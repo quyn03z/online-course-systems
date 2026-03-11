@@ -8,6 +8,7 @@ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +17,12 @@ namespace BusinessLogic.Services.Serv
 	public class DocumentsService : IDocumentsService
 	{
 		private readonly IDocumentsRepository _documentsRepository;
+		private readonly ILessonService _lessonService;
 
-		public DocumentsService(IDocumentsRepository documentsRepository)
+		public DocumentsService(IDocumentsRepository documentsRepository, ILessonService lessonService)
 		{
 			_documentsRepository = documentsRepository;
+			_lessonService = lessonService;
 		}
 
 		public async Task<DocumentResponseModel> AddManaDocumentAsync(DocumentRequestModel documentRequestModel, int lessonId)
@@ -38,6 +41,7 @@ namespace BusinessLogic.Services.Serv
 
 				return new DocumentResponseModel
 				{
+					DocumentId = document.DocumentId,
 					LessonId = lessonId,
 					Title = document.Title,
 					Description = document.Description,
@@ -53,23 +57,21 @@ namespace BusinessLogic.Services.Serv
 
 		public async Task<List<DocumentResponseModel>> GetAllsDocuments(int lessonId)
 		{
-			try
+			if (!await _lessonService.GetLessonsById(lessonId))
 			{
-				var allsDocu = await _documentsRepository.GetAllsDocuments(lessonId);
-				return allsDocu.Select(x => new DocumentResponseModel
-				{
-					LessonId = x.LessonId,
-					Title = x.Title,
-					Description = x.Description,
-					IsLocked = x.IsLocked,
-					FileUrl = x.FileUrl,
-				}).ToList();
+				throw new Exception("Lesson Id không tồn tại.");
 			}
-			catch (Exception ex)
-			{
-				throw new Exception("Có lỗi khi lấy tất cả bài học.", ex);
-			}
+			var documents = await _documentsRepository.GetAllsDocuments(lessonId);
 
+			return documents.Select(x => new DocumentResponseModel
+			{
+				DocumentId = x.DocumentId,
+				LessonId = x.LessonId,
+				Title = x.Title,
+				Description = x.Description,
+				IsLocked = x.IsLocked,
+				FileUrl = x.FileUrl
+			}).ToList();
 		}
 
 		public async Task<List<DocumentResponseModel>> GetAllsManaDocumentsAsync(int lessonId)
@@ -79,6 +81,7 @@ namespace BusinessLogic.Services.Serv
 				var allsDocu = await _documentsRepository.GetAllsManaDocumentsAsync(lessonId);
 				return allsDocu.Select(x => new DocumentResponseModel
 				{
+					DocumentId = x.DocumentId,
 					LessonId = x.LessonId,
 					Title = x.Title,
 					Description = x.Description,
@@ -108,6 +111,7 @@ namespace BusinessLogic.Services.Serv
 
 				return new DocumentResponseModel
 				{
+					DocumentId = document.DocumentId,
 					LessonId = document.LessonId,
 					Title = document.Title,
 					Description = document.Description,

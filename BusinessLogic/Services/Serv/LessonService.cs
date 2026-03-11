@@ -93,6 +93,16 @@ namespace BusinessLogic.Services.Serv
 			}
 		}
 
+		public async Task<bool> GetLessonsById(int lessonId)
+		{
+			var lesson = await _lessonRepository.GetByIdAsync(lessonId);
+			if (lesson != null)
+			{
+				return true;
+			}
+			return false;
+		}
+
 		public async Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel)
 		{
 			try
