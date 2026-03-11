@@ -27,6 +27,7 @@ namespace DataAccess.Repositories
 		public virtual DbSet<CourseType> CourseType { get; set; }
 		public virtual DbSet<Enrollment> Enrollments { get; set; }
 		public virtual DbSet<Lesson> Lessons { get; set; }
+		public virtual DbSet<Documents> Documents { get; set; }
 		public virtual DbSet<MenteeScores> MenteeScores { get; set; }
 		public virtual DbSet<Payment> Payments { get; set; }
 		public virtual DbSet<QuestionType> QuestionType { get; set; }
@@ -89,6 +90,12 @@ namespace DataAccess.Repositories
 
 			modelBuilder.Entity<Lesson>()
 				.HasMany(e => e.SubLessons)
+				.WithOne(e => e.Lesson)
+				.HasForeignKey(e => e.LessonId)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<Lesson>()
+				.HasMany(e => e.Documents)
 				.WithOne(e => e.Lesson)
 				.HasForeignKey(e => e.LessonId)
 				.OnDelete(DeleteBehavior.Restrict);

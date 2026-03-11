@@ -28,5 +28,7 @@ namespace Domain.Models
         public virtual Quizz Quizz { get; set; }
 
         public virtual ICollection<SubLesson> SubLessons { get; set; }
-    }
+		public virtual ICollection<Documents> Documents { get; set; }
+
+	}
 }

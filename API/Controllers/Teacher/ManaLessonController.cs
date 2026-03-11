@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Teacher
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ManaLessonController : ControllerBase
+
+	public class ManaLessonController : BaseController
 	{
 		private readonly ILessonService _lessonService;
 

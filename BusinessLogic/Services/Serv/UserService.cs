@@ -102,8 +102,8 @@ namespace BusinessLogic.Services.Serv
 				UserId = user.UserId,
 				Token = refeshToken,
 				IsRevoked = false,
-				ExpiredAt = DateTime.Now.AddDays(7),
-				CreatedAt = DateTime.Now,
+				ExpiredAt = DateTime.UtcNow.AddDays(7),
+				CreatedAt = DateTime.UtcNow,
 			};
 
 			await _refreshTokenRepository.AddAsync(tokenRefresh);
@@ -318,8 +318,8 @@ namespace BusinessLogic.Services.Serv
 				UserId = user.UserId,
 				Token = newRefreshToken,
 				IsRevoked = false,
-				ExpiredAt = DateTime.Now.AddDays(7),
-				CreatedAt = DateTime.Now,
+				ExpiredAt = DateTime.UtcNow.AddDays(7),
+				CreatedAt = DateTime.UtcNow,
 			});
 
 			return new LoginResponseModel

@@ -72,6 +72,9 @@ namespace DataAccess
 			// courseType
 			services.AddScoped<ICourseTypeRepository, CourseTypeRepository>();
 
+			// documents
+			services.AddScoped<IDocumentsRepository, DocumentsRepository>();
+
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

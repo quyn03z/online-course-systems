@@ -61,6 +61,10 @@ namespace BusinessLogic
 
 			// courseType
 			services.AddScoped<ICourseTypeService, CourseTypeService>();
+
+			// documents
+			services.AddScoped<IDocumentsService, DocumentsService>();
+
 		}
 
 	}
