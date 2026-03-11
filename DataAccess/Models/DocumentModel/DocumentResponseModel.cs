@@ -9,6 +9,8 @@ namespace DataAccess.Models.DocumentModel
 {
 	public class DocumentResponseModel
 	{
+		public int DocumentId { get; set; }
+
 		public string Title { get; set; }
 		public string? Description { get; set; }
 		public string FileUrl { get; set; }
