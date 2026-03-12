@@ -24,14 +24,15 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				var parameters = new 
-				{ 
+				var parameters = new
+				{
 					Title = subLessonRequestModel.Title,
 					Content = subLessonRequestModel.Content,
 					Description = subLessonRequestModel.Description,
 					LessonId = lessonId,
 					CreateDate = subLessonRequestModel?.CreateDate,
 					IsLocked = subLessonRequestModel?.IsLocked,
+					IsDelete = false,
 					VideoLink = subLessonRequestModel?.VideoLink,
 					UserId = userId
 				};
@@ -45,6 +46,7 @@ namespace DataAccess.Repositories.Repo
 					LessonId = lessonId,
 					CreateDate = subLessonRequestModel?.CreateDate,
 					IsLocked = subLessonRequestModel?.IsLocked,
+					IsDelete = false,
 					VideoLink = subLessonRequestModel?.VideoLink,
 				};
 

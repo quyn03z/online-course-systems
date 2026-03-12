@@ -18,12 +18,12 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<IEnumerable<Lesson>> GetAllLessonAsync(int courseId)
 		{
-			return await _dbSet.Include(c => c.Course).Where(c => c.CourseId == courseId && c.IsLocked == false).ToListAsync();
+			return await _dbSet.Include(c => c.Course).Where(c => c.CourseId == courseId && c.IsLocked == false && c.IsDelete == false).ToListAsync();
 		}
 
 		public async Task<IEnumerable<Lesson>> GetAllManaLessonAsync(int courseId)
 		{
-			return await _dbSet.Include(c => c.Course).Where(l => l.CourseId == courseId).ToListAsync();
+			return await _dbSet.Include(c => c.Course).Where(l => l.CourseId == courseId && l.IsDelete == false).ToListAsync();
 		}
 
 		public async Task<int> GetFirstLessonIdByCourseId(int courseId)
@@ -32,6 +32,7 @@ namespace DataAccess.Repositories.Repo
 						.Where(l => l.CourseId == courseId)
 						.Select(l => l.LessonId).FirstOrDefaultAsync();
 		}
+
 	}
 
 }

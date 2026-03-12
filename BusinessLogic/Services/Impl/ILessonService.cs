@@ -19,5 +19,7 @@ namespace BusinessLogic.Services.Impl
 
 		Task<bool> GetLessonsById(int lessonId);
 
+		Task<string> RemoveLessonAsync(int lessonId);
+
 	}
 }

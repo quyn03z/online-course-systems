@@ -13,9 +13,11 @@ namespace DataAccess.Repositories
         public AuditEntry(EntityEntry entry)
         {
             Entry = entry;
+            State = entry.State;
         }
 
         public EntityEntry Entry { get; }
+        public EntityState State { get; }
         public int? UserId { get; set; }
         public string TableName { get; set; }
         public Dictionary<string, object> KeyValues { get; } = new Dictionary<string, object>();
@@ -29,12 +31,12 @@ namespace DataAccess.Repositories
         {
             var audit = new AuditLog();
             audit.UserId = UserId;
-            audit.Action = Entry.State switch
+            audit.Action = State switch
             {
                 EntityState.Added => "Added",
                 EntityState.Modified => "Update",
                 EntityState.Deleted => "Delete",
-                _ => Entry.State.ToString()
+                _ => State.ToString()
             };
             audit.Entity = TableName;
             audit.CreatedAt = DateTime.UtcNow;

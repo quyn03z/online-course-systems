@@ -175,6 +175,13 @@ namespace DataAccess.Repositories
 		private List<AuditEntry> OnBeforeSaveChanges()
 		{
 			ChangeTracker.DetectChanges();
+
+			// Nếu add phần tử mới insert vào database là added không để unchange nữa
+			foreach (var entry in ChangeTracker.Entries().Where(e => e.State == EntityState.Unchanged && !e.IsKeySet))
+			{
+				entry.State = EntityState.Added;
+			}
+
 			var auditEntries = new List<AuditEntry>();
 			foreach (var entry in ChangeTracker.Entries())
 			{

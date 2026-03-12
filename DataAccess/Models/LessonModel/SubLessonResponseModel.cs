@@ -22,6 +22,8 @@ namespace DataAccess.Models.LessonModel
 		public DateTime? CreateDate { get; set; }
 
 		public bool? IsLocked { get; set; }
+		public bool? IsDelete{ get; set; }
+
 
 		public string VideoLink { get; set; }
 	}

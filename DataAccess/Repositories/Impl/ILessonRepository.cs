@@ -17,5 +17,6 @@ namespace DataAccess.Repositories.Impl
 		Task<IEnumerable<Lesson>> GetAllLessonAsync(int courseId);
 		Task<int> GetFirstLessonIdByCourseId(int courseId);
 
+
 	}
 }
