@@ -277,7 +277,7 @@ namespace BusinessLogic.Services.Serv
 			user.RoleId = userRequest.RoleId;
 			user.Email = userRequest.Email;
 			user.Firstname = userRequest.FirstName;
-			user.Lastname = userRequest.LastName;
+			user.Lastname = userRequest.LastName;	
 			user.IsLocked = userRequest.IsLocked;
 
 			await _userRepository.UpdateAsync(user);
