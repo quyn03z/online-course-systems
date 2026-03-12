@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +11,7 @@ namespace DataAccess.Repositories.Impl
 	{
 
 		Task<Role> GetRoleNameAsync(string roleName);
+		Task<bool> CheckExitNameRoleAsync(string roleName);
+		Task<bool> DeleteRoleAsync(int roleId);
 	}
 }
