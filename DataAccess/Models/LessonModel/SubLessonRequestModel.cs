@@ -20,6 +20,8 @@ namespace DataAccess.Models.LessonModel
 
 		public DateTime? CreateDate { get; set; }
 
+		public bool? IsDelete { get; set; }
+
 		public bool? IsLocked { get; set; }
 
 		[Required(ErrorMessage = "Video là bắt buộc.")]

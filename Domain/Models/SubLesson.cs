@@ -24,8 +24,10 @@ namespace Domain.Models
         public DateTime? CreateDate { get; set; }
 
         public bool? IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
 
-        public string VideoLink { get; set; }
+
+		public string VideoLink { get; set; }
 
         public virtual Lesson Lesson { get; set; }
     }

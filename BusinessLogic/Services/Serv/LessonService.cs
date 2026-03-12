@@ -2,6 +2,7 @@
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.LessonModel;
 using DataAccess.Repositories.Impl;
+using DataAccess.Repositories.Repo;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace BusinessLogic.Services.Serv
 					CourseId = courseId,
 					Title = lessonRequesModel.Title,
 					IsLocked = lessonRequesModel.IsLocked,
+					IsDelete = false
 				};
 				await _lessonRepository.AddAsync(lesson);
 
@@ -36,6 +38,7 @@ namespace BusinessLogic.Services.Serv
 					Title = lesson.Title,
 					IsLocked = lesson.IsLocked,
 					CourseId = lesson.CourseId,
+					IsDelete = lesson.IsDelete
 				};
 			}catch (Exception ex)
 			{
@@ -103,6 +106,18 @@ namespace BusinessLogic.Services.Serv
 			return false;
 		}
 
+		public async Task<string> RemoveLessonAsync(int lessonId)
+		{
+			var lesson = await _lessonRepository.GetByIdAsync(lessonId);
+			if (lesson == null) throw new BadRequestException("Lesson không tồn tại trong hệ thống!");
+
+			lesson.IsDelete = true;
+			lesson.IsLocked = true;
+			await _lessonRepository.UpdateAsync(lesson);
+			return "Remove Lesson Thành Công.";
+
+		}
+
 		public async Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel)
 		{
 			try
@@ -121,6 +136,7 @@ namespace BusinessLogic.Services.Serv
 					Title    = lesson.Title,
 					IsLocked = lesson.IsLocked,
 					CourseId = lesson.CourseId,
+					IsDelete = lesson.IsDelete,
 				};
 			}
 			catch (Exception ex)

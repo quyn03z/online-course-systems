@@ -16,6 +16,8 @@ namespace DataAccess.Models.DocumentModel
 		public string FileUrl { get; set; }
 		public int LessonId { get; set; }
 		public bool? IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
+
 	}
 
 
@@ -29,5 +31,6 @@ namespace DataAccess.Models.DocumentModel
 		public string FileUrl { get; set; }
 		public int LessonId { get; set; }
 		public bool? IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
 	}
 }

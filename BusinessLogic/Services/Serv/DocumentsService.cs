@@ -36,6 +36,7 @@ namespace BusinessLogic.Services.Serv
 					Description = documentRequestModel.Description,
 					FileUrl = documentRequestModel.FileUrl,
 					IsLocked = documentRequestModel.IsLocked,
+					IsDelete = false
 				};
 				await _documentsRepository.AddAsync(document);
 
@@ -47,6 +48,7 @@ namespace BusinessLogic.Services.Serv
 					Description = document.Description,
 					FileUrl = document.FileUrl,
 					IsLocked = document.IsLocked,
+					IsDelete = document.IsDelete
 				};
 			}
 			catch (Exception ex)
@@ -117,6 +119,7 @@ namespace BusinessLogic.Services.Serv
 					Description = document.Description,
 					FileUrl = document.FileUrl,
 					IsLocked = document.IsLocked,
+					IsDelete = document.IsDelete,
 				};
 			}
 			catch (Exception ex)

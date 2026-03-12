@@ -23,8 +23,9 @@ namespace Domain.Models
         public int LessonId { get; set; }
 
         public int QuizzTime { get; set; }
+		public bool? IsDelete { get; set; }
 
-        public virtual Lesson Lesson { get; set; }
+		public virtual Lesson Lesson { get; set; }
 
         public virtual ICollection<MenteeScores> MenteeScores { get; set; }
 

@@ -15,6 +15,8 @@ namespace DataAccess.Models.LessonModel
 		public int CourseId { get; set; }
 
 		public bool IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
+
 
 		public string CourseName { get; set; }
 	}

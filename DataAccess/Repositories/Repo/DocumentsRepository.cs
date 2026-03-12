@@ -19,12 +19,12 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<List<Documents>> GetAllsDocuments(int lessonId)
 		{
-			return await _dbSet.Where(x => x.LessonId == lessonId && x.IsLocked == false).ToListAsync();
+			return await _dbSet.Where(x => x.LessonId == lessonId && x.IsLocked == false && x.IsDelete == false).ToListAsync();
 		}
 
 		public async Task<List<Documents>> GetAllsManaDocumentsAsync(int lessonId)
 		{
-			return await _dbSet.Where(x => x.LessonId == lessonId).ToListAsync();
+			return await _dbSet.Where(x => x.LessonId == lessonId && x.IsDelete == false).ToListAsync();
 		}
 	}
 }
