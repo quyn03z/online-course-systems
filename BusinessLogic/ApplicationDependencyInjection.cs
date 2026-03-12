@@ -26,6 +26,9 @@ namespace BusinessLogic
 			// user
 			services.AddScoped<IUserService, UserService>();
 
+			// role
+			services.AddScoped<IRoleService, RoleService>();
+
 			//email
 			services.AddScoped<IEmailService, EmailService>();
 
