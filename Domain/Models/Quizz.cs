@@ -26,7 +26,8 @@ namespace Domain.Models
 		public bool? IsDelete { get; set; }
 		public bool? IsLocked { get; set; }
 
-        public virtual Lesson Lesson { get; set; }
+
+		public virtual Lesson Lesson { get; set; }
 
         public virtual ICollection<MenteeScores> MenteeScores { get; set; }
 
