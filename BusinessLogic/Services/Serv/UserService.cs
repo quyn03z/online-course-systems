@@ -1,8 +1,10 @@
+using Azure;
 using BusinessLogic.Claims;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +15,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using static BusinessLogic.Models.User;
 
 namespace BusinessLogic.Services.Serv
@@ -26,8 +29,9 @@ namespace BusinessLogic.Services.Serv
 		private readonly IEmailService _emailService;
 		private readonly IConfiguration _configuration;
 		private readonly IClaimService _claimService;
+		private readonly IAuditLogsService _auditLogsService;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
@@ -36,6 +40,7 @@ namespace BusinessLogic.Services.Serv
 			_emailService = emailService;
 			_configuration = configuration;
 			_claimService = claimService;
+			_auditLogsService = auditLogsService;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -57,9 +62,8 @@ namespace BusinessLogic.Services.Serv
 				RoleId = role.Id,
 				Username = createUserModel.UserName,
 				Email = createUserModel.Email,
-				Firstname = createUserModel.FirstName,
-				Lastname = createUserModel.LastName,
-				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password)
+				Password = BCrypt.Net.BCrypt.HashPassword(createUserModel.Password),
+				Avatar = "https://t4.ftcdn.net/jpg/07/03/86/11/360_F_703861114_7YxIPnoH8NfmbyEffOziaXy0EO1NpRHD.jpg"
 			};
 
 			// lưu user
@@ -98,25 +102,29 @@ namespace BusinessLogic.Services.Serv
 				UserId = user.UserId,
 				Token = refeshToken,
 				IsRevoked = false,
-				ExpiredAt = DateTime.Now.AddDays(7),
-				CreatedAt = DateTime.Now,
+				ExpiredAt = DateTime.UtcNow.AddDays(7),
+				CreatedAt = DateTime.UtcNow,
 			};
 
 			await _refreshTokenRepository.AddAsync(tokenRefresh);
 
+			await _auditLogsService.LogActionAsync(user.UserId, "Login", "User", keyValues: $"{{ \"UserId\": {user.UserId} }}");
+
 			return new LoginResponseModel
 			{
-				Username = user.Username,
-				Email = user.Email,
 				Role = user.Role.RoleName,
 				Token = accessToken,
 				RefreshToken = refeshToken,
 			};
 		}
 
-		public async Task LogoutAsync(int userId)
+		public async Task LogoutAsync()
 		{
-			await _refreshTokenRepository.RevokeUserTokensAsync(userId);
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new BusinessLogic.Exceptions.UnauthorizedException("Người dùng chưa xác thực.");
+			await _refreshTokenRepository.RevokeUserTokensAsync(userId.Value);
+			await _auditLogsService.LogActionAsync(userId.Value, "Logout", "User", keyValues: $"{{ \"UserId\": {userId.Value} }}");
 		}
 
 		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)
@@ -138,8 +146,9 @@ namespace BusinessLogic.Services.Serv
 				isUsed = false,
 				CreateAt = DateTime.Now,
 			});
+			string safeToken = HttpUtility.UrlEncode(resetToken);
 
-			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={resetToken}&email={email.Email}";
+			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={safeToken}";
 
 			// Gửi email reset password
 			await _emailService.SendEmailResetPasswordAsync(new ForgotPasswordModel
@@ -175,21 +184,22 @@ namespace BusinessLogic.Services.Serv
 
 			return new ResetPasswordModel
 			{
-				Email = user.Email,
-				Token = resetPasswordModel.Token
+				Token = resetPasswordModel.Token,
+				Password = resetPasswordModel.Password,
+				ConfirmPassword = resetPasswordModel.ConfirmPassword,
 			};
 
 		}
 
-		public async Task<IEnumerable<UserResponseModel>> GetAllUserAdmin()
+		public async Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize,string? search)
 		{
-			var users = await _userRepository.GetAllUserAdmin();
-			return users.Select(u => new UserResponseModel
+			var pagedUsers = await _userRepository.GetAllUserAdminPagedAsync(page, pageSize,search);
+			return pagedUsers.Map(u => new UserResponseModel
 			{
 				Id = u.UserId,
 				Username = u.Username.Trim(),
-				Firstname = u.Firstname.Trim(),
-				Lastname = u.Lastname.Trim(),
+				Firstname = u.Firstname?.Trim(),
+				Lastname = u.Lastname?.Trim(),
 				Email = u.Email.Trim(),
 				IsLocked = u.IsLocked,
 				RoleName = u.Role?.RoleName.Trim()
@@ -213,10 +223,15 @@ namespace BusinessLogic.Services.Serv
 				Email = addUserAdminModel.Email,
 				Firstname = addUserAdminModel.FirstName,
 				Lastname = addUserAdminModel.LastName,
+				IsLocked = addUserAdminModel.IsLocked,
 				Password = BCrypt.Net.BCrypt.HashPassword(randomPassword)
 			};
 
 			await _userRepository.AddAsync(user);
+
+			// Gửi email chào mừng kèm mật khẩu tạm thời
+			await _emailService.SendWelcomeEmailAsync(user.Email, user.Username, randomPassword);
+
 			return new UserResponseModel {
 				Id = user.UserId,
 				Username = user.Username,
@@ -245,6 +260,10 @@ namespace BusinessLogic.Services.Serv
 
 		public async Task<UserResponseModel> EditUserAdmin(UserRequest userRequest)
 		{
+			var currentId = _claimService.GetUserId();
+			if (currentId == userRequest.UserId)
+				throw new BadRequestException("Bạn không thể khóa tài khoản của mình.");
+
 			// Lấy user hiện tại từ DB
 			var user = await _userRepository.GetByIdAsync(userRequest.UserId);
 			if (user == null)
@@ -254,16 +273,11 @@ namespace BusinessLogic.Services.Serv
 			if (user.Email != userRequest.Email && await _userRepository.ExistsByEmailAsync(userRequest.Email))
 				throw new BadRequestException("Email đã tồn tại trong hệ thống!");
 
-			// Kiểm tra username trùng — loại trừ chính user đang sửa
-			if (user.Username != userRequest.UserName && await _userRepository.ExistsByUserNameAsync(userRequest.UserName))
-				throw new BadRequestException("Username đã tồn tại trong hệ thống!");
-
 			// Cập nhật các field
 			user.RoleId = userRequest.RoleId;
-			user.Username = userRequest.UserName;
 			user.Email = userRequest.Email;
 			user.Firstname = userRequest.FirstName;
-			user.Lastname = userRequest.LastName;
+			user.Lastname = userRequest.LastName;	
 			user.IsLocked = userRequest.IsLocked;
 
 			await _userRepository.UpdateAsync(user);
@@ -280,6 +294,103 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
+		public async Task<LoginResponseModel> RefreshTokenAsync(TokenRequestModel tokenRequestModel)
+		{
+			// 1. Tìm refresh token trong DB (chưa revoke + chưa hết hạn)
+			var storedToken = await _refreshTokenRepository.GetByTokenAsync(tokenRequestModel.RefreshToken);
+			if (storedToken == null)
+				throw new BadRequestException("Refresh token không hợp lệ hoặc đã hết hạn.");
+
+			var user = storedToken.User;
+
+			if (user.IsLocked)
+				throw new BadRequestException("Tài khoản đã bị khóa.");
+
+			// 2. Thu hồi toàn bộ token cũ của user
+			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
+
+			// 3. Tạo access token + refresh token mới
+			var newAccessToken = JwtHelper.GenerateToken(user, _configuration);
+			var newRefreshToken = JwtHelper.GenerateRefreshToken();
+
+			await _refreshTokenRepository.AddAsync(new RefreshToken
+			{
+				UserId = user.UserId,
+				Token = newRefreshToken,
+				IsRevoked = false,
+				ExpiredAt = DateTime.UtcNow.AddDays(7),
+				CreatedAt = DateTime.UtcNow,
+			});
+
+			return new LoginResponseModel
+			{
+				Role = user.Role.RoleName,
+				Token = newAccessToken,
+				RefreshToken = newRefreshToken,
+			};
+		}
+
+		public async Task<string> ChangePasswordAsync(ChangePassWordModel changePassWordModel)
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetByIdAsync(userId.Value);
+			
+			if (!BCrypt.Net.BCrypt.Verify(changePassWordModel.OldPassword,user.Password))
+				throw new BadRequestException("Mật khẩu cũ không chính xác");
+
+			user.Password = BCrypt.Net.BCrypt.HashPassword(changePassWordModel.NewPassword);
+
+			await _userRepository.UpdateAsync(user);
+
+			return "Change Password Thành Công.";
+		}
+
+		public async Task<UserResponseProfile> GetUserByIdAsync()
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetUserByIdAsync(userId.Value);
+			return new UserResponseProfile
+			{
+				Username = user.Username,
+				LastName = user.Lastname,
+				FirstName = user.Firstname,
+				Email = user.Email,
+				Avatar = user.Avatar,
+				RoleName = user.Role.RoleName,
+			};
+		}
+
+		public async Task<UserResponseProfile> UpdateProfileAsync(UpdateProfileRequestModel updateProfileRequestModel)
+		{
+			var userId = _claimService.GetUserId();
+			if (userId == null)
+				throw new UnauthorizedException("Người dùng chưa xác thực.");
+			var user = await _userRepository.GetUserByIdAsync(userId.Value);
+			user.Firstname = updateProfileRequestModel.FirstName;
+
+
+			user.Lastname = updateProfileRequestModel.LastName;
+				
+
+			user.Avatar = !string.IsNullOrWhiteSpace(updateProfileRequestModel.Avatar)
+				? updateProfileRequestModel.Avatar
+				: user.Avatar;
+
+			await _userRepository.UpdateAsync(user);
+			return new UserResponseProfile
+			{
+				Username = user.Username,
+				LastName = user.Lastname,
+				FirstName = user.Firstname,
+				Email = user.Email,
+				Avatar = user.Avatar,
+				RoleName = user.Role.RoleName,
+			};
+		}
 
 
 	}

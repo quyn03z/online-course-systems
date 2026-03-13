@@ -16,6 +16,8 @@ namespace BusinessLogic.Helpers
 		public static string GenerateToken(User user, IConfiguration configuration)
 		{
 			var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
+			var issuer = configuration.GetValue<string>("JwtConfiguration:ValidIssuer");
+			var audience = configuration.GetValue<string>("JwtConfiguration:ValidAudience");
 
 			var key = Encoding.ASCII.GetBytes(secretKey ?? string.Empty);
 
@@ -27,12 +29,15 @@ namespace BusinessLogic.Helpers
 				new Claim(ClaimTypes.Name, user.Username),
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Role, user.Role.RoleName),
+				new Claim("Avatar", user.Avatar ?? "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png"),
 			};
 
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.Now.AddMinutes(30),
+				Expires = DateTime.UtcNow.AddMinutes(30),
+				Issuer = issuer,
+				Audience = audience,
 				SigningCredentials =
 					new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};

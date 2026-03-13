@@ -7,9 +7,8 @@ using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class QuizzController : ControllerBase
+
+	public class QuizzController : BaseController
 	{
 		private readonly IQuizzService  _quizzService;
 		public QuizzController(IQuizzService quizzService)
@@ -27,9 +26,7 @@ namespace API.Controllers
 		public async Task<IActionResult> AddQuizzAsync(QuizzRequestModel quizzRequestModel, int lessonId)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<QuizzResponseModel>.Success(await _quizzService.AddQuizzAsync(quizzRequestModel, lessonId)));
 		}
 
@@ -37,9 +34,7 @@ namespace API.Controllers
 		public async Task<IActionResult> UpdateQuizzAsync(QuizzRequestModel quizzRequestModel, int quizzId)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<string>.Success(await _quizzService.UpdateQuizzAsync(quizzRequestModel, quizzId)));
 		}
 

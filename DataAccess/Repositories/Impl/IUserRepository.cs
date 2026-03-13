@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using DataAccess.Models.PageResultModel;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,9 @@ namespace DataAccess.Repositories.Impl
 	{
 		Task<User?> GetUserByEmail(string email);
 		Task<User?> GetUserByUserNameAsync(string userName);
-
 		Task<bool> ExistsByEmailAsync(string email);
-
 		Task<bool> ExistsByUserNameAsync(string userName);
-
-		Task<IEnumerable<User>> GetAllUserAdmin();
+		Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null);
+		Task<User> GetUserByIdAsync(int userId);
 	}
 }

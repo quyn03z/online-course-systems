@@ -1,14 +1,18 @@
-﻿using BusinessLogic.Models;
+﻿using Azure;
+using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.PageResultModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using static BusinessLogic.Models.User;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AdminController : ControllerBase
+	[Authorize(Roles = AppConstants.Roles.Admin)]
+	public class AdminController : BaseController
 	{
 		private readonly IUserService _userService;
 
@@ -17,19 +21,18 @@ namespace API.Controllers
 			_userService = userService;
 		}
 
-		[HttpGet("get-alls-user")]
-		public async Task<IActionResult> GetAllUserAdmin()
+		[HttpGet("get-all-users")]
+		public async Task<IActionResult> GetAllUserAdminPagedAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
 		{
-			return Ok(ApiResult<IEnumerable<UserResponseModel>>.Success(await _userService.GetAllUserAdmin()));
+			var result = await _userService.GetAllUserAdminPagedAsync(page, pageSize, search);
+			return Ok(ApiResult<PagedResults<UserResponseModel>>.Success(result));
 		}
 
-		[HttpPost("add-user")]
+		[HttpPost("create-user-admin")]
 		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<UserResponseModel>.Success(await _userService.AddUserByAdmin(addUserAdminModel)));
 		}
 
@@ -43,9 +46,7 @@ namespace API.Controllers
 		public async Task<IActionResult> EditUserAdmin(UserRequest userRequest)
 		{
 			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+				return ValidationError();
 			return Ok(ApiResult<UserResponseModel>.Success(await _userService.EditUserAdmin(userRequest)));
 		}
 

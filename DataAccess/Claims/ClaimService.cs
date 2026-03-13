@@ -31,5 +31,7 @@ namespace BusinessLogic.Claims
 		{
 			return _httpContextAccessor.HttpContext?.User?.FindFirst(key)?.Value;
 		}
+
+
 	}
 }

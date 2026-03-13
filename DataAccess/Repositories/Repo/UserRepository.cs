@@ -1,4 +1,6 @@
-﻿using DataAccess.Repositories.Impl;
+﻿using Azure;
+using DataAccess.Models.PageResultModel;
+using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,14 +27,27 @@ namespace DataAccess.Repositories.Repo
 			return await _dbSet.AnyAsync(x => x.Username == userName);
 		}
 
-		public async Task<IEnumerable<User>> GetAllUserAdmin()
+		public async Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null)
 		{
-			return await _dbSet.Include(r => r.Role).ToListAsync();
+			var query = _dbSet.Include(r => r.Role).AsQueryable();
+			if (!string.IsNullOrWhiteSpace(search))
+			{
+				var term = search.Trim().ToLower();
+				query = query.Where(u => u.Username.ToLower().Contains(term) || u.Email.ToLower().Contains(term));
+			}
+			return await query
+						.OrderByDescending(u => u.UserId)
+						.ToPagedListAsync(page, pageSize);
 		}
 
 		public async Task<User?> GetUserByEmail(string email)
 		{
 			return await _dbSet.FirstOrDefaultAsync(x => x.Email == email);
+		}
+
+		public async Task<User> GetUserByIdAsync(int userId)
+		{
+			return await _dbSet.Include(r => r.Role).FirstOrDefaultAsync(x => x.UserId == userId);
 		}
 
 		public async Task<User?> GetUserByUserNameAsync(string userName)

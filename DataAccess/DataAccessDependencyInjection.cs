@@ -56,6 +56,25 @@ namespace DataAccess
 
 			// quizz
 			services.AddScoped<IQuizzRepository, QuizzRepository>();
+
+			// questions
+			services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+
+			// enrollment
+			services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+
+			// payment
+			services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+			// auditlogs
+			services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
+
+			// courseType
+			services.AddScoped<ICourseTypeRepository, CourseTypeRepository>();
+
+			// documents
+			services.AddScoped<IDocumentsRepository, DocumentsRepository>();
+
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

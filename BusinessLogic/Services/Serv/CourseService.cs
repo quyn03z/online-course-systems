@@ -7,46 +7,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessLogic.Claims;
 
 namespace BusinessLogic.Services.Serv
 {
 	public class CourseService : ICourseService
 	{
 		private readonly ICourseRepository _courseRepository;
+		private readonly IClaimService _claimService;
 
-		public CourseService(ICourseRepository courseRepository)
+		public CourseService(ICourseRepository courseRepository, IClaimService claimService)
 		{
 			_courseRepository = courseRepository;
+			_claimService = claimService;
 		}
 
 		public async Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel)
 		{
-			return await _courseRepository.AddCourseAsync(courseRequestModel);
+			var userId = _claimService.GetUserId();
+			return await _courseRepository.AddCourseAsync(courseRequestModel,userId.Value);
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
 		{
-			return await _courseRepository.GetAllHomeCourseAsync();
+			return await _courseRepository.GetAllHomeCoursePageAsync(page, pageSize);
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
 		{
-			return await _courseRepository.GetAllManaCourseAsync();
+			return await _courseRepository.GetAllManaCourseAsync(page, pageSize,search);
 		}
 
-		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)
 		{
-			return await _courseRepository.GetCourseById(courseId);
+			return await _courseRepository.GetCourseDetailsById(courseId);
 		}
 
 		public async Task<string> RemoveCourseById(int courseId)
 		{
-			return await _courseRepository.RemoveCourseById(courseId);
+			var userId = _claimService.GetUserId();
+			return await _courseRepository.RemoveCourseById(courseId,userId.Value);
 		}
 
 		public async Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel, int courseId)
 		{
-			return await _courseRepository.UpdateCourseAsync(courseRequestModel, courseId);
+			var userId = _claimService.GetUserId();
+			return await _courseRepository.UpdateCourseAsync(courseRequestModel, courseId,userId.Value);
 		}
 
 

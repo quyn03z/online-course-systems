@@ -1,33 +1,82 @@
-using BusinessLogic;
+﻿using BusinessLogic;
+using BusinessLogic.Models.Momo;
 using DataAccess;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<MoMoConfig>(builder.Configuration.GetSection("MomoAPI"));
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+{
+	options.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-	
+builder.Services.AddSwaggerGen(c =>
+{
+	c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+	// Định nghĩa Bearer Token
+	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+		Name = "Authorization",
+		In = ParameterLocation.Header,
+		Type = SecuritySchemeType.ApiKey,
+		Scheme = "Bearer"
+	});
+
+	c.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type = ReferenceType.SecurityScheme,
+					Id = "Bearer"
+				},
+				Scheme = "oauth2",
+				Name = "Bearer",
+				In = ParameterLocation.Header
+			},
+			new List<string>()
+		}
+	});
+});
+
+
 builder.Services.AddAuthentication("Bearer")
 	.AddJwtBearer("Bearer", options =>
 	{
 		options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
 		{
-			ValidateIssuer = true,
-			ValidateAudience = true,
+			ValidateIssuer = false,
+			ValidateAudience = false,
 			ValidateLifetime = true,
 			ValidateIssuerSigningKey = true,
-			ValidIssuer = builder.Configuration["JwtConfiguration:ValidIssuer"],
-			ValidAudience = builder.Configuration["JwtConfiguration:ValidAudience"],
 			IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtConfiguration:SecretKey"]))
 		};
 	});
 
-builder.Services.AddDataAccess(builder.Configuration)
-	.AddApplication(builder.Environment);
+
+builder.Services.AddDataAccess(builder.Configuration).AddApplication(builder.Environment);
+
+// add cors 
+builder.Services.AddCors(option =>
+{
+	option.AddPolicy("AllowAngular", policy =>
+	{
+		policy.WithOrigins("http://localhost:4200")
+			  .AllowAnyHeader()
+			  .AllowAnyMethod();
+	});
+});
 
 var app = builder.Build();
 
@@ -43,6 +92,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseCors("AllowAngular");
 app.UseAuthentication();
 app.UseAuthorization();
 

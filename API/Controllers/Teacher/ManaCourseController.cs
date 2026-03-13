@@ -1,14 +1,15 @@
-﻿using BusinessLogic.Models;
+﻿using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.CourseModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Teacher
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ManaCourseController : ControllerBase
+	[Authorize(Roles = AppConstants.Roles.Teacher)]
+	public class ManaCourseController : BaseController
 	{
 		private readonly ICourseService _courseService;
 
@@ -18,11 +19,11 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpGet("get-alls-mana-course")]
-		public async Task<IActionResult> GetAllsCourse()
+		public async Task<IActionResult> GetAllsCourse(int page, int pageSize,string search = "")
 		{
 			try
 			{
-				return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllManaCourseAsync()));
+				return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllManaCourseAsync(page,pageSize,search)));
 			}
 			catch (Exception ex)
 			{
@@ -35,6 +36,8 @@ namespace API.Controllers.Teacher
 		{
 			try
 			{
+				if (!ModelState.IsValid)
+				return ValidationError();
 				return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.AddCourseAsync(courseRequestModel)));
 			}
 			catch (Exception ex)
@@ -61,6 +64,8 @@ namespace API.Controllers.Teacher
 		{
 			try
 			{
+				if(!ModelState.IsValid)
+				return ValidationError();
 				return Ok(ApiResult<string>.Success(await _courseService.UpdateCourseAsync(courseRequestModel,courseId)));
 			}catch (Exception ex)
 			{

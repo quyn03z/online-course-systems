@@ -33,7 +33,7 @@ namespace DataAccess.Migrations
                     b.Property<string>("AnswerText")
                         .IsRequired()
                         .IsUnicode(false)
-                        .HasColumnType("text");
+                        .HasColumnType("varchar(max)");
 
                     b.Property<bool?>("IsCorrect")
                         .HasColumnType("bit");
@@ -74,11 +74,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NewValues")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OldValues")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
@@ -106,6 +104,9 @@ namespace DataAccess.Migrations
                         .IsFixedLength();
 
                     b.Property<int?>("CourseTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Creator")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -162,6 +163,45 @@ namespace DataAccess.Migrations
                     b.ToTable("CourseType");
                 });
 
+            modelBuilder.Entity("Domain.Models.Documents", b =>
+                {
+                    b.Property<int>("DocumentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentId"));
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("DocumentId");
+
+                    b.HasIndex("LessonId");
+
+                    b.ToTable("Documents");
+                });
+
             modelBuilder.Entity("Domain.Models.Enrollment", b =>
                 {
                     b.Property<int>("UserId")
@@ -192,6 +232,9 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsLocked")
                         .HasColumnType("bit");
@@ -271,12 +314,12 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("QuestionText")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("QuestionTypeTypeId")
+                    b.Property<int?>("QuestionTypeTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("QuizId")
+                    b.Property<int?>("QuizzId")
                         .HasColumnType("int");
 
                     b.Property<int?>("TypeId")
@@ -286,7 +329,9 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("QuestionTypeTypeId");
 
-                    b.HasIndex("QuizId");
+                    b.HasIndex("QuizzId");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Questions");
                 });
@@ -443,6 +488,9 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsLocked")
                         .HasColumnType("bit");
 
@@ -473,13 +521,15 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Firstname")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -487,7 +537,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -536,6 +585,17 @@ namespace DataAccess.Migrations
                         .HasForeignKey("CourseTypeId");
 
                     b.Navigation("CourseType");
+                });
+
+            modelBuilder.Entity("Domain.Models.Documents", b =>
+                {
+                    b.HasOne("Domain.Models.Lesson", "Lesson")
+                        .WithMany("Documents")
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Domain.Models.Enrollment", b =>
@@ -605,15 +665,17 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Models.Question", b =>
                 {
-                    b.HasOne("Domain.Models.QuestionType", "QuestionType")
+                    b.HasOne("Domain.Models.QuestionType", null)
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionTypeTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionTypeTypeId");
 
                     b.HasOne("Domain.Models.Quizz", "Quizz")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId");
+                        .HasForeignKey("QuizzId");
+
+                    b.HasOne("Domain.Models.QuestionType", "QuestionType")
+                        .WithMany()
+                        .HasForeignKey("TypeId");
 
                     b.Navigation("QuestionType");
 
@@ -691,6 +753,8 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Domain.Models.Lesson", b =>
                 {
+                    b.Navigation("Documents");
+
                     b.Navigation("Quizz")
                         .IsRequired();
 

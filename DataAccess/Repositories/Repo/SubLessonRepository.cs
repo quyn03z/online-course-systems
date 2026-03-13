@@ -20,19 +20,21 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId)
+		public async Task<SubLessonResponseModel> AddSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int lessonId, int userId)
 		{
 			try
 			{
-				var parameters = new 
-				{ 
+				var parameters = new
+				{
 					Title = subLessonRequestModel.Title,
 					Content = subLessonRequestModel.Content,
 					Description = subLessonRequestModel.Description,
 					LessonId = lessonId,
 					CreateDate = subLessonRequestModel?.CreateDate,
 					IsLocked = subLessonRequestModel?.IsLocked,
+					IsDelete = false,
 					VideoLink = subLessonRequestModel?.VideoLink,
+					UserId = userId
 				};
 				int newSubLessonId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddSubLesson", parameters);
 				return new SubLessonResponseModel
@@ -44,6 +46,7 @@ namespace DataAccess.Repositories.Repo
 					LessonId = lessonId,
 					CreateDate = subLessonRequestModel?.CreateDate,
 					IsLocked = subLessonRequestModel?.IsLocked,
+					IsDelete = false,
 					VideoLink = subLessonRequestModel?.VideoLink,
 				};
 
@@ -70,7 +73,7 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				var allsLesson = await _sqlDataAccess.QueryAsync<SubLessonResponseModel>("GetAllsSubLessonAsync", new {lessonId = lessonId});
+				var allsLesson = await _sqlDataAccess.QueryAsync<SubLessonResponseModel>("sp_GetAllsSubLessonAsync", new {lessonId = lessonId});
 				return allsLesson.ToList();
 			}
 			catch (Exception ex)
@@ -79,11 +82,24 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> RemoveSubLessonAsync(int subLessonId)
+		public async Task<int> GetFirstSubLessonByLessonId(int lessonId)
 		{
 			try
 			{
-				await _sqlDataAccess.ExecuteAsync("sp_RemoveSubLesson", new {SubLessonId = subLessonId});
+				var subLessonId = await _sqlDataAccess.QueryFirstOrDefaultAsync<int>("GetFirstSubLessonByLessonId", new { lessonId = lessonId });
+				return subLessonId;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Lỗi lấy tất cả bài học.", ex);
+			}
+		}
+
+		public async Task<string> RemoveSubLessonAsync(int subLessonId, int userId)
+		{
+			try
+			{
+				await _sqlDataAccess.ExecuteAsync("sp_RemoveSubLesson", new {SubLessonId = subLessonId,UserId = userId});
 				return "Remove sublesson thành công.";
 			}
 			catch (Exception ex)
@@ -92,7 +108,7 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId)
+		public async Task<string> UpdateSubLessonAsync(SubLessonRequestModel subLessonRequestModel, int sublessonId, int userId)
 		{
 			try
 			{
@@ -104,6 +120,7 @@ namespace DataAccess.Repositories.Repo
 					Description = subLessonRequestModel.Description,
 					IsLocked = subLessonRequestModel.IsLocked,
 					VideoLink = subLessonRequestModel.VideoLink,
+					UserId = userId
 				});
 				return "Cập nhật sublesson thành công.";
 			}
@@ -112,5 +129,6 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("Lỗi update bài học.", ex);
 			}
 		}
+
 	}
 }

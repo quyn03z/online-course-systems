@@ -17,16 +17,16 @@ namespace API.Controllers
 			_courseService = courseService;
 		}
 
-		[HttpGet("get-alls-home-course")]
-		public async Task<IActionResult> GetAllsHomeCourse()
+		[HttpGet("get-alls-course")]
+		public async Task<IActionResult> GetAllsHomeCoursePageAsync(int page, int pageSize)
 		{
-			return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllHomeCourseAsync()));
+			return Ok(ApiResult<List<CourseResponseHomeModel>>.Success(await _courseService.GetAllHomeCoursePageAsync(page, pageSize)));
 		}
 
-		[HttpGet("{courseId}")]
-		public async Task<IActionResult> GetCourseById(int courseId)
+		[HttpGet("get-course-details/{courseId}")]
+		public async Task<IActionResult> GetCourseDetailsById(int courseId)
 		{
-			return Ok(ApiResult<CourseResponseModel>.Success(await _courseService.GetCourseById(courseId)));
+			return Ok(ApiResult<CourseResponseHomeModel>.Success(await _courseService.GetCourseDetailsById(courseId)));
 		}
 
 

@@ -13,6 +13,10 @@ namespace DataAccess.Repositories.Impl
 		// get alls lesson by courseId
 		Task<IEnumerable<Lesson>> GetAllManaLessonAsync(int courseId);
 
+		// lấy tất cả Lesson mà không bị isLocked
+		Task<IEnumerable<Lesson>> GetAllLessonAsync(int courseId);
+		Task<int> GetFirstLessonIdByCourseId(int courseId);
+
 
 	}
 }

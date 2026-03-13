@@ -37,8 +37,10 @@ namespace Domain.Models
         public bool? IsDelete { get; set; }
 
         public double Price { get; set; }
+		public int Creator { get; set; }
 
-        public int? CourseTypeId { get; set; }
+
+		public int? CourseTypeId { get; set; }
 
         public virtual CourseType CourseType { get; set; }
 

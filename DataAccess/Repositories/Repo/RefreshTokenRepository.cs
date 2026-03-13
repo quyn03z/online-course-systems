@@ -22,6 +22,14 @@ namespace DataAccess.Repositories.Repo
 				.ExecuteUpdateAsync(x => x.SetProperty(t => t.IsRevoked, true));					
 		}
 
+		public async Task<RefreshToken?> GetByTokenAsync(string token)
+		{
+			return await _context.RefreshTokens
+				.Include(x => x.User)
+					.ThenInclude(u => u.Role)
+				.FirstOrDefaultAsync(x => x.Token == token && !x.IsRevoked && x.ExpiredAt > DateTime.UtcNow);
+		}
+
 
 	}
 }

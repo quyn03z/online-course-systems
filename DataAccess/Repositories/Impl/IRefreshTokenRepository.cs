@@ -10,5 +10,6 @@ namespace DataAccess.Repositories.Impl
 	public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
 	{
 		Task RevokeUserTokensAsync(int userId);
+		Task<RefreshToken?> GetByTokenAsync(string token);
 	}
 }

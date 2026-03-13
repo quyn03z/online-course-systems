@@ -11,7 +11,15 @@ namespace BusinessLogic.Services.Impl
 	public interface ILessonService
 	{
 		Task<IEnumerable<LessonResponseModel>> GetAllManaLessonAsync(int courseId);
+
+		Task<IEnumerable<LessonResponseModel>> GetAllLessonAsync(int courseId);
 		Task<LessonResponseModel> AddManaLessonAsync(LessonRequestModel lessonRequesModel,int courseId);
 		Task<LessonResponseModel> UpdateManaLessonAsync(int lessonId, LessonRequestModel lessonRequesModel);
+		Task<int> GetFirstLessonIdByCourseId(int courseId);
+
+		Task<bool> GetLessonsById(int lessonId);
+
+		Task<string> RemoveLessonAsync(int lessonId);
+
 	}
 }

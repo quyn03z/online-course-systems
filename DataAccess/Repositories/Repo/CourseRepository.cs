@@ -22,11 +22,23 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
-		public async Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel)
+		public async Task<CourseResponseModel> AddCourseAsync(CourseRequestModel courseRequestModel, int userId)
 		{
 			try
 			{
-				int newCourseId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddCourse", courseRequestModel);
+				var parameters = new
+				{
+					courseRequestModel.CourseName,
+					courseRequestModel.Title,
+					courseRequestModel.Description,
+					courseRequestModel.Image,
+					courseRequestModel.IsLocked,
+					courseRequestModel.IsDelete,
+					courseRequestModel.Price,
+					courseRequestModel.CourseTypeId,
+					UserId = userId 
+				};
+				int newCourseId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddCourse", parameters);
 				return new CourseResponseModel 
 				{
 					CourseId = newCourseId,
@@ -46,11 +58,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllHomeCourseAsync()
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
 		{
 			try
 			{
-				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllHomeCourseAsync", null);
+				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", new {page,pageSize});
 				return allsHomeCourse.ToList();
 			} catch (Exception ex)
 			{
@@ -58,11 +70,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync()
+		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
 		{
 			try
 			{
-				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", null);
+				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", new { page, pageSize,search });
 				return allsManaCourse.ToList();
 			}
 			catch (Exception ex)
@@ -71,23 +83,22 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<CourseResponseModel> GetCourseById(int courseId)
+		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)
 		{
 			try
 			{
-				return await _sqlDataAccess.QueryFirstOrDefaultAsync<CourseResponseModel>("sp_GetCourseById", new { CourseId = courseId });
-
+				return await _sqlDataAccess.QueryFirstOrDefaultAsync<CourseResponseHomeModel>("sp_GetCourseById", new { CourseId = courseId });
 			}catch (Exception ex)
 			{
 				throw new Exception("Không có khóa học tương ứng.",ex);
 			}
 		}
 
-		public async Task<string> RemoveCourseById(int courseId)
+		public async Task<string> RemoveCourseById(int courseId, int userId)
 		{
 			try
 			{
-				await _sqlDataAccess.ExecuteAsync("sp_RemoveCourseById", new { CourseId = courseId });
+				await _sqlDataAccess.ExecuteAsync("sp_RemoveCourseById", new { CourseId = courseId, UserId = userId });
 				return "Xóa khóa học thành công.";
 			}
 			catch (Exception ex)
@@ -96,7 +107,7 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> UpdateCourseAsync( CourseRequestModel courseRequestModel, int courseId)
+		public async Task<string> UpdateCourseAsync( CourseRequestModel courseRequestModel, int courseId, int userId)
 		{
 			try
 			{
@@ -111,6 +122,7 @@ namespace DataAccess.Repositories.Repo
 					IsDelete     = courseRequestModel.IsDelete,
 					Price        = courseRequestModel.Price,
 					CourseTypeId = courseRequestModel.CourseTypeId,
+					UserId = userId
 				});
 				return "Cập nhật khóa học thành công.";
 			}

@@ -1,17 +1,18 @@
-﻿using BusinessLogic.Models;
+﻿using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using DataAccess.Models.CourseModel;
 using DataAccess.Models.LessonModel;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.Teacher
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class ManaLessonController : ControllerBase
+	[Authorize(Roles = AppConstants.Roles.Teacher)]
+	public class ManaLessonController : BaseController
 	{
 		private readonly ILessonService _lessonService;
 
@@ -39,6 +40,8 @@ namespace API.Controllers.Teacher
 		{
 			try
 			{
+				if (!ModelState.IsValid)
+					return ValidationError();
 				return Ok(ApiResult<LessonResponseModel>.Success(await _lessonService.AddManaLessonAsync(lessonRequesModel,courseId)));
 			}
 			catch (Exception ex)
@@ -52,6 +55,8 @@ namespace API.Controllers.Teacher
 		{
 			try
 			{
+				if (!ModelState.IsValid)
+					return ValidationError();
 				return Ok(ApiResult<LessonResponseModel>.Success(await _lessonService.UpdateManaLessonAsync(lessonId, lessonRequesModel)));
 			}
 			catch (Exception ex)
@@ -60,7 +65,17 @@ namespace API.Controllers.Teacher
 			}
 		}
 
-
-
+		[HttpDelete("remove-lesson/{lessonId}")]
+		public async Task<IActionResult> RemoveLessonAsync(int lessonId)
+		{
+			try
+			{
+				return Ok(ApiResult<string>.Success(await _lessonService.RemoveLessonAsync(lessonId)));
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi xóa khóa học.");
+			}
+		}
 	}
 }
