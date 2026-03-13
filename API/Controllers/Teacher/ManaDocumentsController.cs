@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using DataAccess.Models.DocumentModel;
@@ -59,6 +59,19 @@ namespace API.Controllers.Teacher
 
 
 
+
+		[HttpDelete("remove-document/{documentId}")]
+		public async Task<IActionResult> RemoveDocumentAsync(int documentId)
+		{
+			try
+			{
+				return Ok(ApiResult<bool>.Success(await _documentsService.RemoveManaDocumentAsync(documentId)));
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi xóa bài học.");
+			}
+		}
 
 	}
 }

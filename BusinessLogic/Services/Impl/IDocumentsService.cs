@@ -1,4 +1,4 @@
-﻿using DataAccess.Models.DocumentModel;
+using DataAccess.Models.DocumentModel;
 using DataAccess.Models.LessonModel;
 using Domain.Models;
 using System;
@@ -20,5 +20,6 @@ namespace BusinessLogic.Services.Impl
 
 		Task<DocumentResponseModel> AddManaDocumentAsync(DocumentRequestModel documentRequestModel, int lessonId);
 		Task<DocumentResponseModel> UpdateManaDocumentAsync(int documentId, DocumentRequestModel documentRequestModel);
+		Task<bool> RemoveManaDocumentAsync(int documentId);
 	}
 }
