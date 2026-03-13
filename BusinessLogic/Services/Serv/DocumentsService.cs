@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.DocumentModel;
 using DataAccess.Models.LessonModel;
@@ -36,6 +36,7 @@ namespace BusinessLogic.Services.Serv
 					Description = documentRequestModel.Description,
 					FileUrl = documentRequestModel.FileUrl,
 					IsLocked = documentRequestModel.IsLocked,
+					CreateDate = DateTime.UtcNow,
 					IsDelete = false
 				};
 				await _documentsRepository.AddAsync(document);
@@ -126,7 +127,22 @@ namespace BusinessLogic.Services.Serv
 			{
 				throw new Exception("Có lỗi khi cập nhật bài học pdf.", ex);
 			}
+		}
 
+		public async Task<bool> RemoveManaDocumentAsync(int documentId)
+		{
+			try
+			{
+				var document = await _documentsRepository.GetByIdAsync(documentId);
+				if (document == null) throw new BadRequestException("Documment không tồn tại trong hệ thống!");
+
+				await _documentsRepository.DeleteAsync(document);
+				return true;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Có lỗi khi xóa bài học pdf.", ex);
+			}
 		}
 	}
 }

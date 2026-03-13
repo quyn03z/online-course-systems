@@ -73,7 +73,7 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				var allsLesson = await _sqlDataAccess.QueryAsync<SubLessonResponseModel>("GetAllsSubLessonAsync", new {lessonId = lessonId});
+				var allsLesson = await _sqlDataAccess.QueryAsync<SubLessonResponseModel>("sp_GetAllsSubLessonAsync", new {lessonId = lessonId});
 				return allsLesson.ToList();
 			}
 			catch (Exception ex)
