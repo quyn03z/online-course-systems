@@ -23,7 +23,7 @@ namespace API.Controllers.Teacher
 		{
 			try
 			{
-				return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllManaCourseAsync(page,pageSize,search)));
+				return Ok(ApiResult<List<CourseResponseModel>>.Success(await _courseService.GetAllManaCourseByUserIdAsync(page,pageSize,search)));
 			}
 			catch (Exception ex)
 			{

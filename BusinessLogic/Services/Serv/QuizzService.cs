@@ -45,9 +45,21 @@ namespace BusinessLogic.Services.Serv
 			}
 		}
 
-		public async Task<QuizzResponseModel> GetAllQuizzAsync(int lessonId)
+		public async Task<QuizzResponseModel> GetManaQuizzByLessonIdAsync(int lessonId)
 		{
-			var quizz = await _quizzRepository.GetAllQuizzAsync(lessonId);
+			var quizz = await _quizzRepository.GetManaQuizzByLessonIdAsync(lessonId);
+			return new QuizzResponseModel
+			{
+				QuizzId = quizz.QuizzId,
+				Title = quizz.Title,
+				LessonId = quizz.LessonId,
+				QuizzTime = quizz.QuizzTime,
+			};
+		}
+
+		public async Task<QuizzResponseModel> GetQuizzByLessonIdAsync(int lessonId)
+		{
+			var quizz = await _quizzRepository.GetQuizzByLessonIdAsync(lessonId);
 			return new QuizzResponseModel
 			{
 				QuizzId = quizz.QuizzId,

@@ -15,6 +15,7 @@ namespace DataAccess.Models.QuestionModel
 		public int? QuizzId { get; set; }
 
 		public string QuestionText { get; set; }
+		public int? TypeId { get; set; }
 		public List<AnswerResponseModel> Answers { get; set; } = new();
 
 

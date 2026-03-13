@@ -1,4 +1,4 @@
-﻿using DataAccess.Models.CourseModel;
+using DataAccess.Models.CourseModel;
 using DataAccess.Infrastructure;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
@@ -58,11 +58,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize, int? courseTypeId, int? priceOrder, string search = "")
 		{
 			try
 			{
-				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", new {page,pageSize});
+				var allsHomeCourse = await _sqlDataAccess.QueryAsync<CourseResponseHomeModel>("sp_GetAllHomeCourseAsync", new {page,pageSize,courseTypeId,priceOrder,search});
 				return allsHomeCourse.ToList();
 			} catch (Exception ex)
 			{
@@ -70,11 +70,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
+		public async Task<List<CourseResponseModel>> GetAllManaCourseByUserIdAsync(int userId, int page, int pageSize, string search = "")
 		{
 			try
 			{
-				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", new { page, pageSize,search });
+				var allsManaCourse = await _sqlDataAccess.QueryAsync<CourseResponseModel>("sp_GetAllManaCourseAsync", new { userId,page, pageSize,search });
 				return allsManaCourse.ToList();
 			}
 			catch (Exception ex)

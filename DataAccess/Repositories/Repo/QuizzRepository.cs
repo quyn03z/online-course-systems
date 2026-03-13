@@ -16,7 +16,14 @@ namespace DataAccess.Repositories.Repo
 		{
 		}
 
-		public async Task<Quizz> GetAllQuizzAsync(int lessonId)
+		public async Task<Quizz> GetManaQuizzByLessonIdAsync(int lessonId)
+		{
+			return await _dbSet
+					.Where(x => x.LessonId == lessonId && x.IsDelete == false)
+					.FirstOrDefaultAsync();
+		}
+
+		public async Task<Quizz> GetQuizzByLessonIdAsync(int lessonId)
 		{
 				return await _dbSet
 					.Where(x => x.LessonId == lessonId && x.IsLocked == false && x.IsDelete == false)
