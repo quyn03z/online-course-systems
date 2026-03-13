@@ -9,7 +9,7 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface IQuizzService
 	{
-		Task<IEnumerable<QuizzResponseModel>> GetAllQuizzAsync();
+		Task<QuizzResponseModel> GetAllQuizzAsync(int lessonId);
 		Task<QuizzResponseModel> AddQuizzAsync(QuizzRequestModel quizzRequestModel,int lessonId);
 		Task<string> UpdateQuizzAsync(QuizzRequestModel quizzRequestModel, int quizzId);
 		Task<string> RemoveQuizzAsync(int quizzId);

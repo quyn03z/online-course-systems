@@ -24,6 +24,8 @@ namespace Domain.Models
 
         public int QuizzTime { get; set; }
 		public bool? IsDelete { get; set; }
+		public bool? IsLocked { get; set; }
+
 
 		public virtual Lesson Lesson { get; set; }
 
