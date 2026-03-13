@@ -1,4 +1,4 @@
-﻿using DataAccess.Models.CourseModel;
+using DataAccess.Models.CourseModel;
 using BusinessLogic.Services.Impl;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
@@ -28,15 +28,18 @@ namespace BusinessLogic.Services.Serv
 			return await _courseRepository.AddCourseAsync(courseRequestModel,userId.Value);
 		}
 
-		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize)
+		public async Task<List<CourseResponseHomeModel>> GetAllHomeCoursePageAsync(int page, int pageSize, int? courseTypeId, int? priceOrder, string search = "")
 		{
-			return await _courseRepository.GetAllHomeCoursePageAsync(page, pageSize);
+			return await _courseRepository.GetAllHomeCoursePageAsync(page, pageSize,courseTypeId,priceOrder,search);
 		}
 
-		public async Task<List<CourseResponseModel>> GetAllManaCourseAsync(int page, int pageSize, string search = "")
+		public async Task<List<CourseResponseModel>> GetAllManaCourseByUserIdAsync(int page, int pageSize, string search = "")
 		{
-			return await _courseRepository.GetAllManaCourseAsync(page, pageSize,search);
+			var userId = _claimService.GetUserId();
+			return await _courseRepository.GetAllManaCourseByUserIdAsync(userId.Value,page, pageSize,search);
 		}
+
+
 
 		public async Task<CourseResponseHomeModel> GetCourseDetailsById(int courseId)
 		{

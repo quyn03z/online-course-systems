@@ -29,6 +29,7 @@ namespace DataAccess.Models.CourseModel
 		public string Description { get; set; }
 		public string Image { get; set; }
 		public double Price { get; set; }
+		public string Creator { get; set; }
 		public string? CourseTypeName { get; set; }
 	}
 
