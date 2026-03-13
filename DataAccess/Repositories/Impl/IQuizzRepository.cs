@@ -10,6 +10,6 @@ namespace DataAccess.Repositories.Impl
 {
 	public interface IQuizzRepository : IBaseRepository<Quizz>
 	{
-
+		Task<Quizz> GetAllQuizzAsync(int lessonId);
 	}
 }

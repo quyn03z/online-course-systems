@@ -17,11 +17,10 @@ namespace API.Controllers
 			_quizzService = quizzService;
 		}
 
-		[HttpGet("get-alls-quizz")]
-		public async Task<IActionResult> GetAllQuizzAsync()
+		[HttpGet("get-alls-quizz/{lessonId}")]
+		public async Task<IActionResult> GetAllQuizzAsync(int lessonId)
 		{
-			return Ok(ApiResult<IEnumerable<QuizzResponseModel>>
-				.Success(await _quizzService.GetAllQuizzAsync()));
+			return Ok(ApiResult<QuizzResponseModel>.Success(await _quizzService.GetAllQuizzAsync(lessonId)));
 		}
 
 		[HttpPost("add-quizz")]

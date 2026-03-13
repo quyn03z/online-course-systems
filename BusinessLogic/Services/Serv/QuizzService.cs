@@ -45,16 +45,16 @@ namespace BusinessLogic.Services.Serv
 			}
 		}
 
-		public async Task<IEnumerable<QuizzResponseModel>> GetAllQuizzAsync()
+		public async Task<QuizzResponseModel> GetAllQuizzAsync(int lessonId)
 		{
-			var allsQuizz = await _quizzRepository.GetAll();
-			return allsQuizz.Select(q => new QuizzResponseModel
+			var quizz = await _quizzRepository.GetAllQuizzAsync(lessonId);
+			return new QuizzResponseModel
 			{
-				QuizzId    = q.QuizzId,
-				Title      = q.Title,
-				LessonId   = q.LessonId,
-				QuizzTime = q.QuizzTime,
-			}).ToList();
+				QuizzId = quizz.QuizzId,
+				Title = quizz.Title,
+				LessonId = quizz.LessonId,
+				QuizzTime = quizz.QuizzTime,
+			};
 		}
 
 		public async Task<string> RemoveQuizzAsync(int quizzId)
