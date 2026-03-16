@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Exceptions;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.QuizzModel;
 using Microsoft.AspNetCore.Http;
@@ -21,15 +22,22 @@ namespace API.Controllers.Teacher
 		}
 
 
-		[HttpPost("add-quizz")]
+		[HttpPost("add-quizz/{lessonId}")]
 		public async Task<IActionResult> AddQuizzAsync(QuizzRequestModel quizzRequestModel, int lessonId)
 		{
-			if (!ModelState.IsValid)
-				return ValidationError();
-			return Ok(ApiResult<QuizzResponseModel>.Success(await _quizzService.AddQuizzAsync(quizzRequestModel, lessonId)));
+			try
+			{
+				if (!ModelState.IsValid)
+					return ValidationError();
+				return Ok(ApiResult<QuizzResponseModel>.Success(await _quizzService.AddQuizzAsync(quizzRequestModel, lessonId)));
+			}
+			catch (Exception ex)
+			{
+				throw new BadRequestException("Mỗi Lesson chỉ có thể tạo một Quiz duy nhất.");
+			}
 		}
 
-		[HttpPut("update-quizz")]
+		[HttpPut("update-quizz/{quizzId}")]
 		public async Task<IActionResult> UpdateQuizzAsync(QuizzRequestModel quizzRequestModel, int quizzId)
 		{
 			if (!ModelState.IsValid)
@@ -37,7 +45,7 @@ namespace API.Controllers.Teacher
 			return Ok(ApiResult<string>.Success(await _quizzService.UpdateQuizzAsync(quizzRequestModel, quizzId)));
 		}
 
-		[HttpDelete("remove-quizz")]
+		[HttpDelete("remove-quizz/{quizzId}")]
 		public async Task<IActionResult> RemoveQuizzAsync(int quizzId)
 		{
 			return Ok(ApiResult<string>.Success(await _quizzService.RemoveQuizzAsync(quizzId)));

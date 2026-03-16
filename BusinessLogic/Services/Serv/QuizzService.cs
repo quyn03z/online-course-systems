@@ -29,6 +29,8 @@ namespace BusinessLogic.Services.Serv
 					Title = quizzRequestModel.Title,
 					LessonId = lessonId,
 					QuizzTime = quizzRequestModel.QuizzTime,
+					IsDelete = false,
+					IsLocked = quizzRequestModel.IsLocked,
 				};
 				await _quizzRepository.AddAsync(addQuizz);
 				return new QuizzResponseModel
@@ -36,12 +38,14 @@ namespace BusinessLogic.Services.Serv
 					QuizzId = addQuizz.QuizzId,
 					Title = addQuizz.Title,
 					LessonId = addQuizz.LessonId,
-					QuizzTime = addQuizz.QuizzTime
+					QuizzTime = addQuizz.QuizzTime,
+					IsDelete = addQuizz.IsDelete,
+					IsLocked = addQuizz.IsLocked
 				};
 
 			}catch (Exception ex)
 			{
-				throw new Exception("Có lỗi khi thêm quizz mới.", ex);
+				throw new Exception("Mỗi Lesson chỉ có thể tạo một Quiz duy nhất.");
 			}
 		}
 
@@ -54,6 +58,7 @@ namespace BusinessLogic.Services.Serv
 				Title = quizz.Title,
 				LessonId = quizz.LessonId,
 				QuizzTime = quizz.QuizzTime,
+				IsLocked= quizz.IsLocked
 			};
 		}
 
@@ -94,6 +99,7 @@ namespace BusinessLogic.Services.Serv
 
 				quizz.Title = quizzRequestModel.Title;
 				quizz.QuizzTime = quizzRequestModel.QuizzTime;
+				quizz.IsLocked = quizzRequestModel.IsLocked;
 
 				await _quizzRepository.UpdateAsync(quizz);
 
