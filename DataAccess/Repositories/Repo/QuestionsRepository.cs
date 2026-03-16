@@ -1,6 +1,8 @@
-﻿using DataAccess.Models.AnswerModel;
+using DataAccess.Models.AnswerModel;
 using DataAccess.Models.QuestionModel;
+using DataAccess.Models.QuizzModel;
 using DataAccess.Repositories.Impl;
+using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,69 @@ namespace DataAccess.Repositories.Repo
 		public QuestionsRepository(ISqlDataAccess sqlDataAccess)
 		{
 			_sqlDataAccess = sqlDataAccess;
+		}
+
+		public async Task<QuestionResponseModel> AddQuestionsAsync(int quizzId, int userId, QuestionRequestModel questionRequestModel)
+		{
+			try
+			{
+				//Insert câu hỏi, lấy về QuestionId vừa được tạo
+				int newQuestionId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddQuestions", new
+				{
+					QuizzId = quizzId,
+					UserId = userId,
+					QuestionText = questionRequestModel.QuestionText,
+					TypeId = questionRequestModel.TypeId
+				});
+
+				//Insert từng đáp án với QuestionId vừa có
+				var insertedAnswers = new List<AnswerResponseModel>();
+				foreach (var answer in questionRequestModel.Answers ?? Enumerable.Empty<AnswerRequestModel>())
+				{
+					int newAnswerId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddAnswers", new
+					{
+						UserId = userId,
+						QuestionId = newQuestionId,
+						AnswerText = answer.AnswerText,
+						IsCorrect = answer.IsCorrect
+					});
+
+					insertedAnswers.Add(new AnswerResponseModel
+					{
+						AnswerId = newAnswerId,
+						QuestionId = newQuestionId,
+						AnswerText = answer.AnswerText,
+						IsCorrect = answer.IsCorrect ?? false
+					});
+				}
+
+				//Trả về object QuestionResponseModel đầy đủ
+				return new QuestionResponseModel
+				{
+					QuestionId = newQuestionId,
+					QuizzId = quizzId,
+					QuestionText = questionRequestModel.QuestionText,
+					TypeId = questionRequestModel.TypeId,
+					Answers = insertedAnswers
+				};
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Thêm câu hỏi có lỗi.");
+			}
+		}
+
+		public async Task<string> DeleteQuestionsAsync(int questionId, int userId)
+		{
+			try
+			{
+				await _sqlDataAccess.ExecuteAsync("sp_DeleteQuestionsAsync", new { questionId, userId});
+				return "Xóa câu hỏi thành công.";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Lỗi khi xóa câu hỏi.");
+			}
 		}
 
 		public async Task<List<QuestionResponseModel>> GetAllsQuestionAsync(int quizzId)
@@ -52,20 +117,42 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> UpdateQuestionsAsync(int questionId, QuestionRequestModel questionRequestModel)
+		public async Task<string> UpdateQuestionsAsync(int questionId, int userId, QuizzQuestionsRequestModel quizzQuestionsRequestModel)
 		{
 			try
 			{
-				var parameters = new
+				// Bước 1: Update Question (QuestionText, TypeId)
+				await _sqlDataAccess.ExecuteAsync("sp_UpdateQuestionsAsync", new
 				{
 					questionId = questionId,
-					QuizzId = questionRequestModel.QuizzId,
-					QuestionText = questionRequestModel.QuestionText,
-					TypeId = questionRequestModel.TypeId,
-				};
-				await _sqlDataAccess.ExecuteAsync("sp_UpdateQuestionsAsync", parameters);
+					QuizzId = quizzQuestionsRequestModel.QuizzId,
+					QuestionText = quizzQuestionsRequestModel.QuestionText,
+					TypeId = quizzQuestionsRequestModel.TypeId,
+					UserId = userId
+				});
+
+				// Bước 2: Xóa toàn bộ answers cũ của câu hỏi này
+				await _sqlDataAccess.ExecuteAsync("sp_DeleteAnswersByQuestionId", new
+				{
+					QuestionId = questionId,
+					UserId = userId
+				});
+
+				// Bước 3: Insert lại toàn bộ answers mới
+				foreach (var answer in quizzQuestionsRequestModel.Answers ?? Enumerable.Empty<AnswerRequestModel>())
+				{
+					await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddAnswers", new
+					{
+						UserId = userId,
+						QuestionId = questionId,
+						AnswerText = answer.AnswerText,
+						IsCorrect = answer.IsCorrect
+					});
+				}
+
 				return "Cập nhật câu hỏi thành công.";
-			}catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				throw new Exception("Lỗi khi cập nhật câu hỏi.");
 			}

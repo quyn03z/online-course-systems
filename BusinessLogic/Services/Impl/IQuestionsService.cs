@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models.QuestionModel;
+using DataAccess.Models.QuizzModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace BusinessLogic.Services.Impl
 	{
 		Task<List<QuestionResponseModel>> GetAllsQuestionAsync(int quizzId);
 
-		Task<string> UpdateQuestionsAsync(int questionId, QuestionRequestModel questionRequestModel);
+		Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzQuestionsRequestModel);
+
+		Task<QuestionResponseModel> AddQuestionsAsync(int quizzId, QuestionRequestModel questionRequestModel);
+
+		Task<string> DeleteQuestionsAsync(int questionId);
+
 	}
 }
