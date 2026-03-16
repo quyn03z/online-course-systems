@@ -12,11 +12,11 @@ namespace BusinessLogic.Services.Impl
 	{
 		Task<List<QuestionResponseModel>> GetAllsQuestionAsync(int quizzId);
 
-		Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzRequestModel);
+		Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzQuestionsRequestModel);
 
 		Task<QuestionResponseModel> AddQuestionsAsync(int quizzId, QuestionRequestModel questionRequestModel);
 
-		Task<string> DeleteQuestionsAsync(int quizzId);
+		Task<string> DeleteQuestionsAsync(int questionId);
 
 	}
 }

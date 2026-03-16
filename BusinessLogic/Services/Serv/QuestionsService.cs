@@ -28,10 +28,10 @@ namespace BusinessLogic.Services.Serv
 			return await _questionsRepository.AddQuestionsAsync(quizzId, userId.Value ,questionRequestModel);
 		}
 
-		public async Task<string> DeleteQuestionsAsync(int quizzId)
+		public async Task<string> DeleteQuestionsAsync(int questionId)
 		{
 			var userId = _claimService.GetUserId();
-			return await _questionsRepository.DeleteQuestionsAsync(quizzId,userId.Value);
+			return await _questionsRepository.DeleteQuestionsAsync(questionId, userId.Value);
 		}
 
 		public async Task<List<QuestionResponseModel>> GetAllsQuestionAsync(int quizzId)
@@ -39,9 +39,10 @@ namespace BusinessLogic.Services.Serv
 			return await _questionsRepository.GetAllsQuestionAsync(quizzId);
 		}
 
-		public async Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzRequestModel)
+		public async Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzQuestionsRequestModel)
 		{
-			return await _questionsRepository.UpdateQuestionsAsync(questionId, quizzRequestModel);
+			var userId = _claimService.GetUserId();
+			return await _questionsRepository.UpdateQuestionsAsync(questionId, userId.Value,quizzQuestionsRequestModel);
 		}
 	}
 }

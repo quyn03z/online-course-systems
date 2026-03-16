@@ -24,7 +24,7 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				// Bước 1: Insert câu hỏi, lấy về QuestionId vừa được tạo
+				//Insert câu hỏi, lấy về QuestionId vừa được tạo
 				int newQuestionId = await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddQuestions", new
 				{
 					QuizzId = quizzId,
@@ -33,7 +33,7 @@ namespace DataAccess.Repositories.Repo
 					TypeId = questionRequestModel.TypeId
 				});
 
-				// Bước 2: Insert từng đáp án với QuestionId vừa có
+				//Insert từng đáp án với QuestionId vừa có
 				var insertedAnswers = new List<AnswerResponseModel>();
 				foreach (var answer in questionRequestModel.Answers ?? Enumerable.Empty<AnswerRequestModel>())
 				{
@@ -54,7 +54,7 @@ namespace DataAccess.Repositories.Repo
 					});
 				}
 
-				// Bước 3: Trả về object QuestionResponseModel đầy đủ
+				//Trả về object QuestionResponseModel đầy đủ
 				return new QuestionResponseModel
 				{
 					QuestionId = newQuestionId,
@@ -70,11 +70,11 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> DeleteQuestionsAsync(int quizzId, int userId)
+		public async Task<string> DeleteQuestionsAsync(int questionId, int userId)
 		{
 			try
 			{
-				await _sqlDataAccess.ExecuteAsync("sp_DeleteQuestionsAsync", new {quizzId,userId});
+				await _sqlDataAccess.ExecuteAsync("sp_DeleteQuestionsAsync", new { questionId, userId});
 				return "Xóa câu hỏi thành công.";
 			}
 			catch (Exception ex)
@@ -117,20 +117,42 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-		public async Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzRequestModel)
+		public async Task<string> UpdateQuestionsAsync(int questionId, int userId, QuizzQuestionsRequestModel quizzQuestionsRequestModel)
 		{
 			try
 			{
-				var parameters = new
+				// Bước 1: Update Question (QuestionText, TypeId)
+				await _sqlDataAccess.ExecuteAsync("sp_UpdateQuestionsAsync", new
 				{
 					questionId = questionId,
-					QuizzId = quizzRequestModel.QuizzId,
-					QuestionText = quizzRequestModel.QuestionText,
-					TypeId = quizzRequestModel.TypeId,
-				};
-				await _sqlDataAccess.ExecuteAsync("sp_UpdateQuestionsAsync", parameters);
+					QuizzId = quizzQuestionsRequestModel.QuizzId,
+					QuestionText = quizzQuestionsRequestModel.QuestionText,
+					TypeId = quizzQuestionsRequestModel.TypeId,
+					UserId = userId
+				});
+
+				// Bước 2: Xóa toàn bộ answers cũ của câu hỏi này
+				await _sqlDataAccess.ExecuteAsync("sp_DeleteAnswersByQuestionId", new
+				{
+					QuestionId = questionId,
+					UserId = userId
+				});
+
+				// Bước 3: Insert lại toàn bộ answers mới
+				foreach (var answer in quizzQuestionsRequestModel.Answers ?? Enumerable.Empty<AnswerRequestModel>())
+				{
+					await _sqlDataAccess.ExecuteSalarAsync<int>("sp_AddAnswers", new
+					{
+						UserId = userId,
+						QuestionId = questionId,
+						AnswerText = answer.AnswerText,
+						IsCorrect = answer.IsCorrect
+					});
+				}
+
 				return "Cập nhật câu hỏi thành công.";
-			}catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				throw new Exception("Lỗi khi cập nhật câu hỏi.");
 			}

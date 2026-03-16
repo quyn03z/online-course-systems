@@ -27,9 +27,9 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpPut("update-questions/{questionId}")]
-		public async Task<IActionResult> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzRequestModel)
+		public async Task<IActionResult> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzQuestionsRequestModel)
 		{
-			return Ok(ApiResult<string>.Success(await _questionsService.UpdateQuestionsAsync(questionId, quizzRequestModel)));
+			return Ok(ApiResult<string>.Success(await _questionsService.UpdateQuestionsAsync(questionId, quizzQuestionsRequestModel)));
 		}
 
 		[HttpPost("add-questions/{quizzId}")]
@@ -38,10 +38,10 @@ namespace API.Controllers.Teacher
 			return Ok(ApiResult<QuestionResponseModel>.Success(await _questionsService.AddQuestionsAsync(quizzId, questionRequestModel)));
 		}
 
-		[HttpDelete("delete-questions/{quizzId}")]
-		public async Task<IActionResult> DeleteQuestionsAsync(int quizzId)
+		[HttpDelete("delete-questions/{questionId}")]
+		public async Task<IActionResult> DeleteQuestionsAsync(int questionId)
 		{
-			return Ok(ApiResult<string>.Success(await _questionsService.DeleteQuestionsAsync(quizzId)));
+			return Ok(ApiResult<string>.Success(await _questionsService.DeleteQuestionsAsync(questionId)));
 		}
 
 

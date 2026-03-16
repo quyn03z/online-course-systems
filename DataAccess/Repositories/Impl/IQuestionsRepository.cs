@@ -12,10 +12,10 @@ namespace DataAccess.Repositories.Impl
 	{
 		Task<List<QuestionResponseModel>> GetAllsQuestionAsync(int quizzId);
 
-		Task<string> UpdateQuestionsAsync(int questionId, QuizzQuestionsRequestModel quizzRequestModel);
+		Task<string> UpdateQuestionsAsync(int questionId, int userId ,QuizzQuestionsRequestModel quizzQuestionsRequestModel);
 
 		Task<QuestionResponseModel> AddQuestionsAsync(int quizzId,int userId ,QuestionRequestModel questionRequestModel);
 
-		Task<string> DeleteQuestionsAsync(int quizzId, int userId);
+		Task<string> DeleteQuestionsAsync(int questionId, int userId);
 	}
 }

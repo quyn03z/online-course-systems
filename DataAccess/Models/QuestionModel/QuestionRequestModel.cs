@@ -17,6 +17,8 @@ namespace DataAccess.Models.QuestionModel
 		public string QuestionText { get; set; }
 
 		public int? TypeId { get; set; }
+		public virtual ICollection<AnswerRequestModel> Answers { get; set; }
+
 	}
 	public class QuestionRequestModel
 	{
