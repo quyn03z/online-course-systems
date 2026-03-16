@@ -16,5 +16,9 @@ namespace DataAccess.Models.QuizzModel
 
 		[Range(1, int.MaxValue, ErrorMessage = "QuizzTime phải lớn hơn 0.")]
 		public int QuizzTime { get; set; }
+
+		public bool? IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
+
 	}
 }

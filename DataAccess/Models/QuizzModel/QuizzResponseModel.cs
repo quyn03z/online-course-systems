@@ -17,5 +17,7 @@ namespace DataAccess.Models.QuizzModel
 		public int LessonId { get; set; }
 
 		public int QuizzTime { get; set; }
+		public bool? IsLocked { get; set; }
+		public bool? IsDelete { get; set; }
 	}
 }

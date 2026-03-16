@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.LessonModel;
 using DataAccess.Repositories.Impl;
@@ -35,6 +35,7 @@ namespace BusinessLogic.Services.Serv
 				await _lessonRepository.AddAsync(lesson);
 
 				return new LessonResponseModel { 
+					LessonId = lesson.LessonId,
 					Title = lesson.Title,
 					IsLocked = lesson.IsLocked,
 					CourseId = lesson.CourseId,
