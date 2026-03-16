@@ -25,11 +25,7 @@ namespace API.Controllers
 			return Ok(ApiResult<List<QuestionResponseModel>>.Success(await _questionsService.GetAllsQuestionAsync(quizzId)));
 		}
 
-		[HttpPut("update-questions/{questionId}")]
-		public async Task<IActionResult> UpdateQuestionsAsync(int questionId,QuestionRequestModel questionRequestModel)
-		{
-			return Ok(ApiResult<string>.Success(await _questionsService.UpdateQuestionsAsync(questionId, questionRequestModel)));
-		}
+		
 
 
 
