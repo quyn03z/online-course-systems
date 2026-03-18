@@ -68,6 +68,8 @@ namespace BusinessLogic
 			// documents
 			services.AddScoped<IDocumentsService, DocumentsService>();
 
+			// admin
+			services.AddScoped<IAdminService,AdminService>();
 		}
 
 	}

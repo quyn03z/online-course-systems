@@ -11,6 +11,6 @@ namespace DataAccess.Repositories.Impl
 	public interface IPaymentRepository
 	{
 		Task<bool> AddPaymentAsync(PaymentRequestModel paymentRequestModel);
-
+		Task<decimal> GetTotalsCost();
 	}
 }

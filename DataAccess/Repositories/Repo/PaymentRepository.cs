@@ -30,5 +30,17 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("Payment thất bại.", ex);
 			}
 		}
+
+		public async Task<decimal> GetTotalsCost()
+		{
+			try
+			{
+				return await _sqlDataAccess.ExecuteSalarAsync<int>("sp_GetTotalsCost");
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Không thể lấy totals", ex);
+			}
+		}
 	}
 }

@@ -16,5 +16,7 @@ namespace DataAccess.Repositories.Impl
 		Task<List<CourseResponseModel>> GetAllManaCourseByUserIdAsync(int userId,int page, int pageSize, string search = "");
 		Task<string> RemoveCourseById(int courseId,int userId);
 		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel,int courseId,int userId);
+
+		Task<int> GetTotalsCourse();
 	}
 }
