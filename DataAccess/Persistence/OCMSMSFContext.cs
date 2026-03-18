@@ -19,7 +19,10 @@ namespace DataAccess.Repositories
 		{
 			_claimService = claimService;
 		}
-		
+
+		public DbSet<Permission> Permissions { get; set; }
+		public DbSet<RolePermission> RolePermissions { get; set; }
+		public DbSet<UserPermission> UserPermissions { get; set; }
 
 		public virtual DbSet<Answer> Answers { get; set; }
 		public virtual DbSet<AuditLog> AuditLogs { get; set; }
@@ -41,6 +44,24 @@ namespace DataAccess.Repositories
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+
+			// role permissions
+			modelBuilder.Entity<RolePermission>()
+				.HasKey(rp => new {rp.RoleId, rp.PermissionId });
+
+			modelBuilder.Entity<UserPermission>()
+				.HasKey(up => new { up.UserId, up.PermissionId });
+
+			modelBuilder.Entity<RolePermission>()
+				.HasOne(rp => rp.Role)
+				.WithMany(r => r.RolePermissions)
+				.HasForeignKey(rp => rp.RoleId);
+
+			modelBuilder.Entity<RolePermission>()
+			   .HasOne(rp => rp.Permission)
+			   .WithMany()
+			   .HasForeignKey(rp => rp.PermissionId);
+
 			// Enrollment - Composite primary key
 			modelBuilder.Entity<Enrollment>()
 				.HasKey(e => new { e.UserId, e.CourseId });
