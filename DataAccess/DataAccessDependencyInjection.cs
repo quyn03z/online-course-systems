@@ -80,6 +80,9 @@ namespace DataAccess
 
 			// meenteeScore 
 			services.AddScoped<IMenteeScoresRepository, MenteeScoresRepository>();	
+			
+			// permissions
+			services.AddScoped<IPermissionRepository, PermissionRepository>();
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

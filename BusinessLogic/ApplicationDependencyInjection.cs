@@ -74,6 +74,8 @@ namespace BusinessLogic
 			// menteeScore
 			services.AddScoped<IMenteeScoreService,MenteeScoreService>();
 
+			// permission
+			services.AddScoped<IPermissionService, PermissionService>();
 		}
 
 	}
