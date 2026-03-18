@@ -35,5 +35,8 @@ namespace BusinessLogic.Services.Impl
 
 		Task<UserResponseProfile> UpdateProfileAsync(UpdateProfileRequestModel updateProfileRequestModel);
 
+
+
+
 	}
 }

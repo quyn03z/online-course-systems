@@ -94,6 +94,18 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
+		public async Task<int> GetTotalsCourse()
+		{
+			try
+			{
+				return await _sqlDataAccess.ExecuteSalarAsync<int>("sp_GetTotalsCourse");
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Không thể lấy totals", ex);
+			}
+		}
+
 		public async Task<string> RemoveCourseById(int courseId, int userId)
 		{
 			try

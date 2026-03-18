@@ -2,6 +2,7 @@
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.DashboardModel;
 using DataAccess.Models.PageResultModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,12 @@ namespace API.Controllers
 	public class AdminController : BaseController
 	{
 		private readonly IUserService _userService;
+		private readonly IAdminService _adminService;
 
-		public AdminController(IUserService userService)
+		public AdminController(IUserService userService, IAdminService adminService)
 		{
 			_userService = userService;
+			_adminService = adminService;
 		}
 
 		[HttpGet("get-all-users")]
@@ -51,5 +54,16 @@ namespace API.Controllers
 		}
 
 
+		[HttpGet("infor-dashboard")]
+		public async Task<IActionResult> InforDashboard()
+		{
+			return Ok(ApiResult<InforDashboard>.Success(await _adminService.GetInforDashboard()));
+		}
+
+		[HttpGet("chart-dashboard")]
+		public async Task<IActionResult> ChartDashboard()
+		{
+			return Ok(ApiResult<ChartDataResponse>.Success(await _adminService.GetCostChartData()));
+		}
 	}
 }

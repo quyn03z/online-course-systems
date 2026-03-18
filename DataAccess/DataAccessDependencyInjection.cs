@@ -75,6 +75,8 @@ namespace DataAccess
 			// documents
 			services.AddScoped<IDocumentsRepository, DocumentsRepository>();
 
+			// admin
+			services.AddScoped<IAdminRepository, AdminRepository>();
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

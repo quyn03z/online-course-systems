@@ -40,6 +40,11 @@ namespace DataAccess.Repositories.Repo
 						.ToPagedListAsync(page, pageSize);
 		}
 
+		public async Task<int> GetTotalsUser()
+		{
+			return await _dbSet.CountAsync();
+		}
+
 		public async Task<User?> GetUserByEmail(string email)
 		{
 			return await _dbSet.FirstOrDefaultAsync(x => x.Email == email);
