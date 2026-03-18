@@ -70,6 +70,10 @@ namespace BusinessLogic
 
 			// admin
 			services.AddScoped<IAdminService,AdminService>();
+
+			// menteeScore
+			services.AddScoped<IMenteeScoreService,MenteeScoreService>();
+
 		}
 
 	}

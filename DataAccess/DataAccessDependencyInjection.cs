@@ -77,6 +77,9 @@ namespace DataAccess
 
 			// admin
 			services.AddScoped<IAdminRepository, AdminRepository>();
+
+			// meenteeScore 
+			services.AddScoped<IMenteeScoresRepository, MenteeScoresRepository>();	
 		}
 
 		private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
