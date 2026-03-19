@@ -13,6 +13,7 @@ namespace BusinessLogic.Services.Impl
 		Task<List<Permission>> GetAllPermissionsAsync();
 		Task<List<Permission>> GetAllsPermissionsByRole(int roleId);
 		Task<List<Permission>> GetUserPermissionsWithIdAsync(int userId);
+		Task UpdateUserPermissionsAsync(int userId, IEnumerable<int> permissionIds);
 		Task<List<string>> GetCurrentUserPermissionsAsync(int userId);
 		Task<bool> HasPermissionAsync(int userId, string permissionName);
 

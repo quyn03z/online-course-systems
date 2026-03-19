@@ -234,6 +234,12 @@ namespace BusinessLogic.Services.Serv
 
 			await _userRepository.AddAsync(user);
 
+			// Gán permissions nếu có
+			if (addUserAdminModel.PermissionIds != null)
+			{
+				await _permissionService.UpdateUserPermissionsAsync(user.UserId, addUserAdminModel.PermissionIds);
+			}
+
 			// Gửi email chào mừng kèm mật khẩu tạm thời
 			await _emailService.SendWelcomeEmailAsync(user.Email, user.Username, randomPassword);
 
@@ -286,6 +292,12 @@ namespace BusinessLogic.Services.Serv
 			user.IsLocked = userRequest.IsLocked;
 
 			await _userRepository.UpdateAsync(user);
+
+			// Cập nhật permissions nếu có
+			if (userRequest.PermissionIds != null)
+			{
+				await _permissionService.UpdateUserPermissionsAsync(user.UserId, userRequest.PermissionIds);
+			}
 
 			return new UserResponseModel
 			{

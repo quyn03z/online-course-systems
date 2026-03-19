@@ -1,3 +1,4 @@
+using API.Filter;
 using BusinessLogic.Exceptions;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
@@ -23,6 +24,7 @@ namespace API.Controllers.Teacher
 
 
 		[HttpPost("add-quizz/{lessonId}")]
+		[Permission("quiz.create")]
 		public async Task<IActionResult> AddQuizzAsync(QuizzRequestModel quizzRequestModel, int lessonId)
 		{
 			try
@@ -38,6 +40,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpPut("update-quizz/{quizzId}")]
+		[Permission("quiz.edit")]
 		public async Task<IActionResult> UpdateQuizzAsync(QuizzRequestModel quizzRequestModel, int quizzId)
 		{
 			if (!ModelState.IsValid)
@@ -46,6 +49,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpDelete("remove-quizz/{quizzId}")]
+		[Permission("quiz.delete")]
 		public async Task<IActionResult> RemoveQuizzAsync(int quizzId)
 		{
 			return Ok(ApiResult<string>.Success(await _quizzService.RemoveQuizzAsync(quizzId)));

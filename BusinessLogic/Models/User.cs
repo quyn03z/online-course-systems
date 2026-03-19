@@ -89,6 +89,7 @@ namespace BusinessLogic.Models
 			public string? LastName { get; set; }
 			public int RoleId { get; set; }
 			public bool IsLocked { get; set; }
+			public List<int>? PermissionIds { get; set; }
 
 		}
 

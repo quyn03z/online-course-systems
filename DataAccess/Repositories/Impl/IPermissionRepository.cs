@@ -14,6 +14,7 @@ namespace DataAccess.Repositories.Impl
 		Task<bool> HasPermissionAsync(int userId, string permissionName);
 		Task<List<Permission>> GetAllPermissionsAsync();
 		Task<List<Permission>> GetRolePermissionsAsync(int roleId);
+		Task UpdateUserPermissionsAsync(int userId, IEnumerable<int> permissionIds);
 
 	}
 }
