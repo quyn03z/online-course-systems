@@ -1,7 +1,9 @@
 ﻿using BusinessLogic.Claims;
+using BusinessLogic.Helpers;
 using BusinessLogic.Models.Momo;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -76,6 +78,10 @@ namespace BusinessLogic
 
 			// permission
 			services.AddScoped<IPermissionService, PermissionService>();
+
+
+			services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+			services.AddScoped<IAuthorizationHandler, PermissionHandler>();
 		}
 
 	}
