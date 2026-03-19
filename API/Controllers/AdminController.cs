@@ -27,7 +27,6 @@ namespace API.Controllers
 			_adminService = adminService;
 			_permissionService = permissionService;
 		}
-
 		[HttpGet("alls-permissions")]
 		public async Task<IActionResult> GetAllsPermissions()
 		{
@@ -54,7 +53,6 @@ namespace API.Controllers
 		}
 
 		[HttpPost("create-user-admin")]
-		[Permission("course.create")] 
 		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
 		{
 			if (!ModelState.IsValid)

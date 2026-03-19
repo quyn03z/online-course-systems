@@ -41,6 +41,11 @@ namespace BusinessLogic.Services.Serv
 			return await _permissionRepository.GetUserPermissionsWithIdAsync(userId);
 		}
 
+		public async Task UpdateUserPermissionsAsync(int userId, IEnumerable<int> permissionIds)
+		{
+			await _permissionRepository.UpdateUserPermissionsAsync(userId, permissionIds);
+		}
+
 		public async Task<bool> HasPermissionAsync(int userId,string permissionName)
 		{
 			return await _permissionRepository.HasPermissionAsync(userId, permissionName);

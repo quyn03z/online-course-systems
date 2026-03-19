@@ -1,4 +1,5 @@
-﻿using BusinessLogic.Helpers;
+﻿using API.Filter;
+using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.CourseModel;
@@ -32,6 +33,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpPost("add-course")]
+		[Permission("course.create")]
 		public async Task<IActionResult> AddCourseAsync(CourseRequestModel courseRequestModel)
 		{
 			try
@@ -47,6 +49,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpDelete("remove-course/{courseId}")]
+		[Permission("course.delete")]
 		public async Task<IActionResult> RemoveCourseAsync(int courseId)
 		{
 			try
@@ -60,6 +63,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpPut("update-course/{courseId}")]
+		[Permission("course.edit")]
 		public async Task<IActionResult> UpdateCourseAsync(CourseRequestModel courseRequestModel, int courseId)
 		{
 			try

@@ -34,20 +34,11 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<List<string>> GetUserPermissionsAsync(int userId)
 		{
-			var user = await _context.Users
-		   .Include(u => u.Role)
-		   .FirstOrDefaultAsync(u => u.UserId == userId);
-
-			if (user == null)
-				return new List<string>();
-
-			var permissions = await _context.RolePermissions
-				.Where(rp => rp.RoleId == user.RoleId)
-				.Include(rp => rp.Permission)
-				.Select(rp => rp.Permission.Name)
+			return await _context.UserPermissions
+				.Where(up => up.UserId == userId)
+				.Include(up => up.Permission)
+				.Select(up => up.Permission.Name)
 				.ToListAsync();
-
-			return permissions;
 		}
 
 		// Trả về Permission objects (có id) để frontend có thể pre-check checkbox
@@ -70,6 +61,26 @@ namespace DataAccess.Repositories.Repo
 		{
 			var permissions = await GetUserPermissionsAsync(userId);
 			return permissions.Contains(permissionName);
+		}
+
+		public async Task UpdateUserPermissionsAsync(int userId, IEnumerable<int> permissionIds)
+		{
+			// Xóa các quyền cũ
+			var oldPermissions = await _context.UserPermissions.Where(up => up.UserId == userId).ToListAsync();
+			_context.UserPermissions.RemoveRange(oldPermissions);
+
+			// Thêm các quyền mới
+			if (permissionIds != null && permissionIds.Any())
+			{
+				var newPermissions = permissionIds.Select(pid => new UserPermission
+				{
+					UserId = userId,
+					PermissionId = pid
+				});
+				await _context.UserPermissions.AddRangeAsync(newPermissions);
+			}
+
+			await _context.SaveChangesAsync();
 		}
 	}
 }
