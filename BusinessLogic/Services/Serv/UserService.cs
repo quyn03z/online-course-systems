@@ -6,6 +6,7 @@ using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
+using DataAccess.Repositories.Repo;
 using Domain.Models;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -30,8 +31,9 @@ namespace BusinessLogic.Services.Serv
 		private readonly IConfiguration _configuration;
 		private readonly IClaimService _claimService;
 		private readonly IAuditLogsService _auditLogsService;
+		private readonly IPermissionService _permissionService;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService, IPermissionService permissionService)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
@@ -41,6 +43,7 @@ namespace BusinessLogic.Services.Serv
 			_configuration = configuration;
 			_claimService = claimService;
 			_auditLogsService = auditLogsService;
+			_permissionService = permissionService;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -90,8 +93,9 @@ namespace BusinessLogic.Services.Serv
 			{
 				throw new BadRequestException("Tài khoản đã bị khóa.");
 			}
+			var permissions = await _permissionService.GetCurrentUserPermissionsAsync(user.UserId);
 
-			var accessToken = JwtHelper.GenerateToken(user, _configuration);
+			var accessToken = JwtHelper.GenerateToken(user, _configuration,permissions);
 
 			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
 
@@ -115,6 +119,7 @@ namespace BusinessLogic.Services.Serv
 				Role = user.Role.RoleName,
 				Token = accessToken,
 				RefreshToken = refeshToken,
+				Permissions = permissions,
 			};
 		}
 
@@ -309,8 +314,11 @@ namespace BusinessLogic.Services.Serv
 			// 2. Thu hồi toàn bộ token cũ của user
 			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
 
+
+			var permissions = await _permissionService.GetCurrentUserPermissionsAsync(user.UserId);
+
 			// 3. Tạo access token + refresh token mới
-			var newAccessToken = JwtHelper.GenerateToken(user, _configuration);
+			var newAccessToken = JwtHelper.GenerateToken(user, _configuration, permissions);
 			var newRefreshToken = JwtHelper.GenerateRefreshToken();
 
 			await _refreshTokenRepository.AddAsync(new RefreshToken

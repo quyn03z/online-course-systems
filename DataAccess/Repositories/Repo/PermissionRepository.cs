@@ -1,4 +1,4 @@
-﻿using DataAccess.Repositories.Impl;
+using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,19 +23,53 @@ namespace DataAccess.Repositories.Repo
 			return await _context.Permissions.ToListAsync();
 		}
 
-		public Task<List<Permission>> GetRolePermissionsAsync(int roleId)
+		public async Task<List<Permission>> GetRolePermissionsAsync(int roleId)
 		{
-			throw new NotImplementedException();
+			return await _context.RolePermissions
+			.Where(rp => rp.RoleId == roleId)
+			.Include(rp => rp.Permission)
+			.Select(rp => rp.Permission)
+			.ToListAsync();
 		}
 
-		public Task<List<string>> GetUserPermissionsAsync(int userId)
+		public async Task<List<string>> GetUserPermissionsAsync(int userId)
 		{
-			throw new NotImplementedException();
+			var user = await _context.Users
+		   .Include(u => u.Role)
+		   .FirstOrDefaultAsync(u => u.UserId == userId);
+
+			if (user == null)
+				return new List<string>();
+
+			var permissions = await _context.RolePermissions
+				.Where(rp => rp.RoleId == user.RoleId)
+				.Include(rp => rp.Permission)
+				.Select(rp => rp.Permission.Name)
+				.ToListAsync();
+
+			return permissions;
 		}
 
-		public Task<bool> HasPermissionAsync(int userId, string permissionName)
+		// Trả về Permission objects (có id) để frontend có thể pre-check checkbox
+		public async Task<List<Permission>> GetUserPermissionsWithIdAsync(int userId)
 		{
-			throw new NotImplementedException();
+			var user = await _context.Users
+				.Include(u => u.Role)
+				.FirstOrDefaultAsync(u => u.UserId == userId);
+
+			if (user == null) return new List<Permission>();
+
+			return await _context.UserPermissions
+				.Where(rp => rp.UserId == user.UserId)
+				.Include(rp => rp.Permission)
+				.Select(rp => rp.Permission)
+				.ToListAsync();
+		}
+
+		public async Task<bool> HasPermissionAsync(int userId, string permissionName)
+		{
+			var permissions = await GetUserPermissionsAsync(userId);
+			return permissions.Contains(permissionName);
 		}
 	}
 }

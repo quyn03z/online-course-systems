@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,6 +24,7 @@ namespace BusinessLogic.Models
 			public string Token { get; set; }
 			public string RefreshToken { get; set; }
 			public string Role { get; set; }
+			public List<string> Permissions { get; set; }
 		}
 
 		public class CreateUserResponseModel 
@@ -104,6 +105,8 @@ namespace BusinessLogic.Models
 			public int RoleId { get; set; }
 
 			public bool IsLocked { get; set; }
+
+			public List<int>? PermissionIds { get; set; }
 
 
 		}

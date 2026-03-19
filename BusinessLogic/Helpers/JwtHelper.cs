@@ -13,7 +13,7 @@ namespace BusinessLogic.Helpers
 {
 	public static class JwtHelper
 	{
-		public static string GenerateToken(User user, IConfiguration configuration)
+		public static string GenerateToken(User user, IConfiguration configuration, IEnumerable<string> permissions)
 		{
 			var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
 			var issuer = configuration.GetValue<string>("JwtConfiguration:ValidIssuer");
@@ -29,6 +29,7 @@ namespace BusinessLogic.Helpers
 				new Claim(ClaimTypes.Name, user.Username),
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Role, user.Role.RoleName),
+				new Claim("permissions", string.Join(",", permissions)),
 				new Claim("Avatar", user.Avatar ?? "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png"),
 			};
 

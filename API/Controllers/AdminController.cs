@@ -1,9 +1,11 @@
-﻿using Azure;
+using API.Filter;
+using Azure;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.DashboardModel;
 using DataAccess.Models.PageResultModel;
+using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +19,31 @@ namespace API.Controllers
 	{
 		private readonly IUserService _userService;
 		private readonly IAdminService _adminService;
+		private readonly IPermissionService _permissionService;
 
-		public AdminController(IUserService userService, IAdminService adminService)
+		public AdminController(IUserService userService, IAdminService adminService, IPermissionService permissionService)
 		{
 			_userService = userService;
 			_adminService = adminService;
+			_permissionService = permissionService;
+		}
+
+		[HttpGet("alls-permissions")]
+		public async Task<IActionResult> GetAllsPermissions()
+		{
+			return Ok(ApiResult<List<Permission>>.Success(await _permissionService.GetAllPermissionsAsync()));
+		}
+
+		[HttpGet("alls-permissions-byrole")]
+		public async Task<IActionResult> GetAllsPermissionsByRole(int roleId)
+		{
+			return Ok(ApiResult<List<Permission>>.Success(await _permissionService.GetAllsPermissionsByRole(roleId)));
+		}
+
+		[HttpGet("alls-permissions-byuser")]
+		public async Task<IActionResult> GetPermissionsByUser(int userId)
+		{
+			return Ok(ApiResult<List<Permission>>.Success(await _permissionService.GetUserPermissionsWithIdAsync(userId)));
 		}
 
 		[HttpGet("get-all-users")]
@@ -32,6 +54,7 @@ namespace API.Controllers
 		}
 
 		[HttpPost("create-user-admin")]
+		[Permission("course.create")] 
 		public async Task<IActionResult> AddUserByAdmin(AddUserAdminModel addUserAdminModel)
 		{
 			if (!ModelState.IsValid)
@@ -65,5 +88,11 @@ namespace API.Controllers
 		{
 			return Ok(ApiResult<ChartDataResponse>.Success(await _adminService.GetCostChartData()));
 		}
+
+
+
+
+
+
 	}
 }
