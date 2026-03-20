@@ -12,5 +12,6 @@ namespace BusinessLogic.Services.Impl
 		Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 		Task<bool> CheckEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 
+		Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync();
 	}
 }

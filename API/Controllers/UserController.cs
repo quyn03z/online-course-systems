@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using DataAccess.Models.Enrollment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BusinessLogic.Models.User;
@@ -9,12 +10,13 @@ namespace API.Controllers
 	public class UserController : BaseController
 	{
 		private readonly IUserService _userService;
+		private readonly IEnrollmentService _enrollmentService;
 
-		public UserController(IUserService userService)
+		public UserController(IUserService userService, IEnrollmentService enrollmentService)
 		{
 			_userService = userService;
+			_enrollmentService = enrollmentService;
 		}
-
 
 		[Authorize]
 		[HttpPut("change-password")]
@@ -40,6 +42,16 @@ namespace API.Controllers
 				return ValidationError();
 			return Ok(ApiResult<UserResponseProfile>.Success(await _userService.UpdateProfileAsync(updateProfileRequestModel)));
 		}
+
+		[Authorize]
+		[HttpGet("purchase-history")]
+		public async Task<IActionResult> PurchaseHistoryByUserIdAsync()
+		{
+			return Ok(ApiResult<List<PurchaseHistoryModel>>.Success(await _enrollmentService.PurchaseHistoryByUserIdAsync()));
+		}
+
+
+
 
 	}
 }
