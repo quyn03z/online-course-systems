@@ -15,5 +15,7 @@ namespace DataAccess.Repositories.Impl
 
 		Task<bool> CheckEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 
+		Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync(int userId);
+
 	}
 }

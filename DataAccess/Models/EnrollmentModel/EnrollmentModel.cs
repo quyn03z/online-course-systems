@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,4 +13,13 @@ namespace DataAccess.Models.Enrollment
 
 		public int CourseId { get; set; }
 	}
+
+	public class PurchaseHistoryModel
+	{
+		public int CourseId { get; set; }
+		public string CourseName { get; set; }
+		public string Image { get; set; }
+
+	}
+
 }

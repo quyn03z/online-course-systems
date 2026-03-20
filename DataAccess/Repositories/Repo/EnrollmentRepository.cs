@@ -49,6 +49,19 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("sp_CheckEnrollment thất bại.", ex);
 			}
 		}
+
+		public async Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync(int userId)
+		{
+			try
+			{
+				var purchase = await _sqlDataAccess.QueryAsync<PurchaseHistoryModel>("sp_PurchaseHistory", new {userId});
+				return purchase.ToList();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("sp_PurchaseHistory thất bại.", ex);
+			}
+		}
 	}
 
 

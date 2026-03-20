@@ -31,5 +31,10 @@ namespace BusinessLogic.Services.Serv
 			return await _enrollmentRepository.CheckEnrollmentAsync(enrollmentRequestModel);
 		}
 
+		public async Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync()
+		{
+			var userId = _claimService.GetUserId();
+			return await _enrollmentRepository.PurchaseHistoryByUserIdAsync(userId.Value);
+		}
 	}
 }
