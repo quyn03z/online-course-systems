@@ -12,7 +12,6 @@ namespace API.Controllers.Teacher
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize(Roles = AppConstants.Roles.Teacher)]
 
 	public class ManaSubLessonController : ControllerBase
 	{
