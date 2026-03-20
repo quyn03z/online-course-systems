@@ -34,49 +34,21 @@ namespace DataAccess.Repositories.Repo
 
 		public async Task<List<string>> GetUserPermissionsAsync(int userId)
 		{
-			var user = await _context.Users
-				.Include(u => u.Role)
-				.FirstOrDefaultAsync(u => u.UserId == userId);
-
-			if (user == null) return new List<string>();
-
-			var rolePermissions = await _context.RolePermissions
-				.Where(rp => rp.RoleId == user.RoleId)
-				.Include(rp => rp.Permission)
-				.Select(rp => rp.Permission.Name)
-				.ToListAsync();
-
-			var userPermissions = await _context.UserPermissions
+			return await _context.UserPermissions
 				.Where(up => up.UserId == userId)
 				.Include(up => up.Permission)
 				.Select(up => up.Permission.Name)
 				.ToListAsync();
-
-			return rolePermissions.Union(userPermissions).ToList();
 		}
 
 		// Trả về Permission objects (có id) để frontend có thể pre-check checkbox
 		public async Task<List<Permission>> GetUserPermissionsWithIdAsync(int userId)
 		{
-			var user = await _context.Users
-				.Include(u => u.Role)
-				.FirstOrDefaultAsync(u => u.UserId == userId);
-
-			if (user == null) return new List<Permission>();
-
-			var rolePermissions = await _context.RolePermissions
-				.Where(rp => rp.RoleId == user.RoleId)
-				.Include(rp => rp.Permission)
-				.Select(rp => rp.Permission)
+			return await _context.UserPermissions
+				.Where(up => up.UserId == userId)
+				.Include(up => up.Permission)
+				.Select(up => up.Permission)
 				.ToListAsync();
-
-			var userPermissions = await _context.UserPermissions
-				.Where(rp => rp.UserId == user.UserId)
-				.Include(rp => rp.Permission)
-				.Select(rp => rp.Permission)
-				.ToListAsync();
-
-			return rolePermissions.Union(userPermissions).ToList();
 		}
 
 		public async Task<bool> HasPermissionAsync(int userId, string permissionName)
