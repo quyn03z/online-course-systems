@@ -1,4 +1,4 @@
-﻿using API.Filter;
+using API.Filter;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
@@ -53,7 +53,7 @@ namespace API.Controllers.Teacher
 		}
 
 		[HttpPut("update-lesson/{lessonId}")]
-		[Permission("lesson.eidt")]
+		[Permission("lesson.edit")]
 		public async Task<IActionResult> UpdateLessonAsync(int lessonId, LessonRequestModel lessonRequesModel)
 		{
 			try

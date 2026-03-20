@@ -1,4 +1,4 @@
-﻿using Domain.Models;
+using Domain.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -29,9 +29,13 @@ namespace BusinessLogic.Helpers
 				new Claim(ClaimTypes.Name, user.Username),
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Role, user.Role.RoleName),
-				new Claim("permissions", string.Join(",", permissions)),
 				new Claim("Avatar", user.Avatar ?? "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png"),
 			};
+
+			foreach (var permission in permissions)
+			{
+				claims.Add(new Claim("permission", permission));
+			}
 
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
