@@ -1,8 +1,10 @@
-﻿using BusinessLogic.Models;
+﻿using BusinessLogic.Helpers;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using DataAccess.Models.LessonModel;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,8 @@ namespace API.Controllers.Teacher
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = AppConstants.Roles.Teacher)]
+
 	public class ManaSubLessonController : ControllerBase
 	{
 		private readonly ISubLessonService _subLessonService;

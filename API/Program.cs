@@ -72,7 +72,8 @@ builder.Services.AddCors(option =>
 {
 	option.AddPolicy("AllowAngular", policy =>
 	{
-		policy.WithOrigins("http://localhost:4200")
+		policy.WithOrigins("http://localhost:4200",
+			"https://online-course-systems.vercel.app")
 			  .AllowAnyHeader()
 			  .AllowAnyMethod();
 	});
