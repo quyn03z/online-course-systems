@@ -15,7 +15,7 @@ namespace DataAccess.Repositories.Repo
 		{
 		}
 
-		public async Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null)
+		public async Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			var query = _context.AuditLogs
 				.Include(a => a.User)
@@ -26,11 +26,17 @@ namespace DataAccess.Repositories.Repo
 				search = search.Trim().ToLower();
 				query = query.Where(a => 
 					(a.Action != null && a.Action.ToLower().Contains(search)) ||
-					(a.Entity != null && a.Entity.ToLower().Contains(search)) ||
-					(a.User != null && (a.User.Username.ToLower().Contains(search) || a.User.Email.ToLower().Contains(search)))
-				);
+					(a.Entity != null && a.Entity.ToLower().Contains(search)));
 			}
-
+			if (startDate.HasValue)
+			{
+				query = query.Where(x => x.CreatedAt >= startDate.Value);
+			}
+			if (endDate.HasValue)
+			{
+				var endOfDay = endDate.Value.Date.AddDays(1).AddTicks(-1);
+				query = query.Where(x => x.CreatedAt <= endOfDay);
+			}
 			query = query.OrderByDescending(a => a.CreatedAt);
 
 			var totalCount = await query.CountAsync();

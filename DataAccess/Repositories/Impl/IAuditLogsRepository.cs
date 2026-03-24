@@ -9,7 +9,8 @@ namespace DataAccess.Repositories.Impl
 {
 	public interface IAuditLogsRepository : IBaseRepository<AuditLog>
 	{
-		Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null);
+		Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, 
+			string? search = null, DateTime? startDate = null, DateTime? endDate = null);
 		Task<AuditLog?> GetByIdAsync(long id);
 	}
 }

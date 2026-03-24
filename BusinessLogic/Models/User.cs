@@ -81,7 +81,6 @@ namespace BusinessLogic.Models
 			[StringLength(50, MinimumLength = 3, ErrorMessage = "Tên đăng nhập phải từ 3 đến 50 ký tự.")]
 			[RegularExpression(@"^\S+$", ErrorMessage = "Tên đăng nhập không được chứa khoảng trắng.")]
 			public string UserName { get; set; }
-
 			[Required(ErrorMessage = "Email là bắt buộc.")]
 			[EmailAddress(ErrorMessage = "Định dạng email không hợp lệ.")]
 			[StringLength(100, ErrorMessage = "Email không được vượt quá 100 ký tự.")]
