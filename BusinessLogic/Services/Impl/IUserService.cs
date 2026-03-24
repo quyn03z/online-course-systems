@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Models;
 using DataAccess.Models.PageResultModel;
+using DataAccess.Models.RequestAuditModel;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace BusinessLogic.Services.Impl
 		Task<ResetPasswordModel> ResetPasswordAsync(ResetPasswordModel resetPasswordModel);
 
 		Task<PagedResults<UserResponseModel>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null);
+		
+		//Task<List<UserResponseModel>> AllsUserCourseAsync(int page, int pageSize, string? search = null);
 
 		Task<UserResponseModel> AddUserByAdmin(AddUserAdminModel addUserAdminModel);
 

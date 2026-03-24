@@ -1,4 +1,4 @@
-﻿using DataAccess.Repositories.Impl;
+using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,11 +15,23 @@ namespace DataAccess.Repositories.Repo
 		{
 		}
 
-		public async Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize)
+		public async Task<(IEnumerable<AuditLog> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null)
 		{
 			var query = _context.AuditLogs
 				.Include(a => a.User)
-				.OrderByDescending(a => a.CreatedAt);
+				.AsQueryable();
+
+			if (!string.IsNullOrWhiteSpace(search))
+			{
+				search = search.Trim().ToLower();
+				query = query.Where(a => 
+					(a.Action != null && a.Action.ToLower().Contains(search)) ||
+					(a.Entity != null && a.Entity.ToLower().Contains(search)) ||
+					(a.User != null && (a.User.Username.ToLower().Contains(search) || a.User.Email.ToLower().Contains(search)))
+				);
+			}
+
+			query = query.OrderByDescending(a => a.CreatedAt);
 
 			var totalCount = await query.CountAsync();
 			var logs = await query
@@ -28,6 +40,11 @@ namespace DataAccess.Repositories.Repo
 				.ToListAsync();
 
 			return (logs, totalCount);
+		}
+
+		public async Task<AuditLog?> GetByIdAsync(long id)
+		{
+			return await _context.AuditLogs.FindAsync(id);
 		}
 
 

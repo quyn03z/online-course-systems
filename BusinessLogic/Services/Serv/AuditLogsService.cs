@@ -1,10 +1,12 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Claims;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,15 +15,17 @@ namespace BusinessLogic.Services.Serv
 	public class AuditLogsService : IAuditLogsService
 	{
 		private readonly IAuditLogsRepository _auditLogsRepository;
+		private readonly IClaimService _claimService;
 
-		public AuditLogsService(IAuditLogsRepository auditLogsRepository)
+		public AuditLogsService(IAuditLogsRepository auditLogsRepository, IClaimService claimService)
 		{
 			_auditLogsRepository = auditLogsRepository;
+			_claimService = claimService;
 		}
 
-		public async Task<(IEnumerable<AuditLogResponseModel> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize)
+		public async Task<(IEnumerable<AuditLogResponseModel> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null)
 		{
-			var (logs, totalCount) = await _auditLogsRepository.GetPagedAsync(page, pageSize);
+			var (logs, totalCount) = await _auditLogsRepository.GetPagedAsync(page, pageSize, search);
 
 			var mappedLogs = logs.Select(l =>
 			{
@@ -35,12 +39,16 @@ namespace BusinessLogic.Services.Serv
 					OldValues = l.OldValues,
 					NewValues = l.NewValues,
 					CreatedAt = l.CreatedAt,
+					IpAddress = l.IpAddress,	
+					UserAgent = l.UserAgent,
+					DurationMs = l.DurationMs,
 					User = l.User != null ? new AuditLogUserDto
 					{
 						UserName = l.User.Username,
 						Email = l.User.Email
 					} : null
 				};
+
 
 				try
 				{
@@ -105,7 +113,7 @@ namespace BusinessLogic.Services.Serv
 
 			return (mappedLogs, totalCount);
 		}
-		public async Task LogActionAsync(int? userId, string action, string entity, string keyValues = "{}", string oldValues = "{}", string newValues = "{}")
+		public async Task LogActionAsync(int? userId, string action, string entity, string keyValues = "{}", string oldValues = "{}", string newValues = "{}", string? ipAddress = null, string? userAgent = null, int? durationMs = null)
 		{
 			var auditLog = new AuditLog
 			{
@@ -115,10 +123,22 @@ namespace BusinessLogic.Services.Serv
 				KeyValues = keyValues,
 				OldValues = oldValues,
 				NewValues = newValues,
-				CreatedAt = DateTime.UtcNow
+				CreatedAt = DateTime.UtcNow,
+				IpAddress = ipAddress ?? _claimService.GetIpAddress(),
+				UserAgent = userAgent ?? _claimService.GetUserAgent(),
+				DurationMs = durationMs
 			};
 
 			await _auditLogsRepository.AddAsync(auditLog);
+		}
+
+		public async Task<bool> DeleteAsync(long id)
+		{
+			var log = await _auditLogsRepository.GetByIdAsync(id);
+			if (log == null) return false;
+
+			await _auditLogsRepository.DeleteAsync(log);
+			return true;
 		}
 	}
 }

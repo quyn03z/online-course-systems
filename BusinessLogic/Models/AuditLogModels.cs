@@ -13,7 +13,11 @@ namespace BusinessLogic.Models
         public string NewValues { get; set; }
         public string KeyValues { get; set; }
         public DateTime CreatedAt { get; set; }
-        public AuditLogUserDto User { get; set; }
+		public string IpAddress { get; set; }
+		public string UserAgent { get; set; }
+		public int? DurationMs { get; set; }
+
+		public AuditLogUserDto User { get; set; }
         public List<AuditLogChangeDto> Changes { get; set; } = new List<AuditLogChangeDto>();
     }
 

@@ -24,6 +24,9 @@ namespace DataAccess.Repositories
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
         public List<PropertyEntry> TemporaryProperties { get; } = new List<PropertyEntry>();
+		public string? IpAddress { get; set; }
+		public string? UserAgent { get; set; }
+		public int? DurationMs { get; set; }
 
         public bool HasTemporaryProperties => TemporaryProperties.Any();
 
@@ -43,6 +46,9 @@ namespace DataAccess.Repositories
             audit.KeyValues = JsonConvert.SerializeObject(KeyValues);
             audit.OldValues = OldValues.Count == 0 ? "{}" : JsonConvert.SerializeObject(OldValues);
             audit.NewValues = NewValues.Count == 0 ? "{}" : JsonConvert.SerializeObject(NewValues);
+			audit.IpAddress = IpAddress;
+			audit.UserAgent = UserAgent;
+			audit.DurationMs = DurationMs;
             return audit;
         }
     }

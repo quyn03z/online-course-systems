@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +30,21 @@ namespace BusinessLogic.Claims
 		public string? GetClaim(string key)
 		{
 			return _httpContextAccessor.HttpContext?.User?.FindFirst(key)?.Value;
+		}
+
+		public string? GetIpAddress()
+		{
+			var ip = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
+			if (_httpContextAccessor.HttpContext?.Request.Headers.ContainsKey("X-Forwarded-For") == true)
+			{
+				ip = _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"].ToString();
+			}
+			return ip;
+		}
+
+		public string? GetUserAgent()
+		{
+			return _httpContextAccessor.HttpContext?.Request.Headers["User-Agent"].ToString();
 		}
 
 

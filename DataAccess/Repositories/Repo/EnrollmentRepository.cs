@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models.CourseModel;
 using DataAccess.Models.Enrollment;
+using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using System;
@@ -19,6 +20,21 @@ namespace DataAccess.Repositories.Repo
 			_sqlDataAccess = sqlDataAccess;
 		}
 
+
+		public async Task<List<User>> AllsUserCourseAsync(int courseId, int page, int pageSize, string? search = null)
+		{
+			try
+			{
+				var query = await _sqlDataAccess.QueryAsync<User>("sp_AllsUserCourse", new { courseId, page, pageSize, search });
+				return  query.ToList();
+			}
+			catch (Exception ex) 
+			{
+				throw new Exception("sp_AllsUserCourse thất bại.", ex);
+			}
+		}
+
+
 		public async Task<bool> AddEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
 		{
 			try
@@ -35,6 +51,8 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("sp_AddEnrollment thất bại.", ex);
 			}
 		}
+
+		
 
 		public async Task<bool> CheckEnrollmentAsync(EnrollmentModel enrollmentRequestModel)
 		{

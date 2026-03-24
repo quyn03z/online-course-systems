@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models.CourseModel;
 using DataAccess.Models.Enrollment;
+using DataAccess.Models.PageResultModel;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace DataAccess.Repositories.Impl
 		Task<bool> CheckEnrollmentAsync(EnrollmentModel enrollmentRequestModel);
 
 		Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync(int userId);
+
+		Task<List<User>> AllsUserCourseAsync(int courseId,int page, int pageSize, string? search = null);
+
 
 	}
 }

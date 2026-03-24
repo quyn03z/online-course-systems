@@ -15,6 +15,7 @@ namespace DataAccess.Repositories.Impl
 		Task<bool> ExistsByEmailAsync(string email);
 		Task<bool> ExistsByUserNameAsync(string userName);
 		Task<PagedResults<User>> GetAllUserAdminPagedAsync(int page, int pageSize, string? search = null);
+
 		Task<User> GetUserByIdAsync(int userId);
 		Task<int> GetTotalsUser();
 
