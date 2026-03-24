@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,4 +12,13 @@ namespace DataAccess.Models.MenteeScoreModel
 		public int QuizId { get; set; }
 		public double? Score { get; set; }
 	}
+
+
+	public class CheckProgressModel
+	{
+		public int CourseId { get; set; }
+		public string Progress { get; set; }
+		public bool IsCompleted { get; set; }
+	}
+
 }
