@@ -5,11 +5,13 @@ using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.DashboardModel;
 using DataAccess.Models.PageResultModel;
+using DataAccess.Models.RequestAuditModel;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics;
 using static BusinessLogic.Models.User;
 
 namespace API.Controllers
@@ -57,7 +59,10 @@ namespace API.Controllers
 		{
 			if (!ModelState.IsValid)
 				return ValidationError();
-			return Ok(ApiResult<UserResponseModel>.Success(await _userService.AddUserByAdmin(addUserAdminModel)));
+
+			var result = await _userService.AddUserByAdmin(addUserAdminModel);
+
+			return Ok(ApiResult<UserResponseModel>.Success(result));
 		}
 
 		[HttpPut("block-user-admin")]

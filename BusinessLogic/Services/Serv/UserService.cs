@@ -5,6 +5,7 @@ using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.PageResultModel;
+using DataAccess.Models.RequestAuditModel;
 using DataAccess.Repositories.Impl;
 using DataAccess.Repositories.Repo;
 using Domain.Models;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,8 +34,9 @@ namespace BusinessLogic.Services.Serv
 		private readonly IClaimService _claimService;
 		private readonly IAuditLogsService _auditLogsService;
 		private readonly IPermissionService _permissionService;
+		private readonly IEnrollmentRepository _enrollmentRepository;
 
-		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService, IPermissionService permissionService)
+		public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IRefreshTokenRepository refreshTokenRepository, IResetPasswordTokenRepository resetPasswordTokenRepository, IEmailService emailService, IConfiguration configuration, IClaimService claimService, IAuditLogsService auditLogsService, IPermissionService permissionService, IEnrollmentRepository enrollmentRepository)
 		{
 			_userRepository = userRepository;
 			_roleRepository = roleRepository;
@@ -44,6 +47,7 @@ namespace BusinessLogic.Services.Serv
 			_claimService = claimService;
 			_auditLogsService = auditLogsService;
 			_permissionService = permissionService;
+			_enrollmentRepository = enrollmentRepository;
 		}
 
 		public async Task<CreateUserResponseModel> CreateUserAsync(CreateUserModel createUserModel)
@@ -95,6 +99,7 @@ namespace BusinessLogic.Services.Serv
 			}
 			var permissions = await _permissionService.GetCurrentUserPermissionsAsync(user.UserId);
 
+			var stopwatch = Stopwatch.StartNew();
 			var accessToken = JwtHelper.GenerateToken(user, _configuration,permissions);
 
 			await _refreshTokenRepository.RevokeUserTokensAsync(user.UserId);
@@ -111,8 +116,9 @@ namespace BusinessLogic.Services.Serv
 			};
 
 			await _refreshTokenRepository.AddAsync(tokenRefresh);
+			stopwatch.Stop();
 
-			await _auditLogsService.LogActionAsync(user.UserId, "Login", "User", keyValues: $"{{ \"UserId\": {user.UserId} }}");
+			await _auditLogsService.LogActionAsync(user.UserId, "Login", "User", keyValues: $"{{ \"UserId\": {user.UserId} }}", durationMs: (int)stopwatch.ElapsedMilliseconds);
 
 			return new LoginResponseModel
 			{
@@ -128,8 +134,10 @@ namespace BusinessLogic.Services.Serv
 			var userId = _claimService.GetUserId();
 			if (userId == null)
 				throw new BusinessLogic.Exceptions.UnauthorizedException("Người dùng chưa xác thực.");
+			var stopwatch = Stopwatch.StartNew();
 			await _refreshTokenRepository.RevokeUserTokensAsync(userId.Value);
-			await _auditLogsService.LogActionAsync(userId.Value, "Logout", "User", keyValues: $"{{ \"UserId\": {userId.Value} }}");
+			stopwatch.Stop();
+			await _auditLogsService.LogActionAsync(userId.Value, "Logout", "User", keyValues: $"{{ \"UserId\": {userId.Value} }}", durationMs: (int)stopwatch.ElapsedMilliseconds);
 		}
 
 		public async Task<ForgotPassWordModel> ForgotPasswordAsync(EmailRequest email)
@@ -412,7 +420,15 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
+		//public async Task<List<UserResponseModel>> AllsUserCourseAsync(int courseId,int page, int pageSize, string? search = null)
+		//{
+		//	var allsUser = await _enrollmentRepository.AllsUserCourseAsync(courseId, page, pageSize, search);
+		//	return allsUser.Select( new UserResponseModel
+		//	{
 
+		//	});
+
+		//}
 	}
 }
 

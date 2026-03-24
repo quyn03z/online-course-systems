@@ -2,10 +2,13 @@
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
+using BusinessLogic.Services.Serv;
 using DataAccess.Models.CourseModel;
+using DataAccess.Models.PageResultModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static BusinessLogic.Models.User;
 
 namespace API.Controllers.Teacher
 {
@@ -13,10 +16,12 @@ namespace API.Controllers.Teacher
 	public class ManaCourseController : BaseController
 	{
 		private readonly ICourseService _courseService;
+		private readonly IUserService _userService;
 
-		public ManaCourseController(ICourseService courseService)
+		public ManaCourseController(ICourseService courseService, IUserService userService)
 		{
 			_courseService = courseService;
+			_userService = userService;
 		}
 
 		[HttpGet("get-alls-mana-course")]
@@ -77,6 +82,15 @@ namespace API.Controllers.Teacher
 			}
 		}
 
+
+		//[HttpGet("alls-user-course")]
+		//public async Task<IActionResult> AllsUserCourseAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
+		//{
+		//	var result = await _userService.AllsUserCourseAsync(page, pageSize, search);
+		//	return Ok(ApiResult<PagedResults<UserResponseModel>>.Success(result));
+		//}
+
+	
 
 	}
 }

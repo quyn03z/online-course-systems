@@ -180,7 +180,15 @@ namespace DataAccess.Repositories
 		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 		{
 			var auditEntries = OnBeforeSaveChanges();
+			var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 			var result = await base.SaveChangesAsync(cancellationToken);
+			stopwatch.Stop();
+			
+			foreach (var entry in auditEntries)
+			{
+				entry.DurationMs = (int)stopwatch.ElapsedMilliseconds;
+			}
+
 			await OnAfterSaveChangesAsync(auditEntries);
 			return result;
 		}
@@ -188,7 +196,15 @@ namespace DataAccess.Repositories
 		public override int SaveChanges()
 		{
 			var auditEntries = OnBeforeSaveChanges();
+			var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 			var result = base.SaveChanges();
+			stopwatch.Stop();
+
+			foreach (var entry in auditEntries)
+			{
+				entry.DurationMs = (int)stopwatch.ElapsedMilliseconds;
+			}
+
 			OnAfterSaveChanges(auditEntries);
 			return result;
 		}
@@ -204,6 +220,9 @@ namespace DataAccess.Repositories
 			}
 
 			var auditEntries = new List<AuditEntry>();
+			var ipAddress = _claimService?.GetIpAddress();
+			var userAgent = _claimService?.GetUserAgent();
+
 			foreach (var entry in ChangeTracker.Entries())
 			{
 				if (entry.Entity is AuditLog || entry.State == EntityState.Detached || entry.State == EntityState.Unchanged)
@@ -212,6 +231,8 @@ namespace DataAccess.Repositories
 				var auditEntry = new AuditEntry(entry);
 				auditEntry.TableName = entry.Entity.GetType().Name;
 				auditEntry.UserId = _claimService?.GetUserId();
+				auditEntry.IpAddress = ipAddress;
+				auditEntry.UserAgent = userAgent;
 				auditEntries.Add(auditEntry);
 
 				foreach (var property in entry.Properties)
@@ -250,12 +271,7 @@ namespace DataAccess.Repositories
 				}
 			}
 
-			foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
-			{
-				AuditLogs.Add(auditEntry.ToAuditLog());
-			}
-
-			return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
+			return auditEntries;
 		}
 
 		private Task OnAfterSaveChangesAsync(List<AuditEntry> auditEntries)

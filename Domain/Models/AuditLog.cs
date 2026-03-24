@@ -26,6 +26,10 @@ namespace Domain.Models
 
         public string? NewValues { get; set; }
 
-        public virtual User User { get; set; }
+		public string? IpAddress { get; set; }
+		public string? UserAgent { get; set; }
+		public int? DurationMs { get; set; }
+
+		public virtual User User { get; set; }
     }
 }

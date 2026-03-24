@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +17,17 @@ namespace API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+		public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
 		{
-			var (logs, totalCount) = await _auditLogsService.GetPagedAsync(page, pageSize);
+			var (logs, totalCount) = await _auditLogsService.GetPagedAsync(page, pageSize, search);
 			return Ok(ApiResult<object>.Success(new { Logs = logs, TotalCount = totalCount }));
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(long id)
+		{
+			var result = await _auditLogsService.DeleteAsync(id);
+			return Ok(ApiResult<string>.Success("Xóa bản ghi thành công."));
 		}
 	}
 }

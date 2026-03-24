@@ -17,6 +17,8 @@ namespace DataAccess.Repositories.Repo
 		{
 		}
 
+		
+
 		public async Task<bool> ExistsByEmailAsync(string email)
 		{
 			return await _dbSet.AnyAsync(x => x.Email == email);
