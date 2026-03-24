@@ -1,3 +1,4 @@
+using DataAccess.Models.MenteeScoreModel;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,8 @@ namespace DataAccess.Repositories.Impl
 	public interface IMenteeScoresRepository : IBaseRepository<MenteeScores>
 	{
 		Task<MenteeScores?> FindByUserAndQuizAsync(int userId, int quizId);
+		Task<CheckProgressModel> CheckProgressAsync(int courseId, int userId);
+
+		Task RemoveQuizzIdAsync(int quizzId);
 	}
 }

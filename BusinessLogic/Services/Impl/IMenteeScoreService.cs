@@ -1,4 +1,4 @@
-﻿using DataAccess.Models.MenteeScoreModel;
+using DataAccess.Models.MenteeScoreModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,6 @@ namespace BusinessLogic.Services.Impl
 	public interface IMenteeScoreService
 	{
 		Task<MenteeScoreRequestModel> AddMenteeScoreAsync(MenteeScoreRequestModel menteeScoreRequestModel);
-
+		Task<CheckProgressModel> GetProgressAsync(int courseId);
 	}
 }

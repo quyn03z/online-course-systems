@@ -54,5 +54,10 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
+		public async Task<CheckProgressModel> GetProgressAsync(int courseId)
+		{
+			var userId = _claimService.GetUserId();
+			return await _menteeScoresRepository.CheckProgressAsync(courseId, userId.Value);
+		}
 	}
 }

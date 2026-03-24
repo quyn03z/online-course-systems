@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Models;
+using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
 using DataAccess.Models.MenteeScoreModel;
@@ -25,6 +25,12 @@ namespace API.Controllers
 			if (!ModelState.IsValid)
 				return ValidationError();
 			return Ok(ApiResult<MenteeScoreRequestModel>.Success(await _menteeScoreService.AddMenteeScoreAsync(menteeScoreRequestModel)));
+		}
+		
+		[HttpGet("get-progress/{courseId}")]
+		public async Task<IActionResult> GetProgressAsync(int courseId)
+		{
+			return Ok(ApiResult<CheckProgressModel>.Success(await _menteeScoreService.GetProgressAsync(courseId)));
 		}
 	}
 }

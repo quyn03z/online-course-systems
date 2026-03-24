@@ -1,7 +1,9 @@
-﻿using BusinessLogic.Exceptions;
+using BusinessLogic.Claims;
+using BusinessLogic.Exceptions;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.QuizzModel;
 using DataAccess.Repositories.Impl;
+using DataAccess.Repositories.Repo;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -14,10 +16,12 @@ namespace BusinessLogic.Services.Serv
 	public class QuizzService : IQuizzService
 	{
 		private readonly IQuizzRepository _quizzRepository;
+		private readonly IMenteeScoresRepository _menteeScoresRepository;
 
-		public QuizzService(IQuizzRepository quizzRepository)
+		public QuizzService(IQuizzRepository quizzRepository, IMenteeScoresRepository menteeScoresRepository)
 		{
 			_quizzRepository = quizzRepository;
+			_menteeScoresRepository = menteeScoresRepository;
 		}
 
 		public async Task<QuizzResponseModel> AddQuizzAsync(QuizzRequestModel quizzRequestModel, int lessonId)
@@ -80,6 +84,8 @@ namespace BusinessLogic.Services.Serv
 			{
 				var quizz = await _quizzRepository.GetByIdAsync(quizzId);
 				if (quizz == null) throw new BadRequestException("Quizz không tồn tại trong hệ thống!");
+
+				await _menteeScoresRepository.RemoveQuizzIdAsync(quizzId);
 
 				await _quizzRepository.DeleteAsync(quizz);
 				return "Remove Quizz thành công";
