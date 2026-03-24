@@ -23,9 +23,9 @@ namespace BusinessLogic.Services.Serv
 			_claimService = claimService;
 		}
 
-		public async Task<(IEnumerable<AuditLogResponseModel> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null)
+		public async Task<(IEnumerable<AuditLogResponseModel> Logs, int TotalCount)> GetPagedAsync(int page, int pageSize, string? search = null, DateTime? startDate = null, DateTime? endDate = null)
 		{
-			var (logs, totalCount) = await _auditLogsRepository.GetPagedAsync(page, pageSize, search);
+			var (logs, totalCount) = await _auditLogsRepository.GetPagedAsync(page, pageSize, search, startDate, endDate);
 
 			var mappedLogs = logs.Select(l =>
 			{

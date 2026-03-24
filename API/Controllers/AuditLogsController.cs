@@ -17,9 +17,9 @@ namespace API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
+		public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null, [FromQuery] DateTime? startDate = null, [FromQuery] DateTime? endDate = null)
 		{
-			var (logs, totalCount) = await _auditLogsService.GetPagedAsync(page, pageSize, search);
+			var (logs, totalCount) = await _auditLogsService.GetPagedAsync(page, pageSize, search, startDate, endDate);
 			return Ok(ApiResult<object>.Success(new { Logs = logs, TotalCount = totalCount }));
 		}
 
