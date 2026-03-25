@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BusinessLogic.Models.User;
 
-//"server=.; database=OnlineCourseMSF;TrustServerCertificate=True;Trusted_Connection=True;"
 namespace API.Controllers
 {
 	public class UserController : BaseController
@@ -50,6 +49,10 @@ namespace API.Controllers
 		{
 			return Ok(ApiResult<List<PurchaseHistoryModel>>.Success(await _enrollmentService.PurchaseHistoryByUserIdAsync()));
 		}
+
+
+
+
 
 
 
