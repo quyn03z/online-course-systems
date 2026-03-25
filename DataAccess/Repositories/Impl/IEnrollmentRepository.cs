@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.CourseModel;
+using DataAccess.Models.UserCourse;
+using DataAccess.Models.CourseModel;
 using DataAccess.Models.Enrollment;
 using DataAccess.Models.PageResultModel;
 using Domain.Models;
@@ -18,7 +19,7 @@ namespace DataAccess.Repositories.Impl
 
 		Task<List<PurchaseHistoryModel>> PurchaseHistoryByUserIdAsync(int userId);
 
-		Task<List<User>> AllsUserCourseAsync(int courseId,int page, int pageSize, string? search = null);
+		Task<List<UserCourseDto>> AllsUserCourseAsync(int courseId, int page, int pageSize, string? search = null);
 
 
 	}

@@ -1,4 +1,5 @@
 using DataAccess.Models.MenteeScoreModel;
+using DataAccess.Models.UserCourse;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace DataAccess.Repositories.Impl
 		Task<CheckProgressModel> CheckProgressAsync(int courseId, int userId);
 
 		Task RemoveQuizzIdAsync(int quizzId);
+
+		Task<UserStatisticModel> GetUserStatisticByIdAsync(int userId);
 	}
 }

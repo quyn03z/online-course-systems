@@ -52,6 +52,16 @@ namespace BusinessLogic.Models
 			[Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")] 
 			public string ConfirmPassword { get; set; } = string.Empty;
 		}
+		public class UserCourseResponseModel
+		{
+			public int Id { get; set; }
+			public string Username { get; set; }
+			public string? Lastname { get; set; }
+			public string? Firstname { get; set; }
+			public string Email { get; set; }
+			public bool IsLocked { get; set; }
+			public DateTime Date {  get; set; }
+		}
 
 		public class UserResponseModel
 		{

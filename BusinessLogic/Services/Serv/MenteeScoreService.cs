@@ -1,6 +1,7 @@
 using BusinessLogic.Claims;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.MenteeScoreModel;
+using DataAccess.Models.UserCourse;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using System;
@@ -58,6 +59,11 @@ namespace BusinessLogic.Services.Serv
 		{
 			var userId = _claimService.GetUserId();
 			return await _menteeScoresRepository.CheckProgressAsync(courseId, userId.Value);
+		}
+
+		public async Task<UserStatisticModel> GetUserStatisticByIdAsync(int userId)
+		{
+			return await _menteeScoresRepository.GetUserStatisticByIdAsync(userId);
 		}
 	}
 }

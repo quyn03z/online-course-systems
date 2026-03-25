@@ -1,4 +1,5 @@
-﻿using DataAccess.Models.CourseModel;
+using DataAccess.Models.UserCourse;
+using DataAccess.Models.CourseModel;
 using DataAccess.Models.Enrollment;
 using DataAccess.Models.PageResultModel;
 using DataAccess.Repositories.Impl;
@@ -21,11 +22,11 @@ namespace DataAccess.Repositories.Repo
 		}
 
 
-		public async Task<List<User>> AllsUserCourseAsync(int courseId, int page, int pageSize, string? search = null)
+		public async Task<List<UserCourseDto>> AllsUserCourseAsync(int courseId, int page, int pageSize, string? search = null)
 		{
 			try
 			{
-				var query = await _sqlDataAccess.QueryAsync<User>("sp_AllsUserCourse", new { courseId, page, pageSize, search });
+				var query = await _sqlDataAccess.QueryAsync<UserCourseDto>("sp_AllsUserCourse", new { courseId, page, pageSize, search });
 				return  query.ToList();
 			}
 			catch (Exception ex) 

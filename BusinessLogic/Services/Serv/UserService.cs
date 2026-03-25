@@ -420,15 +420,23 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-		//public async Task<List<UserResponseModel>> AllsUserCourseAsync(int courseId,int page, int pageSize, string? search = null)
-		//{
-		//	var allsUser = await _enrollmentRepository.AllsUserCourseAsync(courseId, page, pageSize, search);
-		//	return allsUser.Select( new UserResponseModel
-		//	{
+		public async Task<List<UserCourseResponseModel>> AllsUserCourseAsync(int courseId, int page, int pageSize, string? search = null)
+		{
+			var allsUser = await _enrollmentRepository.AllsUserCourseAsync(courseId, page, pageSize, search);
+			return allsUser.Select(u => new UserCourseResponseModel
+			{
+				Id = u.UserId,
+				Username = u.Username,
+				Email = u.Email,
+				Firstname = u.Firstname,
+				Lastname = u.Lastname,
+				Date = u.Date ?? DateTime.MinValue
+			}).ToList();
+		}
 
-		//	});
 
-		//}
+
+
 	}
 }
 

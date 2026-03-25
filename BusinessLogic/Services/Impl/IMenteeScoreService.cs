@@ -1,4 +1,5 @@
 using DataAccess.Models.MenteeScoreModel;
+using DataAccess.Models.UserCourse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,8 @@ namespace BusinessLogic.Services.Impl
 	{
 		Task<MenteeScoreRequestModel> AddMenteeScoreAsync(MenteeScoreRequestModel menteeScoreRequestModel);
 		Task<CheckProgressModel> GetProgressAsync(int courseId);
+
+		Task<UserStatisticModel> GetUserStatisticByIdAsync(int userId);
+
 	}
 }

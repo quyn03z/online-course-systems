@@ -1,4 +1,5 @@
 using DataAccess.Models.MenteeScoreModel;
+using DataAccess.Models.UserCourse;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,40 @@ namespace DataAccess.Repositories.Repo
 		public async Task<MenteeScores?> FindByUserAndQuizAsync(int userId, int quizId)
 		{
 			return await _dbSet.FirstOrDefaultAsync(x => x.UserId == userId && x.QuizId == quizId);
+		}
+
+		public async Task<UserStatisticModel> GetUserStatisticByIdAsync(int userId)
+		{
+			var userScores = await _dbSet
+				.Where(x => x.UserId == userId)
+				.Include(x => x.Quizz)
+				.OrderBy(x => x.QuizId) // Đảm bảo thứ tự cho biểu đồ
+				.ToListAsync();
+
+			if (!userScores.Any())
+			{
+				return new UserStatisticModel
+				{
+					AvgScore = 0,
+					TotalAttempts = 0,
+					MaxScore = 0,
+					MinScore = 0,
+					ChartStatistic = new List<CourseScoreUser>()
+				};
+			}
+
+			return new UserStatisticModel
+			{
+				AvgScore = Math.Round(userScores.Average(x => x.Score) ?? 0, 2),
+				TotalAttempts = userScores.Count,
+				MaxScore = userScores.Max(x => x.Score) ?? 0,
+				MinScore = userScores.Min(x => x.Score) ?? 0,
+				ChartStatistic = userScores.Select(x => new CourseScoreUser
+				{
+					QuizzName = x.Quizz?.Title ?? "N/A",
+					Score = x.Score
+				}).ToList()
+			};
 		}
 
 		public async Task RemoveQuizzIdAsync(int quizzId)
