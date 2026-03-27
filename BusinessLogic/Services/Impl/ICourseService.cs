@@ -19,5 +19,6 @@ namespace BusinessLogic.Services.Impl
 		Task<string> RemoveCourseById(int courseId);
 
 		Task<string> UpdateCourseAsync(CourseRequestModel courseRequestModel, int courseId);
+		Task<string> DownloadCertificateAsync(int courseId);
 	}
 }

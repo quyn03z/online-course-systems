@@ -43,8 +43,7 @@ namespace BusinessLogic.Helpers
 				Expires = DateTime.UtcNow.AddMinutes(30),
 				Issuer = issuer,
 				Audience = audience,
-				SigningCredentials =
-					new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
 			var token = tokenHandler.CreateToken(tokenDescriptor);
