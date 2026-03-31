@@ -19,6 +19,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Hangfire;
+using BusinessLogic.Jobs;
 using static BusinessLogic.Models.User;
 
 namespace BusinessLogic.Services.Serv
@@ -163,12 +165,12 @@ namespace BusinessLogic.Services.Serv
 
 			var resetLink = $"{_configuration["AppUrl"]}/reset-password?token={safeToken}";
 
-			// Gửi email reset password
-			await _emailService.SendEmailResetPasswordAsync(new ForgotPasswordModel
+			// Gửi email reset password qua background job
+			BackgroundJob.Enqueue<EmailJob>(x => x.SendEmailResetPasswordAsync(new ForgotPasswordModel
 			{
 				Email = email.Email,
 				ResetLink = resetLink
-			});
+			}));
 			return new ForgotPassWordModel
 			{
 				Email = email.Email,
@@ -242,14 +244,8 @@ namespace BusinessLogic.Services.Serv
 
 			await _userRepository.AddAsync(user);
 
-			// Gán permissions nếu có
-			if (addUserAdminModel.PermissionIds != null)
-			{
-				await _permissionService.UpdateUserPermissionsAsync(user.UserId, addUserAdminModel.PermissionIds);
-			}
-
-			// Gửi email chào mừng kèm mật khẩu tạm thời
-			await _emailService.SendWelcomeEmailAsync(user.Email, user.Username, randomPassword);
+			// Gửi email chào mừng kèm mật khẩu tạm thời qua background job
+			BackgroundJob.Enqueue<EmailJob>(x => x.SendWelcomeEmailAsync(user.Email, user.Username, randomPassword));
 
 			return new UserResponseModel {
 				Id = user.UserId,

@@ -8,6 +8,7 @@ using DataAccess.Models.PaymentModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace API.Controllers
 {
@@ -34,7 +35,9 @@ namespace API.Controllers
 		{
 			var requestQuery = HttpContext.Request.Query;
 
+			var stopwatch = Stopwatch.StartNew();
 			var response = await _momoService.PaymentExecuteAsync(requestQuery);
+			var momoDuration = stopwatch.ElapsedMilliseconds;
 			// lấy userId
 			var userId = _claimService.GetUserId();
 
@@ -57,16 +60,20 @@ namespace API.Controllers
 					CourseId = (int)response.CourseId,
 					IpAddress = ipAddress,
 					UserAgent = userAgent,
-					DurationMs = 0
+					DurationMs = (int)momoDuration
 				});
-
+				stopwatch.Stop();
+				var enrollmentDuration = stopwatch.ElapsedMilliseconds;
 				// 2. Lưu Payment
 				await _paymentService.AddPaymentAsync(new PaymentRequestModel
 				{
 					UserId = userId.Value,
 					CourseId = (int)response.CourseId,
 					Amount = decimal.TryParse(response.Amount, out var amt) ? amt : 0,
-					TransactionCode = orderId
+					TransactionCode = orderId,
+					IpAddress = ipAddress,
+					UserAgent = userAgent,
+					DurationMs = (int)enrollmentDuration
 				});
 
 				return Ok(ApiResult<object>.Success(response, "Thanh toán và đăng ký khóa học thành công!"));
