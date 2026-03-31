@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models.DashboardModel;
+using DataAccess.Models.Enrollment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace BusinessLogic.Services.Impl
 
 		Task<ChartDataResponse> GetCostChartData();
 
+		Task<TopCourseModel> TopCourseEnrollmentAsync();
 	}
 }

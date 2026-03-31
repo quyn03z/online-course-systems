@@ -1,5 +1,6 @@
 using DataAccess.Models.CourseModel;
 using DataAccess.Models.DashboardModel;
+using DataAccess.Models.Enrollment;
 using DataAccess.Repositories.Impl;
 using Domain.Models;
 using System;
@@ -37,6 +38,22 @@ namespace DataAccess.Repositories.Repo
 			}
 		}
 
-
+		public async Task<TopCourseModel> GetTopCourseEnrollment()
+		{
+			try
+			{
+				var rawData = await _sqlDataAccess.QueryAsync<CourseRevenue>("sp_TopCourseEnrollment");
+				var courseResponse = new TopCourseModel
+				{
+					Labels = rawData.Select(x => (string)x.CourseName).ToList(),
+					Data = rawData.Select(x => (decimal)x.TotalEnrollment).ToList()
+				};
+				return courseResponse;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception("Không thể lấy dữ liệu.", ex);
+			}
+		}
 	}
 }

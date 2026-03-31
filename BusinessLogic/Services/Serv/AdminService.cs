@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Services.Impl;
 using DataAccess.Models.DashboardModel;
+using DataAccess.Models.Enrollment;
 using DataAccess.Repositories.Impl;
 using System;
 using System.Collections.Generic;
@@ -43,8 +44,9 @@ namespace BusinessLogic.Services.Serv
 			};
 		}
 
-
-
-
+		public async Task<TopCourseModel> TopCourseEnrollmentAsync()
+		{
+			return await _adminRepository.GetTopCourseEnrollment();
+		}
 	}
 }

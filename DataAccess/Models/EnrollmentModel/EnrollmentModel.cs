@@ -12,6 +12,10 @@ namespace DataAccess.Models.Enrollment
 		public int UserId { get; set; }
 
 		public int CourseId { get; set; }
+
+		public string IpAddress { get; set; }
+		public string UserAgent { get; set; }
+		public int DurationMs { get; set; }
 	}
 
 	public class PurchaseHistoryModel
@@ -20,6 +24,17 @@ namespace DataAccess.Models.Enrollment
 		public string CourseName { get; set; }
 		public string Image { get; set; }
 
+	}
+
+	public class TopCourseModel
+	{
+		public List<string> Labels { get; set; } = new List<string>();
+		public List<decimal> Data { get; set; } = new List<decimal>();
+	}
+	public class CourseRevenue
+	{
+		public string CourseName { get; set; }
+		public int TotalEnrollment { get; set; }
 	}
 
 }

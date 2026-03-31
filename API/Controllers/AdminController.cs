@@ -1,17 +1,12 @@
-using API.Filter;
-using Azure;
 using BusinessLogic.Helpers;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using DataAccess.Models.DashboardModel;
+using DataAccess.Models.Enrollment;
 using DataAccess.Models.PageResultModel;
-using DataAccess.Models.RequestAuditModel;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics;
 using static BusinessLogic.Models.User;
 
 namespace API.Controllers
@@ -80,6 +75,8 @@ namespace API.Controllers
 		}
 
 
+
+
 		[HttpGet("infor-dashboard")]
 		public async Task<IActionResult> InforDashboard()
 		{
@@ -93,8 +90,11 @@ namespace API.Controllers
 		}
 
 
-
-
+		[HttpGet("top-course-enrollment")]
+		public async Task<IActionResult> TopCourseEnrollmentAsync()
+		{
+			return Ok(ApiResult<TopCourseModel>.Success(await _adminService.TopCourseEnrollmentAsync()));
+		}
 
 
 	}

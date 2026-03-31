@@ -3,9 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class HomeController : ControllerBase
+	public class HomeController : BaseController
 	{
+		
+		//public async Task<IActionResult> GetInforHomeAsync()
+		//{
+
+		//}
+
+
+
+		//public async Task<IActionResult> 
+
 	}
 }

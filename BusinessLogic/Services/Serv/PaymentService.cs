@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Services.Impl;
+using BusinessLogic.Services.Impl;
 using DataAccess.Models.PaymentModel;
 using DataAccess.Repositories.Impl;
 using System;
@@ -18,7 +18,7 @@ namespace BusinessLogic.Services.Serv
 			_paymentRepository = paymentRepository;
 		}
 
-		public async Task<bool> AddaymentAsync(PaymentRequestModel paymentRequestModel)
+		public async Task<bool> AddPaymentAsync(PaymentRequestModel paymentRequestModel)
 		{
 			 return await _paymentRepository.AddPaymentAsync(paymentRequestModel);
 		}

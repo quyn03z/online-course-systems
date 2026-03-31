@@ -59,7 +59,11 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				var count = await _sqlDataAccess.QueryFirstOrDefaultAsync<int>("sp_CheckEnrollment", enrollmentRequestModel);
+				var count = await _sqlDataAccess.QueryFirstOrDefaultAsync<int>("sp_CheckEnrollment", new
+				{
+					UserId = enrollmentRequestModel.UserId,
+					CourseId = enrollmentRequestModel.CourseId
+				});
 
 				return count > 0;
 			}

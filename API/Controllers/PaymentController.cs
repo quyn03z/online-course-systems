@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+using Azure.Core;
 using BusinessLogic.Claims;
 using BusinessLogic.Models;
 using BusinessLogic.Models.Momo;
@@ -31,13 +31,26 @@ namespace API.Controllers
 		public async Task<IActionResult> CreatePaymentMomo(OrderInfoModel model)
 		{
 			var course = await _courseService.GetCourseDetailsById(model.CourseId);
+			var ipAddress = _claimService.GetIpAddress();
+			var userAgent = _claimService.GetUserAgent();
+
 			if (course.Price == 0)
 			{
-				bool isEnrolled = await _enrollmentService.AddEnrollmentAsync(new EnrollmentModel
+				var enrollModel = new EnrollmentModel
 				{
 					UserId = _claimService.GetUserId().Value,
-					CourseId = model.CourseId
-				});
+					CourseId = model.CourseId,
+					IpAddress = ipAddress,
+					UserAgent = userAgent,
+					DurationMs =  0
+				};
+
+				// Kiểm tra đã đăng ký chưa để tránh lỗi trùng khóa
+				bool alreadyEnrolled = await _enrollmentService.CheckEnrollmentAsync(enrollModel);
+				if (alreadyEnrolled)
+					return Ok(ApiResult<object>.Success(null, "Bạn đã đăng ký khóa học này rồi!"));
+
+				bool isEnrolled = await _enrollmentService.AddEnrollmentAsync(enrollModel);
 				if (isEnrolled)
 					return Ok(ApiResult<object>.Success(null, "Đăng ký khóa học miễn phí thành công!"));
 				else
