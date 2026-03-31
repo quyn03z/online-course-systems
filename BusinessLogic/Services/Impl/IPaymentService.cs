@@ -1,4 +1,4 @@
-﻿using DataAccess.Models.Enrollment;
+using DataAccess.Models.Enrollment;
 using DataAccess.Models.PaymentModel;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace BusinessLogic.Services.Impl
 {
 	public interface IPaymentService
 	{
-		Task<bool> AddaymentAsync(PaymentRequestModel paymentRequestModel);
+		Task<bool> AddPaymentAsync(PaymentRequestModel paymentRequestModel);
 
 	}
 }

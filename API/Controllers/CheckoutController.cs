@@ -1,4 +1,4 @@
-﻿using BusinessLogic.Claims;
+using BusinessLogic.Claims;
 using BusinessLogic.Models;
 using BusinessLogic.Services.Impl;
 using BusinessLogic.Services.Serv;
@@ -45,17 +45,23 @@ namespace API.Controllers
 
 			bool isSuccess = (errorCode == "0");
 
+			var ipAddress = _claimService.GetIpAddress();
+			var userAgent = _claimService.GetUserAgent();
+
 			if (isSuccess  && response.CourseId > 0)
 			{
 				// 1. Lưu Enrollment
 				await _enrollmentService.AddEnrollmentAsync(new EnrollmentModel
 				{
 					UserId = userId.Value,
-					CourseId = (int)response.CourseId
+					CourseId = (int)response.CourseId,
+					IpAddress = ipAddress,
+					UserAgent = userAgent,
+					DurationMs = 0
 				});
 
 				// 2. Lưu Payment
-				await _paymentService.AddaymentAsync(new PaymentRequestModel
+				await _paymentService.AddPaymentAsync(new PaymentRequestModel
 				{
 					UserId = userId.Value,
 					CourseId = (int)response.CourseId,

@@ -59,7 +59,7 @@ namespace API.Middleware
 					response = new
 					{
 						success = false,
-						message = "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+						message = $"Lỗi: {exception.Message} | Inner: {exception.InnerException?.Message}",
 						errors = (object)null
 					};
 					_logger.LogError(exception, "Internal server error: {Message}", exception.Message);
