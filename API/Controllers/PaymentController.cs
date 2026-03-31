@@ -42,15 +42,19 @@ namespace API.Controllers
 					CourseId = model.CourseId,
 					IpAddress = ipAddress,
 					UserAgent = userAgent,
-					DurationMs =  0
 				};
 
+				var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 				// Kiểm tra đã đăng ký chưa để tránh lỗi trùng khóa
 				bool alreadyEnrolled = await _enrollmentService.CheckEnrollmentAsync(enrollModel);
 				if (alreadyEnrolled)
 					return Ok(ApiResult<object>.Success(null, "Bạn đã đăng ký khóa học này rồi!"));
+				stopwatch.Stop();
+				enrollModel.DurationMs = (int)stopwatch.ElapsedMilliseconds;
 
 				bool isEnrolled = await _enrollmentService.AddEnrollmentAsync(enrollModel);
+				
+
 				if (isEnrolled)
 					return Ok(ApiResult<object>.Success(null, "Đăng ký khóa học miễn phí thành công!"));
 				else

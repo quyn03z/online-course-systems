@@ -1,8 +1,11 @@
-﻿using BusinessLogic;
+using BusinessLogic;
 using BusinessLogic.Models.Momo;
 using DataAccess;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+// using StackExchange.Redis; // Đã bỏ vì dùng Sql Server
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +70,25 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddDataAccess(builder.Configuration).AddApplication(builder.Environment);
 
+// Hangfire + SQL Server background job (Dùng trực tiếp DB của hệ thống, không cần cài thêm Redis)
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration["Database:ConnectionString"], new SqlServerStorageOptions
+    {
+        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+        QueuePollInterval = TimeSpan.Zero,
+        UseRecommendedIsolationLevel = true,
+        DisableGlobalLocks = true
+    }));
+
+builder.Services.AddHangfireServer(options =>
+{
+    options.WorkerCount = 5;
+});
+
 // add cors 
 builder.Services.AddCors(option =>
 {
@@ -83,6 +105,12 @@ var app = builder.Build();
 
 // Add exception handling middleware
 app.UseMiddleware<API.Middleware.ExceptionHandlingMiddleware>();
+
+// Hangfire Dashboard (xem job tại /hangfire)
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    IsReadOnlyFunc = _ => false // Cho phép trigger job thủ công
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

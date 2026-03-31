@@ -14,6 +14,9 @@ namespace DataAccess.Models.PaymentModel
 
 		public decimal? Amount { get; set; }
 		public string TransactionCode { get; set; }
+		public string IpAddress { get; set; }
+		public string UserAgent { get; set; }
+		public int DurationMs { get; set; }
 	}
 
 	public class PaymentResponseModel
