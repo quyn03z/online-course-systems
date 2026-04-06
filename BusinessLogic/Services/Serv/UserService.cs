@@ -109,7 +109,7 @@ namespace BusinessLogic.Services.Serv
 			var refeshToken = JwtHelper.GenerateRefreshToken();
 
 			var tokenRefresh = new RefreshToken
-			{
+			{	
 				UserId = user.UserId,
 				Token = refeshToken,
 				IsRevoked = false,

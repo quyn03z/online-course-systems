@@ -28,7 +28,7 @@ namespace BusinessLogic.Services.Serv
 			model.OrderId = DateTime.Now.Ticks.ToString();
 			model.OrderInfo = "Khách hàng: " + model.FullName +" " + model.OrderInfo;
 
-			// Encode CourseId into extraData
+			// Mã hóa CourseId 
 			var extraData = Convert.ToBase64String(Encoding.UTF8.GetBytes(model.CourseId.ToString()));
 
 			var rawData = $"partnerCode={_options.Value.PartnerCode}&accessKey={_options.Value.AccessKey}&requestId={model.OrderId}&amount={model.Amount}&orderId={model.OrderId}&orderInfo={model.OrderInfo}&returnUrl={_options.Value.ReturnUrl}&notifyUrl={_options.Value.NotifyUrl}&extraData={extraData}";
@@ -36,6 +36,7 @@ namespace BusinessLogic.Services.Serv
 			var signature = ComputeHmacSha256(rawData, _options.Value.SecretKey);
 			var client = new RestClient(_options.Value.MomoApiUrl);
 			var request = new RestRequest() { Method = RestSharp.Method.Post };
+
 			request.AddHeader("Content-Type", "application/json; charset=UTF-8");
 
 			var requestData = new
@@ -53,12 +54,14 @@ namespace BusinessLogic.Services.Serv
 				signature = signature
 			};
 			request.AddParameter("application/json", JsonConvert.SerializeObject(requestData), ParameterType.RequestBody);
+			// gửi dữ liệu lên Momo
 
 			var response = await client.ExecuteAsync(request);
 
 			return JsonConvert.DeserializeObject<MomoCreatePaymentResponeModel>(response.Content);
 		}
 
+		//giải mã và trích xuất dữ liệu từ callback
 		public async Task<MomoExecuteResponseModel> PaymentExecuteAsync(IQueryCollection collection)
 		{
 			var amount = collection.FirstOrDefault(s => s.Key == "amount").Value.ToString();

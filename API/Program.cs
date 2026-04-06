@@ -5,7 +5,6 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-// using StackExchange.Redis; // Đã bỏ vì dùng Sql Server
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +69,6 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddDataAccess(builder.Configuration).AddApplication(builder.Environment);
 
-// Hangfire + SQL Server background job (Dùng trực tiếp DB của hệ thống, không cần cài thêm Redis)
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
@@ -112,7 +110,6 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     IsReadOnlyFunc = _ => false // Cho phép trigger job thủ công
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();

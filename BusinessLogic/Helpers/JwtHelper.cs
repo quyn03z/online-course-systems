@@ -40,7 +40,7 @@ namespace BusinessLogic.Helpers
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.UtcNow.AddMinutes(30),
+				Expires = DateTime.UtcNow.AddMinutes(1),
 				Issuer = issuer,
 				Audience = audience,
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

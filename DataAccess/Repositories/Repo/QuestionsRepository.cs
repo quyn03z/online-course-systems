@@ -87,14 +87,13 @@ namespace DataAccess.Repositories.Repo
 		{
 			try
 			{
-				var result = await _sqlDataAccess.QueryMultipleAsync(
-					"sp_GetAllsQuestion",
+				var result = await _sqlDataAccess.QueryMultipleAsync("sp_GetAllsQuestion",
 					async (reader) =>
 					{
-						// Đọc kết quả bảng 1 (Questions)
+						// Đọc kết quả bảng 1 (Questions) - map vào QuestionResponseModel
 						var questions = (await reader.ReadAsync<QuestionResponseModel>()).ToList();
 
-						// Đọc kết quả bảng 2 (Answers)
+						// Đọc kết quả bảng 2 (Answers) - map vào AnswerResponseModel
 						var answers = (await reader.ReadAsync<AnswerResponseModel>()).ToList();
 
 						// Lặp qua từng câu hỏi và gán danh sách câu trả lời tương ứng

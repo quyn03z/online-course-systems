@@ -85,6 +85,7 @@ namespace DataAccess.Repositories.Repo
 				throw new Exception("sp_PurchaseHistory thất bại.", ex);
 			}
 		}
+
 	}
 
 
