@@ -16,7 +16,6 @@ namespace BusinessLogic.Models
 		public string IpAddress { get; set; }
 		public string UserAgent { get; set; }
 		public int? DurationMs { get; set; }
-
 		public AuditLogUserDto User { get; set; }
         public List<AuditLogChangeDto> Changes { get; set; } = new List<AuditLogChangeDto>();
     }

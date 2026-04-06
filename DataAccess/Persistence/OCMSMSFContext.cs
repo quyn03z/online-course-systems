@@ -23,7 +23,6 @@ namespace DataAccess.Repositories
 		public DbSet<Permission> Permissions { get; set; }
 		public DbSet<RolePermission> RolePermissions { get; set; }
 		public DbSet<UserPermission> UserPermissions { get; set; }
-
 		public virtual DbSet<Answer> Answers { get; set; }
 		public virtual DbSet<AuditLog> AuditLogs { get; set; }
 		public virtual DbSet<Course> Courses { get; set; }

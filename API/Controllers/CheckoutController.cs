@@ -38,6 +38,7 @@ namespace API.Controllers
 			var stopwatch = Stopwatch.StartNew();
 			var response = await _momoService.PaymentExecuteAsync(requestQuery);
 			var momoDuration = stopwatch.ElapsedMilliseconds;
+
 			// lấy userId
 			var userId = _claimService.GetUserId();
 
